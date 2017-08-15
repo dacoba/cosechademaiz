@@ -1,17 +1,25 @@
-@extends('layouts.app')
+@extends('layouts.appini')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Welcome</div>
-
-                <div class="panel-body">
-                    Your Application's Landing Page.
-                </div>
-            </div>
-        </div>
+<section id="home" class="pfblock-image screen-height">
+    <div class="home-overlay"></div>
+    <div class="intro">
+        <div class="start">Proyeto de grado</div>
+        <h1>sistema web responsive de gestión del proceso y simulación de
+            crecimiento de maíz</h1>
+        <div class="start">Gualberto Rocha Escobar</div>
     </div>
-</div>
+    @if (Auth::guest())
+        <a href="{{ url('/login') }}">
+    @else
+        <a href="{{ url('/home') }}">
+    @endif
+        <div class="scroll-down">
+        <span>
+            <i class="fa fa-angle-down fa-2x"></i>
+        </span>
+        </div>
+    </a>
+
+</section>
 @endsection

@@ -1,17 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
+<section id="contact" class="pfblock">
+    <div class="container">
+        <div class="row">
 
-                <div class="panel-body">
-                    You are logged in!
+            <div class="col-sm-6 col-sm-offset-3">
+
+                <div class="pfblock-header">
+                    <h2 class="pfblock-title">Pagina principal</h2>
+                    <div class="pfblock-line"></div>
+                    <div class="pfblock-subtitle">
+                        .
+                    </div>
                 </div>
+
             </div>
-        </div>
-    </div>
-</div>
+
+        </div><!-- .row -->
+
+    </div><!-- .container -->
+</section>
 @endsection

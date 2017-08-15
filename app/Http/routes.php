@@ -18,3 +18,15 @@ Route::get('/', function () {
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/users/tecnico', 'UsersController@createTecnico');
+Route::post('/users/tecnico', 'UsersController@storeTecnico');
+Route::get('/users/productor', 'UsersController@createProductor');
+Route::post('/users/productor', 'UsersController@storeProductor');
+Route::resource('/users', 'UsersController');
+Route::resource('/terrenos', 'TerrenosController');
+Route::resource('/preparacionterrenos', 'PreparacionterrenosController');
+Route::resource('/siembras', 'SiembrasController');
+Route::get('/planificacionriegos/siembras', 'PlanificacionriegosController@getSiembras');
+Route::post('/planificacionriegos/siembras', 'PlanificacionriegosController@postSiembras');
+Route::post('/planificacionriegos/addriego', 'PlanificacionriegosController@addRiego');
+Route::resource('/planificacionriegos', 'PlanificacionriegosController');

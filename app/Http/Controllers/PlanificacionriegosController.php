@@ -1,0 +1,137 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Siembra;
+use App\Riego;
+use App\Planificacionriego;
+
+use App\Http\Requests;
+
+class PlanificacionriegosController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        //
+    }
+
+    public function getSiembras()
+    {
+//        $siembras = Siembra::with(['riego'])->get();
+        $siembras = Siembra::all();
+        return view('planificaionriego.siembra',['siembras' => $siembras]);
+    }
+
+    public function postSiembras(Request $request)
+    {
+        $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
+        $siembras = Siembra::all();
+        if($riego != [])
+        {
+            return view('planificaionriego.siembra',['siembras' => $siembras, 'riegosband' => True, 'siembra_idd' => $request['siembra_id']]);
+        };
+        foreach ($riego as $rig){
+            $riego_id = $rig['id'];
+        }
+        $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
+        return view('planificaionriego.siembra',['siembras' => $siembras, 'planificacionriegos' => $planificacionriegos, 'riegosband' => True, 'riego_id' => $riego_id, 'siembra_idd' => $request['siembra_id']]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    public function addRiego(Request $request)
+    {
+        if(isset($request['newriego'])){
+            $riego = Riego::create([
+                'siembra_id' => $request['siembra_id'],
+            ]);
+            $request['riego_id'] = $riego['id'];
+        }
+        Planificacionriego::create([
+            'fecha_planificacion' => $request['fecha_planificacion'],
+            'riego_id' => $request['riego_id'],
+        ]);
+
+        $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
+        $siembras = Siembra::all();
+        if($riego == [])
+        {
+            return view('planificaionriego.siembra',['siembras' => $siembras, 'riegosband' => True, 'siembra_idd' => $request['siembra_id']]);
+        };
+        foreach ($riego as $rig){
+            $riego_id = $rig['id'];
+        }
+        $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
+        return view('planificaionriego.siembra',['siembras' => $siembras, 'planificacionriegos' => $planificacionriegos, 'riegosband' => True, 'riego_id' => $riego_id, 'siembra_id' => $request['siembra_id']]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}
