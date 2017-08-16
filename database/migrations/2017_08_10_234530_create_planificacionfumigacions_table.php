@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePlanificacionfumigacions2Table extends Migration
+class CreatePlanificacionfumigacionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,8 @@ class CreatePlanificacionfumigacions2Table extends Migration
         Schema::create('planificacionfumigacions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('numero_alerta');
-            $table->date('fecha_planificacion');
+            $table->datetime('fecha_planificacion');
+            $table->string('estado');
             $table->integer('fumigacion_id')->unsigned();
             $table->foreign('fumigacion_id')->references('id')->on('fumigacions')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();

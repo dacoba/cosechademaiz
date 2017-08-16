@@ -20,5 +20,21 @@ class UsersTableSeeder extends Seeder
             'login' => 'admin',
             'password' => bcrypt('admin'),
         ]);
+        DB::table('users')->insert([
+            'ci' => str_random(10),
+            'nombre' => 'Juan',
+            'apellido' => 'Vasquez',
+            'tipo' => 'Tecnico',
+            'login' => 'tecnico',
+            'password' => bcrypt('tecnico'),
+        ]);
+        DB::table('users')->insert([
+            'ci' => '123456',
+            'nombre' => 'Jose',
+            'apellido' => 'Perez',
+            'tipo' => 'Productor',
+            'login' => '123456',
+            'password' => bcrypt('123456'),
+        ]);
     }
 }

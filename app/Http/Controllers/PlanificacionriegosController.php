@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Siembra;
 use App\Riego;
 use App\Planificacionriego;
+use DB;
 
 use App\Http\Requests;
 
@@ -23,7 +24,6 @@ class PlanificacionriegosController extends Controller
 
     public function getSiembras()
     {
-//        $siembras = Siembra::with(['riego'])->get();
         $siembras = Siembra::all();
         return view('planificaionriego.siembra',['siembras' => $siembras]);
     }
@@ -31,16 +31,17 @@ class PlanificacionriegosController extends Controller
     public function postSiembras(Request $request)
     {
         $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
+        $riego_count = Riego::where('siembra_id', $request['siembra_id'])->count();
         $siembras = Siembra::all();
-        if($riego != [])
+        if($riego_count)
         {
-            return view('planificaionriego.siembra',['siembras' => $siembras, 'riegosband' => True, 'siembra_idd' => $request['siembra_id']]);
+            foreach ($riego as $rig){
+                $riego_id = $rig['id'];
+            }
+            $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
+            return view('planificaionriego.siembra',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id']]);
         };
-        foreach ($riego as $rig){
-            $riego_id = $rig['id'];
-        }
-        $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
-        return view('planificaionriego.siembra',['siembras' => $siembras, 'planificacionriegos' => $planificacionriegos, 'riegosband' => True, 'riego_id' => $riego_id, 'siembra_idd' => $request['siembra_id']]);
+        return view('planificaionriego.siembra',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
     }
 
     /**
@@ -72,22 +73,24 @@ class PlanificacionriegosController extends Controller
             ]);
             $request['riego_id'] = $riego['id'];
         }
-        Planificacionriego::create([
+        $planificacionriego = Planificacionriego::create([
             'fecha_planificacion' => $request['fecha_planificacion'],
+            'estado' => "planificado",
             'riego_id' => $request['riego_id'],
         ]);
-
+        $query = 'CREATE EVENT planificacionriego_'.$planificacionriego['id'].' ON SCHEDULE AT \''.$request['fecha_planificacion'].'\' DO UPDATE planificacionriegos SET estado=\'ejecutado\' WHERE id='.$planificacionriego['id'];
+        DB::unprepared($query);
         $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
         $siembras = Siembra::all();
-        if($riego == [])
+        if($riego != [])
         {
-            return view('planificaionriego.siembra',['siembras' => $siembras, 'riegosband' => True, 'siembra_idd' => $request['siembra_id']]);
+            foreach ($riego as $rig){
+                $riego_id = $rig['id'];
+            }
+            $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
+            return view('planificaionriego.siembra',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id']]);
         };
-        foreach ($riego as $rig){
-            $riego_id = $rig['id'];
-        }
-        $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
-        return view('planificaionriego.siembra',['siembras' => $siembras, 'planificacionriegos' => $planificacionriegos, 'riegosband' => True, 'riego_id' => $riego_id, 'siembra_id' => $request['siembra_id']]);
+        return view('planificaionriego.siembra',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
     }
 
     /**

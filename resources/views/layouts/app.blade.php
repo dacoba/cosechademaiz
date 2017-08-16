@@ -9,13 +9,15 @@
     <title>Cosecha</title>
 
     <!-- CSS -->
-    <link href="{{URL::asset('assets/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">
+    {{--<link href="{{URL::asset('assets/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">--}}
+    <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link href="{{URL::asset('assets/css/font-awesome.min.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/simple-line-icons.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/animate.css')}}" rel="stylesheet">
 
     <!-- Custom styles CSS -->
     <link href="{{URL::asset('assets/css/style.css')}}" rel="stylesheet" media="screen">
+    <link href="{{URL::asset('assets/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/bootstrap-slider.css')}}" rel="stylesheet" media="screen">
 
     <script src="{{URL::asset('assets/js/modernizr.custom.js')}}"></script>
@@ -158,6 +160,17 @@
 <script src="{{URL::asset('assets/js/waypoints.min.js')}}"></script>
 <script src="{{URL::asset('assets/js/jquery.cbpQTRotator.js')}}"></script>
 <script src="{{URL::asset('assets/js/custom.js')}}"></script>
+<script src="{{URL::asset('assets/js/jquery-2.1.1.min.js')}}"></script>
+<script src="{{URL::asset('assets/js/moment-with-locales.js')}}"></script>
+<script src="{{URL::asset('assets/js/bootstrap-datetimepicker.min.js')}}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+//            format: 'DD/MM/YYYY HH:mm',
+            format: 'YYYY-MM-DD HH:mm:ss',
+        });
+    });
+</script>
 
 </body>
 </html>

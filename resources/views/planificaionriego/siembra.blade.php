@@ -11,7 +11,6 @@
         </div>
         <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionriegos/siembras') }}">
             {{ csrf_field() }}
-
             <div class="row">
                 <div class="col-md-6 col-md-offset-1">
                     <div class="form-group{{ $errors->has('siembra_id') ? ' has-error' : '' }}">
@@ -50,18 +49,20 @@
                     </div>
                 @endif
                 <div class="panel-body">
-                    @if (isset($riegosband))
-                        @if (isset($planificacionriegos))
+                    @if (isset($siembra_id))
+                        @if (isset($riego_id))
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
                                     <th style="text-align: center">Fecha</th>
+                                    <th style="text-align: center">Estado</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach ($planificacionriegos as $id => $planificacionriego)
                                     <tr>
                                         <td style="text-align: center">{{$planificacionriego['fecha_planificacion']}}</td>
+                                        <td style="text-align: center">{{$planificacionriego['estado']}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -79,16 +80,17 @@
                                 </button>
                             </center>
                         @endif
-
                     @else
-                        No se tienen riegos registrados
+                        <center>
+                            Seleccione una siembra
+                        </center>
                     @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="myModal" role="dialog" style="margin-top: 200px">
+<div class="modal fade" id="myModal" role="dialog" style="margin-top: 100px">
     <div class="modal-dialog">
 
         <!-- Modal content-->
@@ -102,22 +104,28 @@
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionriegos/addriego') }}">
                     {{ csrf_field() }}
                     <div class="row">
+                        {{--<div class="form-group">--}}
+                            {{--<div class="col-md-12" style="text-align: center;">--}}
+                                {{--<input type="datetime" name="fecha_planificacion">--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <div class="form-group">
-                            <div class="col-md-12" style="text-align: center;">
-                                <input type="date" name="fecha_planificacion">
+                            <div class='col-md-10 col-md-offset-1 input-group date' id='datetimepicker1'>
+                                <input type='text' class="form-control" name="fecha_planificacion"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        @if (isset($siembra_idd))
-                            <input type="hidden" name="siembra_id" value="{{ $siembra_idd }}" >
-                            <input type="hidden" name="newriego" value="True" >
-                        @endif
                         @if (isset($siembra_id))
                             <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
-                        @endif
-                        @if (isset($riego_id))
-                            <input type="hidden" name="riego_id" value="{{ $riego_id }}" >
+                            @if (isset($riego_id))
+                                <input type="hidden" name="riego_id" value="{{ $riego_id }}" >
+                            @else
+                                <input type="hidden" name="newriego" value="True" >
+                            @endif
                         @endif
                         <div class="form-group">
                             <div class="col-md-12" style="text-align: center;">

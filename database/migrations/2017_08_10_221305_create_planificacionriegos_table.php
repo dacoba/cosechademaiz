@@ -15,7 +15,8 @@ class CreatePlanificacionriegosTable extends Migration
         Schema::create('planificacionriegos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('numero_alerta');
-            $table->date('fecha_planificacion');
+            $table->datetime('fecha_planificacion');
+            $table->string('estado');
             $table->integer('riego_id')->unsigned();
             $table->foreign('riego_id')->references('id')->on('riegos')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
