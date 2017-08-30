@@ -12,6 +12,7 @@ body {
 	font: 300 14px/1.8 'Raleway', sans-serif;
 	color: #666;
 	overflow-x: hidden;
+	background-color: rgba(195, 195, 195, 0.54);
 }
 
 img {
@@ -144,7 +145,7 @@ h6 {
 .form-control {
 	background: #FFF;
 	border: 1px solid #D8E1E4;
-	font-size: 12px;
+	font-size: 14px;
 	padding: 0 15px;
 }
 

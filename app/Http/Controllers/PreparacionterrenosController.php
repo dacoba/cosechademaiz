@@ -17,6 +17,10 @@ class PreparacionterrenosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     protected function validator(array $data)
     {
         return Validator::make($data, [

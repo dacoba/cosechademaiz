@@ -15,6 +15,10 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     protected function validatorTecnico(array $data)
     {
         return Validator::make($data, [

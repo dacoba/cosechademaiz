@@ -6,10 +6,10 @@
 
         <div class="col-sm-6 col-sm-offset-3">
             <div class="pfblock-header">
-                <h2 class="pfblock-title">Administrar Planificacion de Riego</h2>
+                <h2 class="pfblock-title">Administrar Planificacion de Fumigacion</h2>
             </div>
         </div>
-        <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionriegos/siembras') }}">
+        <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionfumigacions/siembras') }}">
             {{ csrf_field() }}
             <div class="row">
                 <div class="col-md-6 col-md-offset-1">
@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-btn fa-user"></i> Cargar Riegos
+                                <i class="fa fa-btn fa-user"></i> Cargar Fumigaciones
                             </button>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
         </form>
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Riegos Planificados</div>
+                <div class="panel-heading">Fumigaciones Planificadas</div>
                 @if (isset($mensaje))
                     <div class="alert alert-success">
                         <strong>¡Correcto! </strong>{{ $mensaje }}
@@ -50,7 +50,7 @@
                 @endif
                 <div class="panel-body">
                     @if (isset($siembra_id))
-                        @if (isset($riego_id))
+                        @if (isset($fumigacion_id))
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
@@ -59,10 +59,10 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($planificacionriegos as $id => $planificacionriego)
+                                @foreach ($planificacionfumigacions as $id => $planificacionfumigacion)
                                     <tr>
-                                        <td style="text-align: center">{{$planificacionriego['fecha_planificacion']}}</td>
-                                        <td style="text-align: center">{{$planificacionriego['estado']}}</td>
+                                        <td style="text-align: center">{{$planificacionfumigacion['fecha_planificacion']}}</td>
+                                        <td style="text-align: center">{{$planificacionfumigacion['estado']}}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -74,7 +74,7 @@
                             </center>
                         @else
                             <center>
-                                Esta siembra aun no cuenta con una planificacion de riegos<br>
+                                Esta siembra aun no cuenta con una planificacion de fumigacion<br>
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                                     <i class="fa fa-btn fa-user"></i> Iniciar Planificacion
                                 </button>
@@ -100,8 +100,8 @@
                 <h4 class="modal-title">Planificacion de riego</h4>
             </div>
             <div class="modal-body">
-                <p  style="text-align: center;">Fecha del siguiente riego.</p>
-                <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionriegos/addriego') }}">
+                <p  style="text-align: center;">Fecha de la siguiente fumigacion.</p>
+                <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionfumigacions/addriego') }}">
                     {{ csrf_field() }}
                     <div class="row">
                         {{--<div class="form-group">--}}
@@ -121,8 +121,8 @@
                     <div class="row">
                         @if (isset($siembra_id))
                             <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
-                            @if (isset($riego_id))
-                                <input type="hidden" name="riego_id" value="{{ $riego_id }}" >
+                            @if (isset($fumigacion_id))
+                                <input type="hidden" name="fumigacion_id" value="{{ $fumigacion_id }}" >
                             @else
                                 <input type="hidden" name="newriego" value="True" >
                             @endif

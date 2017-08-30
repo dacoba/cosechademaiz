@@ -9,16 +9,16 @@
     <title>Cosecha</title>
 
     <!-- CSS -->
-    {{--<link href="{{URL::asset('assets/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">--}}
-    <link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="{{URL::asset('assets/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">
+    {{--<link rel="stylesheet" type="text/css" media="screen" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">--}}
     <link href="{{URL::asset('assets/css/font-awesome.min.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/simple-line-icons.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/animate.css')}}" rel="stylesheet">
 
     <!-- Custom styles CSS -->
-    <link href="{{URL::asset('assets/css/style.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/bootstrap-slider.css')}}" rel="stylesheet" media="screen">
+    <link href="{{URL::asset('assets/css/style.css')}}" rel="stylesheet" media="screen">
 
     <script src="{{URL::asset('assets/js/modernizr.custom.js')}}"></script>
 
@@ -71,21 +71,26 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Riego</a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ url('/planificacionriegos/siembras') }}">Planificacion</a></li>
-                            <li><a href="#">Administrar Riego</a></li>
+                            <li><a href="{{ url('/riegos') }}">Administrar Riego</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Fumigacion</a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Planificacion</a></li>
-                            <li><a href="#">Administrar Fumigacion</a></li>
+                            <li><a href="{{ url('/planificacionfumigacions/siembras') }}">Planificacion</a></li>
+                            <li><a href="{{ url('/fumigacions') }}">Administrar Fumigacion</a></li>
                         </ul>
                     </li>
-                    <li><a href="">Cosecha</a></li>
-                    <li><a href="">Reportes</a></li>
+                    <li><a href="{{ url('/cosechas') }}">Cosecha</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reportes</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url('/reportes/siembras') }}">Reporte de Siembras</a></li>
+                        </ul>
+                    </li>
                     @endif
                     @if (Auth::guest())
-                        <li><a href="{{ url('/login') }}">Login</a></li>
+                        <li><a href="{{ url('/login') }}">Iniciar Sesion</a></li>
 {{--                        <li><a href="{{ url('/register') }}">Register</a></li>--}}
                     @else
                         <li class="dropdown">

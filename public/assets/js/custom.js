@@ -57,14 +57,12 @@
                     animate: 2000,
                     lineCap:'butt',
                     scaleColor: false,
-                    barColor: '#FF5252',
+                    barColor: '#008000',
                     trackColor: 'transparent',
-                    lineWidth: 10
+                    lineWidth: 10,
                 });
             });
         },{offset:'80%'});
-        
-        
         /* ---------------------------------------------- /*
 		 * Quote Rotator
 		/* ---------------------------------------------- */

@@ -30,3 +30,19 @@ Route::get('/planificacionriegos/siembras', 'PlanificacionriegosController@getSi
 Route::post('/planificacionriegos/siembras', 'PlanificacionriegosController@postSiembras');
 Route::post('/planificacionriegos/addriego', 'PlanificacionriegosController@addRiego');
 Route::resource('/planificacionriegos', 'PlanificacionriegosController');
+Route::post('/riegos/create', 'RiegosController@postCreate');
+Route::resource('/riegos', 'RiegosController');
+
+Route::get('/planificacionfumigacions/siembras', 'PlanificacionfumigacionsController@getSiembras');
+Route::post('/planificacionfumigacions/siembras', 'PlanificacionfumigacionsController@postSiembras');
+Route::post('/planificacionfumigacions/addriego', 'PlanificacionfumigacionsController@addRiego');
+Route::resource('/planificacionfumigacions', 'PlanificacionfumigacionsController');
+Route::post('/fumigacions/create', 'FumigacionsController@postCreate');
+Route::resource('/fumigacions', 'FumigacionsController');
+
+Route::post('/cosechas/create', 'CosechasController@postCreate');
+Route::resource('/cosechas', 'CosechasController');
+
+Route::get('/reportes/siembras', 'CosechasController@getreporteSiembra');
+Route::post('/reportes/siembras', 'CosechasController@postreporteSiembra');
+
