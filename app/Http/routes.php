@@ -24,7 +24,10 @@ Route::get('/users/productor', 'UsersController@createProductor');
 Route::post('/users/productor', 'UsersController@storeProductor');
 Route::resource('/users', 'UsersController');
 Route::resource('/terrenos', 'TerrenosController');
+
+Route::post('/preparacionterrenos/create', 'PreparacionterrenosController@postCreate');
 Route::resource('/preparacionterrenos', 'PreparacionterrenosController');
+
 Route::resource('/siembras', 'SiembrasController');
 Route::get('/planificacionriegos/siembras', 'PlanificacionriegosController@getSiembras');
 Route::post('/planificacionriegos/siembras', 'PlanificacionriegosController@postSiembras');

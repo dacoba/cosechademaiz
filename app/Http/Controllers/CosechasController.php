@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Cosecha;
 use App\Siembra;
 use App\Riego;
 use App\Planificacionriego;
@@ -134,6 +135,13 @@ class CosechasController extends Controller
             {
                 $band = False;
             }
+            if($band){
+                $cosecha_count = Cosecha::where('siembra_id', $request['siembra_id'])->count();
+                if($cosecha_count){
+                    $cosecha = Cosecha::where('siembra_id', $request['siembra_id'])->get();
+                    return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band, 'cosecha' => $cosecha]);
+                }
+            }
             return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band]);
         }
         return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
@@ -147,17 +155,32 @@ class CosechasController extends Controller
      */
     public function store(Request $request)
     {
-        Cosecha::create([
-            'problemas_produccion' => $request['problemas_produccion'],
-            'altura_tallo' => $request['altura_tallo'],
-            'humedad_terreno' => $request['humedad_terreno'],
-            'rendimiento_produccion' => $request['rendimiento_produccion'],
-            'comentario_cosecha' => $request['comentario_cosecha'],
-            'siembra_id' => $request['siembra_id'],
-        ]);
+        $cosecha_count = Cosecha::where('siembra_id', $request['siembra_id'])->count();
+        if($cosecha_count){
+
+            Cosecha::where('siembra_id', $request['siembra_id'])
+                ->update([
+                    'problemas_produccion' => $request['problemas_produccion'],
+                    'altura_tallo' => $request['altura_tallo'],
+                    'humedad_terreno' => $request['humedad_terreno'],
+                    'rendimiento_produccion' => $request['rendimiento_produccion'],
+                    'comentario_cosecha' => $request['comentario_cosecha'],
+                ]);
+            $cosecha = Cosecha::where('siembra_id', $request['siembra_id'])->get();
+        }else{
+            $cosecha = Cosecha::create([
+                'problemas_produccion' => $request['problemas_produccion'],
+                'altura_tallo' => $request['altura_tallo'],
+                'humedad_terreno' => $request['humedad_terreno'],
+                'rendimiento_produccion' => $request['rendimiento_produccion'],
+                'comentario_cosecha' => $request['comentario_cosecha'],
+                'siembra_id' => $request['siembra_id'],
+            ]);
+        }
         $mensaje = "Cosecha registrado exitosamente";
         $siembras = Siembra::all();
-        return view("cosecha.registrar", ['siembras' => $siembras]);
+        $band = True;
+        return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band, 'cosecha' => $cosecha]);
     }
 
     /**

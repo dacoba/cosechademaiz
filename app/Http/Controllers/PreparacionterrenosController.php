@@ -31,9 +31,21 @@ class PreparacionterrenosController extends Controller
 
     public function index()
     {
-        //
+        $terrenos = Terreno::all();
+        return view('preparacionterreno.index',['terrenos' => $terrenos]);
     }
-
+    public function postCreate(Request $request)
+    {
+        $preterreno_count = Preparacionterreno::where('terreno_id', $request['terreno_id'])->count();
+        $terrenos = Terreno::all();
+        $tecnicos = User::where('tipo', "Tecnico")->get();
+        if($preterreno_count)
+        {
+            $preterreno = Preparacionterreno::where('terreno_id', $request['terreno_id'])->get();
+            return view('preparacionterreno.index',['terreno_id' => $request['terreno_id'], 'terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos]);
+        }
+        return view('preparacionterreno.index',['terreno_id' => $request['terreno_id'], 'terrenos' => $terrenos, 'tecnicos' => $tecnicos]);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -54,27 +66,44 @@ class PreparacionterrenosController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = $this->validator($request->all());
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
+        $preterreno_count = Preparacionterreno::where('terreno_id', $request['terreno_id'])->count();
+        if($preterreno_count)
+        {
+            Preparacionterreno::where('terreno_id', $request['terreno_id'])
+                ->update([
+                    'ph' => $request['ph'],
+                    'plaga_suelo' => $request['plaga_suelo'],
+                    'drenage' => $request['drenage'],
+                    'erocion' => $request['erocion'],
+                    'maleza_preparacion' => $request['maleza_preparacion'],
+                    'comentario_preparacion' => $request['comentario_preparacion'],
+                    'tecnico_id' => $request['tecnico_id'],
+                    'estado' => 'En progreso',
+                ]);
+        $preterreno = Preparacionterreno::where('terreno_id', $request['terreno_id'])->get();
+        }else{
+            $validator = $this->validator($request->all());
+            if ($validator->fails()) {
+                $this->throwValidationException(
+                    $request, $validator
+                );
+            }
+            $preterreno = Preparacionterreno::create([
+                'ph' => $request['ph'],
+                'plaga_suelo' => $request['plaga_suelo'],
+                'drenage' => $request['drenage'],
+                'erocion' => $request['erocion'],
+                'maleza_preparacion' => $request['maleza_preparacion'],
+                'comentario_preparacion' => $request['comentario_preparacion'],
+                'estado' => 'En progreso',
+                'terreno_id' => $request['terreno_id'],
+                'tecnico_id' => $request['tecnico_id'],
+            ]);
         }
-        Preparacionterreno::create([
-            'ph' => $request['ph'],
-            'plaga_suelo' => $request['plaga_suelo'],
-            'drenage' => $request['drenage'],
-            'erocion' => $request['erocion'],
-            'maleza_preparacion' => $request['maleza_preparacion'],
-            'comentario_preparacion' => $request['comentario_preparacion'],
-            'estado' => 'En progreso',
-            'terreno_id' => $request['terreno_id'],
-            'tecnico_id' => $request['tecnico_id'],
-        ]);
-        $mensaje = "Terreno registrado exitosamente";
+        $mensaje = "Cosecha registrado exitosamente";
         $terrenos = Terreno::all();
         $tecnicos = User::where('tipo', "Tecnico")->get();
-        return view("preparacionterreno.registrar", ['terrenos' => $terrenos, 'tecnicos' => $tecnicos, 'mensaje' => $mensaje]);
+        return view('preparacionterreno.index',['terreno_id' => $request['terreno_id'], 'terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos]);
     }
 
     /**

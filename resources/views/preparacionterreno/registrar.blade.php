@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="plaga_suelo" class="col-md-4 control-label">plaga_suelo</label>
+                            <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo</label>
                             <div class="col-md-6">
                                 <select id="plaga_suelo" name="plaga_suelo" class="form-control">
                                 <option value="1">1</option>
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="drenage" class="col-md-4 control-label">drenage</label>
+                            <label for="drenage" class="col-md-4 control-label">Drenage</label>
                             <div class="col-md-6">
                                 <select id="drenage" name="drenage" class="form-control">
                                 <option value="1">1</option>
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="erocion" class="col-md-4 control-label">erocion</label>
+                            <label for="erocion" class="col-md-4 control-label">Erocion</label>
                             <div class="col-md-6">
                                 <select id="erocion" name="erocion" class="form-control">
                                 <option value="1">1</option>
@@ -95,7 +95,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="maleza_preparacion" class="col-md-4 control-label">maleza_preparacion</label>
+                            <label for="maleza_preparacion" class="col-md-4 control-label">Maleza Preparacion</label>
                             <div class="col-md-6">
                                 <select id="maleza_preparacion" name="maleza_preparacion" class="form-control">
                                 <option value="1">1</option>
@@ -131,7 +131,9 @@
                             <div class="col-md-6">
                                 <select name="terreno_id" class="form-control">
                                     @foreach ( $terrenos as $terreno )
-                                        <option value="{{$terreno['id']}}" @if (old('terreno_id') == $terreno['id']) selected @endif >{{$terreno['area_parcela']}}</option>
+                                        <option value="{{$terreno['id']}}" @if (old('terreno_id') == $terreno['id']) selected @endif >
+                                            {{$terreno['productor']['nombre']}} {{$terreno['productor']['apellido']}} - {{$terreno['area_parcela']}} Hec.
+                                        </option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('terreno_id'))
@@ -143,7 +145,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('tecnico_id') ? ' has-error' : '' }}">
-                            <label for="tecnico_id" class="col-md-4 control-label">Tipo de Producto</label>
+                            <label for="tecnico_id" class="col-md-4 control-label">Tecnico</label>
                             <div class="col-md-6">
                                 <select name="tecnico_id" class="form-control">
                                     @foreach ( $tecnicos as $tecnico )

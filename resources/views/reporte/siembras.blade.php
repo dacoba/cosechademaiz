@@ -52,6 +52,7 @@
                     @if (isset($siembra_id))
                         @if (isset($band))
                             <center>
+
                                 <div class="skills">
                                     <div class="col-sm-6 col-md-3 col-md-offset-2 text-center">
                                         <span data-percent="{{ $riego }}" class="chart easyPieChart" style="width: 140px; height: 140px; line-height: 140px;">
@@ -72,7 +73,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <br>
+                                <br><br><br><br><br>
                                 <h2>Siembra</h2>
                                 <table class="table table-bordered">
                                     <thead>
@@ -100,7 +101,48 @@
                                         </tr>
                                     </tbody>
                                 </table>
+
                             </center>
+                            <style>
+                                text {
+                                    font: 12px sans-serif;
+                                }
+                                svg {
+                                    display: block;
+                                }
+                                html, body, #chart1, svg {
+                                    margin: 0px;
+                                    padding: 0px;
+                                    height: 100%;
+                                    width: 100%;
+                                }
+                            </style>
+                            <div id="chart1">
+                                <svg></svg>
+                            </div>
+                            <script>
+
+                                historicalBarChart = [
+                                    {
+                                        key: "Cumulative Return",
+                                        values: [
+                                            {
+                                                "label" : "Semilla" ,
+                                                "value" : <?=$siembra['semilla']?>
+                                            } ,
+                                            {
+                                                "label" : "Fertilizacion" ,
+                                                "value" : <?=$siembra['fertilizacion']?>
+                                            } ,
+                                            {
+                                                "label" : "Densidad de la siembra" ,
+                                                "value" : <?=$siembra['densidad_siembra']?>
+                                            }
+                                        ]
+                                    }
+                                ];
+
+                            </script>
                         @else
                             <center>
                                 Esta siembra aun no cuenta con una planificacion de riego o fumigacion

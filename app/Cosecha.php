@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Siembra extends Model
+class Cosecha extends Model
 {
     protected $table = 'cosechas';
     protected $fillable = [

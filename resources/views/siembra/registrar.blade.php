@@ -95,7 +95,9 @@
                             <div class="col-md-6">
                                 <select name="preparacionterreno_id" class="form-control">
                                     @foreach ( $preparacionterrenos as $preparacionterreno )
-                                        <option value="{{$preparacionterreno['id']}}" @if (old('preparacionterreno_id') == $preparacionterreno['id']) selected @endif >{{$preparacionterreno['terreno_id']}}</option>
+                                        <option value="{{$preparacionterreno['id']}}" @if (old('preparacionterreno_id') == $preparacionterreno['id']) selected @endif >
+                                            {{$preparacionterreno['terreno']['productor']['nombre']}} {{$preparacionterreno['terreno']['productor']['apellido']}} - {{$preparacionterreno['terreno']['area_parcela']}} Hec.
+                                        </option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('preparacionterreno_id'))

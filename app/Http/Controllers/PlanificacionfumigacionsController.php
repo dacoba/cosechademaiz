@@ -125,6 +125,8 @@ class PlanificacionfumigacionsController extends Controller
             'estado' => "planificado",
             'fumigacion_id' => $request['fumigacion_id'],
         ]);
+        $event_on= "SET GLOBAL event_scheduler =  \"ON\"";
+        DB::unprepared($event_on);
         $query = 'CREATE EVENT planificacionfumigacion_'.$planificacionfumigacion['id'].' ON SCHEDULE AT \''.$request['fecha_planificacion'].'\' DO UPDATE planificacionfumigacions SET estado=\'ejecutado\' WHERE id='.$planificacionfumigacion['id'];
         DB::unprepared($query);
         $fumigacion = Fumigacion::where('siembra_id', $request['siembra_id'])->get();

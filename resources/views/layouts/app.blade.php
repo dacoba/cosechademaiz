@@ -19,6 +19,7 @@
     <link href="{{URL::asset('assets/css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/bootstrap-slider.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/style.css')}}" rel="stylesheet" media="screen">
+    <link href="{{URL::asset('assets/nvd/nv.d3.css')}}" rel="stylesheet" media="screen">
 
     <script src="{{URL::asset('assets/js/modernizr.custom.js')}}"></script>
 
@@ -63,7 +64,7 @@
                             @if ( Auth::user()->tipo == 'Administrador')
                                 <li><a href="{{ url('/terrenos/create') }}">Administar Terreno</a></li>
                             @endif
-                            <li><a href="{{ url('/preparacionterrenos/create') }}">Preparacion del Terreno</a></li>
+                            <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
                         </ul>
                     </li>
                     <li><a href="{{ url('/siembras/create') }}">Siembra</a></li>
@@ -168,6 +169,8 @@
 <script src="{{URL::asset('assets/js/jquery-2.1.1.min.js')}}"></script>
 <script src="{{URL::asset('assets/js/moment-with-locales.js')}}"></script>
 <script src="{{URL::asset('assets/js/bootstrap-datetimepicker.min.js')}}"></script>
+<script src="{{URL::asset('assets/nvd/d3.min.js')}}"></script>
+<script src="{{URL::asset('assets/nvd/nv.d3.js')}}"></script>
 <script type="text/javascript">
     $(function () {
         $('#datetimepicker1').datetimepicker({
@@ -175,6 +178,25 @@
             format: 'YYYY-MM-DD HH:mm:ss',
         });
     });
+
+    nv.addGraph(function() {
+        var chart = nv.models.discreteBarChart()
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            .staggerLabels(true)
+            //.staggerLabels(historicalBarChart[0].values.length > 8)
+            .showValues(true)
+            .duration(250)
+        ;
+
+        d3.select('#chart1 svg')
+            .datum(historicalBarChart)
+            .call(chart);
+
+        nv.utils.windowResize(chart.update);
+        return chart;
+    });
+
 </script>
 
 </body>

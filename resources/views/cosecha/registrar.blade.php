@@ -26,16 +26,16 @@
                             <label for="problemas_produccion" class="col-md-4 control-label">problemas_produccion</label>
                             <div class="col-md-6">
                                 <select id="problemas_produccion" name="problemas_produccion" class="form-control">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
+                                    <option value="1" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '1') selected @endif >1</option>
+                                    <option value="2" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '2') selected @endif >2</option>
+                                    <option value="3" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '3') selected @endif >3</option>
+                                    <option value="4" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '4') selected @endif >4</option>
+                                    <option value="5" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '5') selected @endif >5</option>
+                                    <option value="6" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '6') selected @endif >6</option>
+                                    <option value="7" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '7') selected @endif >7</option>
+                                    <option value="8" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '8') selected @endif >8</option>
+                                    <option value="9" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '9') selected @endif >9</option>
+                                    <option value="10" @if (isset($cosecha['problemas_produccion']) and $cosecha['problemas_produccion'] == '10') selected @endif >10</option>
                                 </select>
                             </div>
                         </div>
