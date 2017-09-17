@@ -20,6 +20,9 @@
     <link href="{{URL::asset('assets/css/bootstrap-slider.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/css/style.css')}}" rel="stylesheet" media="screen">
     <link href="{{URL::asset('assets/nvd/nv.d3.css')}}" rel="stylesheet" media="screen">
+    <script src="{{URL::asset('assets/js/jquery-2.1.1.min.js')}}"></script>
+    <script src="{{URL::asset('assets/nvd/d3.min.js')}}"></script>
+    <script src="{{URL::asset('assets/nvd/nv.d3.js')}}"></script>
 
     <script src="{{URL::asset('assets/js/modernizr.custom.js')}}"></script>
 
@@ -53,8 +56,8 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Usuarios</a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{{ url('/users/tecnico') }}">Tecnico</a></li>
                                     <li><a href="{{ url('/users/productor') }}">Productor</a></li>
+                                    <li><a href="{{ url('/users/tecnico') }}">Tecnico</a></li>
                                 </ul>
                             </li>
                         @endif
@@ -63,8 +66,11 @@
                         <ul class="dropdown-menu">
                             @if ( Auth::user()->tipo == 'Administrador')
                                 <li><a href="{{ url('/terrenos/create') }}">Administar Terreno</a></li>
+                                <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
+                                <li><a href="{{ url('/simuladors') }}">Simulador</a></li>
+                            @else
+                                <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
                             @endif
-                            <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
                         </ul>
                     </li>
                     <li><a href="{{ url('/siembras/create') }}">Siembra</a></li>
@@ -166,11 +172,11 @@
 <script src="{{URL::asset('assets/js/waypoints.min.js')}}"></script>
 <script src="{{URL::asset('assets/js/jquery.cbpQTRotator.js')}}"></script>
 <script src="{{URL::asset('assets/js/custom.js')}}"></script>
-<script src="{{URL::asset('assets/js/jquery-2.1.1.min.js')}}"></script>
+{{--<script src="{{URL::asset('assets/js/jquery-2.1.1.min.js')}}"></script>--}}
 <script src="{{URL::asset('assets/js/moment-with-locales.js')}}"></script>
 <script src="{{URL::asset('assets/js/bootstrap-datetimepicker.min.js')}}"></script>
-<script src="{{URL::asset('assets/nvd/d3.min.js')}}"></script>
-<script src="{{URL::asset('assets/nvd/nv.d3.js')}}"></script>
+{{--<script src="{{URL::asset('assets/nvd/d3.min.js')}}"></script>--}}
+{{--<script src="{{URL::asset('assets/nvd/nv.d3.js')}}"></script>--}}
 <script type="text/javascript">
     $(function () {
         $('#datetimepicker1').datetimepicker({
@@ -180,7 +186,7 @@
     });
 
     nv.addGraph(function() {
-        var chart = nv.models.discreteBarChart()
+        chartBar = nv.models.discreteBarChart()
             .x(function(d) { return d.label })
             .y(function(d) { return d.value })
             .staggerLabels(true)
@@ -191,12 +197,35 @@
 
         d3.select('#chart1 svg')
             .datum(historicalBarChart)
-            .call(chart);
+            .call(chartBar);
 
-        nv.utils.windowResize(chart.update);
-        return chart;
+        nv.utils.windowResize(chartBar.update);
+        return chartBar;
     });
 
+</script>
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td_aux = tr[i].getElementsByTagName("td");
+            for (j = 0; j < td_aux.length; j++) {
+                td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        break;
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    }
 </script>
 
 </body>

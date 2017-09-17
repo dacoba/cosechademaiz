@@ -40,9 +40,9 @@
                 </div>
             </div>
         </form>
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Fumigaciones Planificadas</div>
+                <div class="panel-heading">Reporte de siembras</div>
                 @if (isset($mensaje))
                     <div class="alert alert-success">
                         <strong>¡Correcto! </strong>{{ $mensaje }}
@@ -51,98 +51,103 @@
                 <div class="panel-body">
                     @if (isset($siembra_id))
                         @if (isset($band))
-                            <center>
-
-                                <div class="skills">
-                                    <div class="col-sm-6 col-md-3 col-md-offset-2 text-center">
+                            <div class="row" style="margin-top: 50px;">
+                                <div class="col-lg-6 col-md-12">
+                                <center>
+                                    <h2 class="h2-reports">Panificaciones</h2>
+                                    <div class="skills">
+                                        <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
                                         <span data-percent="{{ $riego }}" class="chart easyPieChart" style="width: 140px; height: 140px; line-height: 140px;">
                                             <span class="percent">{{ $riego }}</span>
                                         </span>
-                                        <h3 class="text-center">Riego</h3>
-                                        @if (isset($planificacionriegonext) and $planificacionriegonext != False)
-                                            <p><strong>Fecha del siguiente riego</strong><br>{{ $planificacionriegonext[0]['fecha_planificacion'] }}</p>
-                                        @endif
-                                    </div>
-                                    <div class="col-sm-6 col-md-3 col-md-offset-2 text-center">
+                                            <h3 class="text-center">Riego</h3>
+                                            @if (isset($planificacionriegonext) and $planificacionriegonext != False)
+                                                <p class="reports-skills-p"><strong>Fecha del siguiente riego</strong><br>{{ $planificacionriegonext[0]['fecha_planificacion'] }}</p>
+                                            @endif
+                                        </div>
+                                        <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
                                         <span data-percent="{{ $fumigacion }}" class="chart easyPieChart" style="barColor:black; width: 140px; height: 140px; line-height: 140px;">
                                             <span class="percent">{{ $fumigacion }}</span>
                                         </span>
-                                        <h3 class="text-center">Fumigacion</h3>
-                                        @if (isset($planificacionfumigacionnext) and $planificacionfumigacionnext != False)
-                                            <p><strong>Fecha de la siguiente fumigacion</strong><br>{{ $planificacionfumigacionnext[0]['fecha_planificacion'] }}</p>
-                                        @endif
+                                            <h3 class="text-center">Fumigacion</h3>
+                                            @if (isset($planificacionfumigacionnext) and $planificacionfumigacionnext != False)
+                                                <p class="reports-skills-p"><strong>Fecha de la siguiente fumigacion</strong><br>{{ $planificacionfumigacionnext[0]['fecha_planificacion'] }}</p>
+                                            @endif
+                                        </div>
                                     </div>
+                                </center>
                                 </div>
-                                <br><br><br><br><br>
-                                <h2>Siembra</h2>
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th style="text-align: center">Dato</th>
-                                        <th style="text-align: center">Valor</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td style="text-align: center">Semilla</td>
-                                            <td style="text-align: center">{{$siembra['semilla']}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center">Fertilizacion</td>
-                                            <td style="text-align: center">{{$siembra['fertilizacion']}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center">Densidad de la siembra</td>
-                                            <td style="text-align: center">{{$siembra['densidad_siembra']}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center">Comentario</td>
-                                            <td style="text-align: center">{{$siembra['comentario_siembra']}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                            </center>
-                            <style>
-                                text {
-                                    font: 12px sans-serif;
-                                }
-                                svg {
-                                    display: block;
-                                }
-                                html, body, #chart1, svg {
-                                    margin: 0px;
-                                    padding: 0px;
-                                    height: 100%;
-                                    width: 100%;
-                                }
-                            </style>
-                            <div id="chart1">
-                                <svg></svg>
-                            </div>
-                            <script>
-
-                                historicalBarChart = [
-                                    {
-                                        key: "Cumulative Return",
-                                        values: [
+                                <div class="col-lg-6 col-md-12">
+                                    <center>
+                                        <h2 class="h2-reports">Siembra</h2>
+                                        {{--<table class="table table-bordered">--}}
+                                            {{--<thead>--}}
+                                            {{--<tr>--}}
+                                                {{--<th style="text-align: center">Dato</th>--}}
+                                                {{--<th style="text-align: center">Valor</th>--}}
+                                            {{--</tr>--}}
+                                            {{--</thead>--}}
+                                            {{--<tbody>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td style="text-align: center">Semilla</td>--}}
+                                                    {{--<td style="text-align: center">{{$siembra['semilla']}}</td>--}}
+                                                {{--</tr>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td style="text-align: center">Fertilizacion</td>--}}
+                                                    {{--<td style="text-align: center">{{$siembra['fertilizacion']}}</td>--}}
+                                                {{--</tr>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td style="text-align: center">Densidad de la siembra</td>--}}
+                                                    {{--<td style="text-align: center">{{$siembra['densidad_siembra']}}</td>--}}
+                                                {{--</tr>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td style="text-align: center">Comentario</td>--}}
+                                                    {{--<td style="text-align: center">{{$siembra['comentario_siembra']}}</td>--}}
+                                                {{--</tr>--}}
+                                            {{--</tbody>--}}
+                                        {{--</table>--}}
+                                        <div id="chart1" style="height: 250px;">
+                                            <svg></svg>
+                                        </div>
+                                        <p><strong>Comentario: </strong>{{$siembra['comentario_siembra']}}</p>
+                                    </center>
+                                    <style>
+                                        text {
+                                            font: 12px sans-serif;
+                                        }
+                                        svg {
+                                            display: block;
+                                        }
+                                        html, body, #chart1, svg {
+                                            margin: 0px;
+                                            padding: 0px;
+                                            height: 100%;
+                                            width: 100%;
+                                        }
+                                    </style>
+                                    <script>
+                                        historicalBarChart = [
                                             {
-                                                "label" : "Semilla" ,
-                                                "value" : <?=$siembra['semilla']?>
-                                            } ,
-                                            {
-                                                "label" : "Fertilizacion" ,
-                                                "value" : <?=$siembra['fertilizacion']?>
-                                            } ,
-                                            {
-                                                "label" : "Densidad de la siembra" ,
-                                                "value" : <?=$siembra['densidad_siembra']?>
+                                                key: "Cumulative Return",
+                                                values: [
+                                                    {
+                                                        "label" : "Semilla" ,
+                                                        "value" : <?=$siembra['semilla']?>
+                                                    } ,
+                                                    {
+                                                        "label" : "Fertilizacion" ,
+                                                        "value" : <?=$siembra['fertilizacion']?>
+                                                    } ,
+                                                    {
+                                                        "label" : "Densidad de la siembra" ,
+                                                        "value" : <?=$siembra['densidad_siembra']?>
+                                                    }
+                                                ]
                                             }
-                                        ]
-                                    }
-                                ];
-
-                            </script>
+                                        ];
+                                    </script>
+                                </div>
+                            </div>
                         @else
                             <center>
                                 Esta siembra aun no cuenta con una planificacion de riego o fumigacion

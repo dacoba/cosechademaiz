@@ -10,7 +10,8 @@
 
 body {
 	font: 300 14px/1.8 'Raleway', sans-serif;
-	color: #666;
+	/*color: #666;*/
+	color: #444444;
 	overflow-x: hidden;
 	background-color: rgba(195, 195, 195, 0.54);
 }
@@ -78,8 +79,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2 {
-	font-size: 30px;
+	font-size: 25px;
 	margin: 0 0 30px;
+}
+
+.h2-reports {
+	margin: 0 0 0px;
 }
 
 h3 {
@@ -231,7 +236,7 @@ textarea.form-control {
 /* ---------------------------------------------- */
 
 .pfblock {
-	padding: 60px 0 100px;
+	padding: 30px 0 100px;
 }
 
 .pfblock-gray {
@@ -260,7 +265,7 @@ textarea.form-control {
 
 .pfblock-header {
 	text-align: center;
-	margin: 0 0 60px;
+	/*margin: 0 0 60px;*/
 }
 
 .pfblock-header-left {
@@ -424,7 +429,7 @@ textarea.form-control {
 .chart {
     display: inline-block;
     height: 140px;
-    margin: 50px 0;
+    margin: 0px 0;
     position: relative;
     text-align: center;
     width: 140px;
@@ -970,3 +975,39 @@ figure.effect-bubba:hover p {
 
 }
 
+.reports-skills{
+	padding-top: 40px;
+	padding-right: 0px;
+	padding-left: 0px;
+}
+
+.reports-skills-p{
+	font-size: 10pt;
+}
+/** {*/
+	/*overflow:hidden;*/
+/*}*/
+@media (max-width: 750px) {
+	::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+.fa-padding-right{
+	padding-right: 10px;
+}
+.button-back{
+	margin-right: 5px;
+}
+#myTable tr {
+	border-bottom: 1px solid #ddd;
+}
+
+#myTable tr:hover {
+	background-color: #f1f1f1;
+}
+
+.search-table{
+	width: 300px;
+	float: right;
+}

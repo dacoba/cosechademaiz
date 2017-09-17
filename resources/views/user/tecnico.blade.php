@@ -4,7 +4,7 @@
 <div class="container pfblock"">
     <div class="row">
 
-        <div class="col-sm-6 col-sm-offset-3">
+        <div class="col-sm-8 col-sm-offset-2">
             <div class="pfblock-header">
                 <h2 class="pfblock-title">Administar Cuentas de Tecnico</h2>
             </div>
@@ -136,9 +136,10 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary pull-right">
                                     <i class="fa fa-btn fa-user"></i> Register
                                 </button>
+                                <a href="{{ url('users/tecnico')}}" class="btn btn-danger pull-right button-back"><i class="fa fa-backward fa-padding-right"></i>Atras</a>
                             </div>
                         </div>
                     </form>

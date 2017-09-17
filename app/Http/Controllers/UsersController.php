@@ -42,7 +42,16 @@ class UsersController extends Controller
         $usuarios = User::all();
         return view('user.mostrar',['usuarios' => $usuarios]);
     }
-
+    public function indexProductor()
+    {
+        $productors = User::where('tipo', "Productor")->orderBy('apellido', 'asc')->get();
+        return view("user.productorlista",['productors' => $productors]);
+    }
+    public function indexTecnico()
+    {
+        $tecnicos = User::where('tipo', "Tecnico")->orderBy('apellido', 'asc')->get();
+        return view("user.tecnicolista",['tecnicos' => $tecnicos]);
+    }
     /**
      * Show the form for creating a new resource.
      *
