@@ -32,6 +32,7 @@
                             <th style="text-align: right">CI</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
+                            <th>Email</th>
                             <th style="text-align: center">Telefono</th>
                             <th>Direccion</th>
                         </tr>
@@ -42,6 +43,7 @@
                                 <td style="text-align: right">{{$tecnico['ci']}}</td>
                                 <td>{{$tecnico['nombre']}}</td>
                                 <td>{{$tecnico['apellido']}}</td>
+                                <td>{{$tecnico['email']}}</td>
                                 <td style="text-align: center">{{$tecnico['telefono']}}</td>
                                 <td>{{$tecnico['direccion']}}</td>
                             </tr>

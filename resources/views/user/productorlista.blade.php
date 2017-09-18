@@ -32,6 +32,7 @@
                             <th style="text-align: right">CI</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
+                            <th>Email</th>
                             <th style="text-align: center">Telefono</th>
                             <th>Direccion</th>
                         </tr>
@@ -42,6 +43,7 @@
                                 <td style="text-align: right">{{$productor['ci']}}</td>
                                 <td>{{$productor['nombre']}}</td>
                                 <td>{{$productor['apellido']}}</td>
+                                <td>{{$productor['email']}}</td>
                                 <td style="text-align: center">{{$productor['telefono']}}</td>
                                 <td>{{$productor['direccion']}}</td>
                             </tr>

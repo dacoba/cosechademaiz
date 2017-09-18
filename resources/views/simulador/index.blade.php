@@ -226,12 +226,11 @@
                             width: 100%;
                         }
                     </style>
-
                     {{--<div id="chart0" style="height: 500px;"></div>--}}
                     {{--<div class="text-center">--}}
                         {{--<button onclick="randomizeFillOpacity();">Randomize fill opacity</button>--}}
                     {{--</div>--}}
-                    <div id="chart1" style="height: 350px;">
+                    <div id="chart1" style="height: 350px; width: 500px">
                         <svg></svg>
                     </div>
                     <script>

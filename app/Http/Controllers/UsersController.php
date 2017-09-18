@@ -25,6 +25,7 @@ class UsersController extends Controller
             'ci' => 'required|max:10|unique:users',
             'nombre' => 'required|max:255',
             'login' => 'required|max:15|unique:users',
+            'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
     }
@@ -92,6 +93,7 @@ class UsersController extends Controller
             'ci' => $request['ci'],
             'nombre' => $request['nombre'],
             'apellido' => $request['apellido'],
+            'email' => $request['email'],
             'telefono' => $request['telefono'],
             'direccion' => $request['direccion'],
             'tipo' => "Tecnico",
