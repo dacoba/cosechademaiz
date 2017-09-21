@@ -61,7 +61,7 @@
                                     <div class="col-md-6">
                                         <select name="tecnico_id" class="form-control" @if ( Auth::user()->tipo == 'Tecnico') readonly @endif>
                                             @foreach ( $tecnicos as $tecnico )
-                                                <option value="{{$tecnico['id']}}" @if ($preterreno[0]['tecnico_id'] == $tecnico['id']) selected @endif >{{$tecnico['nombre']}} {{$tecnico['apellido']}}</option>
+                                                <option value="{{$tecnico['id']}}" @if (isset($preterreno[0]['tecnico_id']) and $preterreno[0]['tecnico_id'] == $tecnico['id']) selected @endif >{{$tecnico['nombre']}} {{$tecnico['apellido']}}</option>
                                             @endforeach
                                         </select>
                                         @if ($errors->has('tecnico_id'))

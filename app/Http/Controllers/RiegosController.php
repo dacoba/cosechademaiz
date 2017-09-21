@@ -47,6 +47,10 @@ class RiegosController extends Controller
             }
             $riego = Riego::find($riego_id);
             $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
+            if(isset($request['planificacionriego_id'])){
+                $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
+                return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'planificacionriego_done' => $planificacionriego_done]);
+            }
             return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego]);
         };
         return view('riego.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
@@ -60,20 +64,19 @@ class RiegosController extends Controller
      */
     public function store(Request $request)
     {
-        Riego::where('id', $request['riego_id'])
+        Planificacionriego::where('id', $request['planificacionriego_id'])
             ->update([
                 'metodos_riego' => $request['metodos_riego'],
                 'comportamiento_lluvia' => $request['comportamiento_lluvia'],
                 'problemas_drenaje' => $request['problemas_drenaje'],
                 'comentario_riego' => $request['comentario_riego'],
             ]);
+        $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
         $siembras = Siembra::all();
 
-        $riego = Riego::find($request['riego_id']);
-
-        $mensaje = "Riego registrado exitosamente";
-        $planificacionriegos = Planificacionriego::where('riego_id', $request['riego_id'])->get();
-        return view('riego.index',['siembras' => $siembras, 'riego_id' => $request['riego_id'], 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego]);
+        $mensaje = "Planificacion de riego registrado exitosamente";
+        $planificacionriegos = Planificacionriego::where('riego_id', $planificacionriego_done['riego_id'])->get();
+        return view('riego.index',['siembras' => $siembras, 'riego_id' => $planificacionriego_done['riego_id'], 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'mensaje' => $mensaje]);
 
     }
 

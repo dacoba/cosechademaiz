@@ -14,10 +14,6 @@ class CreateRiegosTable extends Migration
     {
         Schema::create('riegos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('metodos_riego');
-            $table->integer('comportamiento_lluvia');
-            $table->integer('problemas_drenaje');
-            $table->string('comentario_riego');
             $table->integer('siembra_id')->unsigned();
             $table->foreign('siembra_id')->references('id')->on('siembras')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();

@@ -28,13 +28,14 @@ Route::resource('/users', 'UsersController');
 Route::resource('/terrenos', 'TerrenosController');
 
 Route::post('/preparacionterrenos/create', 'PreparacionterrenosController@postCreate');
-Route::resource('/preparacionterrenos', 'PreparacionterrenosController');
+Route::resource('/preparacionterrenos', 'PreparacionterrenosController', ['except' => ['create']]);
 
 Route::resource('/siembras', 'SiembrasController');
 Route::get('/planificacionriegos/siembras', 'PlanificacionriegosController@getSiembras');
 Route::post('/planificacionriegos/siembras', 'PlanificacionriegosController@postSiembras');
 Route::post('/planificacionriegos/addriego', 'PlanificacionriegosController@addRiego');
 Route::resource('/planificacionriegos', 'PlanificacionriegosController');
+
 Route::post('/riegos/create', 'RiegosController@postCreate');
 Route::resource('/riegos', 'RiegosController');
 

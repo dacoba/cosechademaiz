@@ -17,6 +17,10 @@ class CreatePlanificacionriegosTable extends Migration
             $table->integer('numero_alerta');
             $table->datetime('fecha_planificacion');
             $table->string('estado');
+            $table->integer('metodos_riego');
+            $table->integer('comportamiento_lluvia');
+            $table->integer('problemas_drenaje');
+            $table->string('comentario_riego');
             $table->integer('riego_id')->unsigned();
             $table->foreign('riego_id')->references('id')->on('riegos')->onDelete('restrict')->onUpdate('cascade');
             $table->timestamps();
