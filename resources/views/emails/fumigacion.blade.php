@@ -291,9 +291,9 @@
                             <table border="0" cellpadding="0" cellspacing="0" style="color: black">
                                 <tr>
                                     <td>
-                                        <?php $tecnico = $planificacionriego['riego']['siembra']['preparacionterreno']['tecnico']?>
+                                        <?php $tecnico = $planificacionfumigacion['fumigacion']['siembra']['preparacionterreno']['tecnico']?>
                                         <p>Hola {{$tecnico['nombre']}},</p>
-                                        <p>Tiene programado un proceso de riego, para mayor informacion haga click en el boton de abajo.</p>
+                                        <p>Tiene programado un proceso de fumigacion, para mayor informacion haga click en el boton de abajo.</p>
                                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                             <tbody>
                                             <tr>

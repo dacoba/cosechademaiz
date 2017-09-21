@@ -55,10 +55,9 @@ class SendRiegoEmail extends Command
             $email_tecnico = $planificacionriego['riego']['siembra']['preparacionterreno']['tecnico']['email'];
             Mail::queue('emails.riego', ['planificacionriego' => $planificacionriego], function ($mail) use ($email_tecnico) {
                 $mail->to($email_tecnico)
-                    ->from('you@company.com', 'Company')
-                    ->subject('Fecha de Riego!');
+                    ->from('noreply@toco.com', 'Toco')
+                    ->subject('Alerta Planificacion de Riego!');
             });
-
         }
 
         foreach($planificacionfumigacions as $planificacionfumigacion) {
@@ -66,7 +65,7 @@ class SendRiegoEmail extends Command
             $email_tecnico = $planificacionfumigacion['fumigacion']['siembra']['preparacionterreno']['tecnico']['email'];
             Mail::queue('emails.fumigacion', ['planificacionfumigacion' => $planificacionfumigacion], function ($mail) use ($email_tecnico) {
                 $mail->to($email_tecnico)
-                    ->from('you@company.com', 'Cosecha')
+                    ->from('noreply@toco.com', 'Toco')
                     ->subject('Fecha de Fumigacion!');
             });
 

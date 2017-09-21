@@ -111,7 +111,7 @@
                         {{--</div>--}}
                         <div class="form-group">
                             <div class='col-md-10 col-md-offset-1 input-group date' id='datetimepicker1'>
-                                <input type='text' class="form-control" name="fecha_planificacion"/>
+                                <input type='text' class="form-control" name="fecha_planificacion" required/>
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>

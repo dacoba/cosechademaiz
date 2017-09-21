@@ -33,7 +33,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-btn fa-user"></i> Cargar Fumigaciones
+                                <i class="fa fa-btn fa-user"></i> Cargar Siembra
                             </button>
                         </div>
                     </div>
@@ -80,32 +80,6 @@
                                 <div class="col-lg-6 col-md-12">
                                     <center>
                                         <h2 class="h2-reports">Siembra</h2>
-                                        {{--<table class="table table-bordered">--}}
-                                            {{--<thead>--}}
-                                            {{--<tr>--}}
-                                                {{--<th style="text-align: center">Dato</th>--}}
-                                                {{--<th style="text-align: center">Valor</th>--}}
-                                            {{--</tr>--}}
-                                            {{--</thead>--}}
-                                            {{--<tbody>--}}
-                                                {{--<tr>--}}
-                                                    {{--<td style="text-align: center">Semilla</td>--}}
-                                                    {{--<td style="text-align: center">{{$siembra['semilla']}}</td>--}}
-                                                {{--</tr>--}}
-                                                {{--<tr>--}}
-                                                    {{--<td style="text-align: center">Fertilizacion</td>--}}
-                                                    {{--<td style="text-align: center">{{$siembra['fertilizacion']}}</td>--}}
-                                                {{--</tr>--}}
-                                                {{--<tr>--}}
-                                                    {{--<td style="text-align: center">Densidad de la siembra</td>--}}
-                                                    {{--<td style="text-align: center">{{$siembra['densidad_siembra']}}</td>--}}
-                                                {{--</tr>--}}
-                                                {{--<tr>--}}
-                                                    {{--<td style="text-align: center">Comentario</td>--}}
-                                                    {{--<td style="text-align: center">{{$siembra['comentario_siembra']}}</td>--}}
-                                                {{--</tr>--}}
-                                            {{--</tbody>--}}
-                                        {{--</table>--}}
                                         <div id="chart1" style="height: 250px;">
                                             <svg></svg>
                                         </div>
@@ -146,6 +120,106 @@
                                             }
                                         ];
                                     </script>
+                                </div>
+                                @if(isset($cosecha[0]))
+                                    <div class="col-lg-6 col-md-12">
+                                        <style>
+                                            text {
+                                                font: 12px sans-serif;
+                                            }
+                                            svg {
+                                                display: block;
+                                            }
+                                            html, body, #chartCosecha, svg {
+                                                margin: 0px;
+                                                padding: 0px;
+                                                height: 100%;
+                                                width: 100%;
+                                            }
+                                        </style>
+                                        <center>
+                                            <h2 class="h2-reports">Cosecha</h2>
+                                            <div id="chartCosecha" style="height: 250px;">
+                                                <svg></svg>
+                                            </div>
+                                            <p><strong>Comentario: </strong>{{$cosecha[0]['comentario_cosecha']}}</p>
+                                        </center>
+                                        <script>
+                                            var chartBarCosecha;
+                                            historicalBarChartCosecha = [
+                                                {
+                                                    key: "Cumulative Return",
+                                                    values: [
+                                                        {
+                                                            "label" : "Problemas de produccion",
+                                                            "value" : <?=$cosecha[0]['problemas_produccion']?>
+                                                        } ,
+                                                        {
+                                                            "label" : "Altura de tallo" ,
+                                                            "value" : <?=$cosecha[0]['altura_tallo']?>
+                                                        } ,
+                                                        {
+                                                            "label" : "Humedad del terreno" ,
+                                                            "value" : <?=$cosecha[0]['humedad_terreno']?>
+                                                        } ,
+                                                        {
+                                                            "label" : "Remdimiento de produccion" ,
+                                                            "value" : <?=$cosecha[0]['rendimiento_produccion']?>
+                                                        }
+                                                    ]
+                                                }
+                                            ];
+                                            nv.addGraph(function() {
+                                                chartBarCosecha = nv.models.discreteBarChart()
+                                                    .x(function(d) { return d.label })
+                                                    .y(function(d) { return d.value })
+                                                    .staggerLabels(true)
+                                                    //.staggerLabels(historicalBarChart[0].values.length > 8)
+                                                    .showValues(true)
+                                                    .duration(250)
+                                                    .color(['#bc5a45', '#405d27', '#034f84', '#618685']);
+                                                ;
+
+                                                d3.select('#chartCosecha svg')
+                                                    .datum(historicalBarChartCosecha)
+                                                    .call(chartBarCosecha);
+
+                                                nv.utils.windowResize(chartBarCosecha.update);
+                                                return chartBarCosecha;
+                                            });
+                                        </script>
+                                    </div>
+                                @endif
+                                <div class="col-lg-6 col-md-12">
+
+                                    <center>
+                                        <h2 class="h2-reports">Riegos y Fumigaciones</h2>
+                                    </center>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th style="text-align: center">Tipo</th>
+                                            <th style="text-align: center">Fecha</th>
+                                            <th style="text-align: center">Estado</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach ($riego_lista as $riego_one)
+                                            <tr style="background: rgba(0, 38, 255, 0.29);">
+                                                <td style="text-align: center">Riego</td>
+                                                <td style="text-align: center">{{$riego_one['fecha_planificacion']}}</td>
+                                                <td style="text-align: center">{{$riego_one['estado']}}</td>
+                                            </tr>
+                                        @endforeach
+                                        @foreach ($fumigacion_lista as $fumigacion_one)
+                                            <tr style="background: #cea4de;">
+                                                <td style="text-align: center">Fumigacion</td>
+                                                <td style="text-align: center">{{$fumigacion_one['fecha_planificacion']}}</td>
+                                                <td style="text-align: center">{{$fumigacion_one['estado']}}</td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         @else

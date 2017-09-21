@@ -41,6 +41,8 @@ class CosechasController extends Controller
         $fumigacion_count = Fumigacion::where('siembra_id', $request['siembra_id'])->count();
         $siembras = Siembra::all();
         $siembra = Siembra::find($request['siembra_id']);
+        $cosecha = [];
+        $cosecha = Cosecha::where('siembra_id', $request['siembra_id'])->get();
         if($riego_count and $fumigacion_count)
         {
             $band = True;
@@ -48,6 +50,7 @@ class CosechasController extends Controller
                 $riego_id = $rig['id'];
             }
             $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->count();
+            $riego_lista = Planificacionriego::where('riego_id', $riego_id)->get();
             $planificacionriegosend = Planificacionriego::where([
                 ['riego_id', '=', $riego_id],
                 ['estado', '=', 'ejecutado'],
@@ -69,6 +72,7 @@ class CosechasController extends Controller
                 $fumigacion_id = $fum['id'];
             }
             $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $fumigacion_id)->count();
+            $fumigacion_lista = Planificacionfumigacion::where('fumigacion_id', $fumigacion_id)->get();
             $planificacionfumigacionsend = Planificacionfumigacion::where([
                 ['fumigacion_id', '=', $fumigacion_id],
                 ['estado', '=', 'ejecutado'],
@@ -86,7 +90,7 @@ class CosechasController extends Controller
                     ['estado', '=', 'planificado'],
                 ])->select('fecha_planificacion')->orderBy('fecha_planificacion', 'desc')->limit(1)->get();
             }
-            return view('reporte.siembras',['siembra' => $siembra, 'siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band, 'riego' => $riego, 'fumigacion' => $fumigacion, 'planificacionriegonext' => $planificacionriegonext, 'planificacionfumigacionnext' => $planificacionfumigacionnext]);
+            return view('reporte.siembras',['cosecha' => $cosecha, 'siembra' => $siembra, 'siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band, 'riego' => $riego, 'riego_lista' => $riego_lista, 'fumigacion' => $fumigacion, 'fumigacion_lista' => $fumigacion_lista, 'planificacionriegonext' => $planificacionriegonext, 'planificacionfumigacionnext' => $planificacionfumigacionnext]);
         }
         return view('reporte.siembras',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
     }
