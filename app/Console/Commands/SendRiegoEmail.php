@@ -66,7 +66,7 @@ class SendRiegoEmail extends Command
             Mail::queue('emails.fumigacion', ['planificacionfumigacion' => $planificacionfumigacion], function ($mail) use ($email_tecnico) {
                 $mail->to($email_tecnico)
                     ->from('noreply@toco.com', 'Toco')
-                    ->subject('Fecha de Fumigacion!');
+                    ->subject('Alerta Planificacion de Fumigacion!');
             });
 
         }

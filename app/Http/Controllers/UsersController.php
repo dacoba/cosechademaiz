@@ -29,12 +29,30 @@ class UsersController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
     }
+    protected function validatorTecnicoUpdate(array $data)
+    {
+        return Validator::make($data, [
+            'ci' => 'required|max:10',
+            'nombre' => 'required|max:255',
+            'email' => 'required|email|max:255',
+        ]);
+    }
 
     protected function validatorProductor(array $data)
     {
         return Validator::make($data, [
             'ci' => 'required|max:10|unique:users',
             'nombre' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+        ]);
+    }
+
+    protected function validatorProductorUpdate(array $data)
+    {
+        return Validator::make($data, [
+            'ci' => 'required|max:10',
+            'nombre' => 'required|max:255',
+            'email' => 'required|email|max:255',
         ]);
     }
 
@@ -117,6 +135,7 @@ class UsersController extends Controller
             'apellido' => $request['apellido'],
             'telefono' => $request['telefono'],
             'direccion' => $request['direccion'],
+            'email' => $request['email'],
             'tipo' => "Productor",
             'login' => $request['ci'],
             'password' => bcrypt($request['ci']),
@@ -131,40 +150,72 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showProductor($id)
     {
-        //
+        $productor = User::find($id);
+        return view("user.productorshow",['productor' => $productor]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function showTecnico($id)
     {
-        //
+        $tecnico = User::find($id);
+        return view("user.tecnicoshow",['tecnico' => $tecnico]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function editProductor($id)
     {
-        //
+        $productor = User::find($id);
+        return view("user.productor",['productor' => $productor]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function editTecnico($id)
+    {
+        $tecnico = User::find($id);
+        return view("user.tecnico",['tecnico' => $tecnico]);
+    }
+
+    public function updateProductor(Request $request, $id)
+    {
+        $validator = $this->validatorProductorUpdate($request->all());
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+        User::where('id', $id)
+            ->update([
+                'nombre' => $request['nombre'],
+                'apellido' => $request['apellido'],
+                'telefono' => $request['telefono'],
+                'direccion' => $request['direccion'],
+                'email' => $request['email'],
+            ]);
+
+        $productors = User::where('tipo', "Productor")->orderBy('apellido', 'asc')->get();
+        return view("user.productorlista",['productors' => $productors]);
+    }
+
+    public function updateTecnico(Request $request, $id)
+    {
+        $validator = $this->validatorTecnicoUpdate($request->all());
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+        User::where('id', $id)
+            ->update([
+                'nombre' => $request['nombre'],
+                'apellido' => $request['apellido'],
+                'telefono' => $request['telefono'],
+                'direccion' => $request['direccion'],
+                'email' => $request['email'],
+            ]);
+
+        $tecnicos = User::where('tipo', "Tecnico")->orderBy('apellido', 'asc')->get();
+        return view("user.tecnicolista",['tecnicos' => $tecnicos]);
+    }
+
     public function destroy($id)
     {
         //

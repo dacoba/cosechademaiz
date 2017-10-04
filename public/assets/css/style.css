@@ -999,6 +999,9 @@ figure.effect-bubba:hover p {
 .button-back{
 	margin-right: 5px;
 }
+.button-back-alone{
+	margin-right: 10px;
+}
 #myTable tr {
 	border-bottom: 1px solid #ddd;
 }
@@ -1010,4 +1013,8 @@ figure.effect-bubba:hover p {
 .search-table{
 	width: 300px;
 	float: right;
+}
+
+.show-user{
+	padding-top: 5px;
 }

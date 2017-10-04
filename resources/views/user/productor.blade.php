@@ -12,22 +12,25 @@
 
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Registrar Cuenta de Productor</div>
+                <div class="panel-heading"> @if (isset($productor)) Actualizar @else Registrar @endif Cuenta de Productor</div>
                 @if (isset($mensaje))
                     <div class="alert alert-success">
                         <strong>¡Correcto! </strong>{{ $mensaje }}
                     </div>
                 @endif
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/users/productor') }}">
+                    @if (isset($productor))
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/users/productor') }}/{{ $productor['id'] }}">
+                    @else
+                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/users/productor') }}">
+                    @endif
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('ci') ? ' has-error' : '' }}">
                             <label for="ci" class="col-md-4 control-label">CI</label>
 
                             <div class="col-md-6">
-                                <input id="ci" type="text" class="form-control" name="ci" value="{{ old('ci') }}">
-
+                                <input id="ci" type="text" class="form-control" name="ci" value="{{ $productor['ci'] or old('ci') }}" @if (isset($productor)) readonly @endif>
                                 @if ($errors->has('ci'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('ci') }}</strong>
@@ -40,8 +43,7 @@
                             <label for="nombre" class="col-md-4 control-label">Nombre</label>
 
                             <div class="col-md-6">
-                                <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}">
-
+                                <input id="nombre" type="text" class="form-control" name="nombre" value="{{ $productor['nombre'] or old('nombre') }}">
                                 @if ($errors->has('nombre'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('nombre') }}</strong>
@@ -54,7 +56,7 @@
                             <label for="apellido" class="col-md-4 control-label">Apellido</label>
 
                             <div class="col-md-6">
-                                <input id="apellido" type="text" class="form-control" name="apellido" value="{{ old('apellido') }}">
+                                <input id="apellido" type="text" class="form-control" name="apellido" value="{{ $productor['apellido'] or old('apellido') }}">
 
                                 @if ($errors->has('apellido'))
                                     <span class="help-block">
@@ -68,7 +70,7 @@
                             <label for="email" class="col-md-4 control-label">Correo electronico</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
+                                <input id="email" type="email" class="form-control" name="email" value="{{ $productor['email'] or old('email') }}">
 
                                 @if ($errors->has('email'))
                                     <span class="help-block">
@@ -82,7 +84,7 @@
                             <label for="telefono" class="col-md-4 control-label">Telefono</label>
 
                             <div class="col-md-6">
-                                <input id="telefono" type="number" class="form-control" name="telefono" value="{{ old('telefono') }}">
+                                <input id="telefono" type="number" class="form-control" name="telefono" value="{{ $productor['telefono'] or old('telefono') }}">
 
                                 @if ($errors->has('telefono'))
                                     <span class="help-block">
@@ -96,7 +98,7 @@
                             <label for="direccion" class="col-md-4 control-label">Direccion</label>
 
                             <div class="col-md-6">
-                                <input id="direccion" type="text" class="form-control" name="direccion" value="{{ old('direccion') }}">
+                                <input id="direccion" type="text" class="form-control" name="direccion" value="{{ $productor['direccion'] or old('direccion') }}">
 
                                 @if ($errors->has('direccion'))
                                     <span class="help-block">
@@ -108,9 +110,16 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary pull-right">
-                                    <i class="fa fa-btn fa-user"></i> Register
-                                </button>
+                                @if (isset($productor))
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <button type="submit" class="btn pull-right btn-warning margin-left-md">
+                                        <i class="fa fa-btn fa-pencil"></i> Modificar usuario
+                                    </button>
+                                @else
+                                    <button type="submit" class="btn btn-primary pull-right">
+                                        <i class="fa fa-btn fa-user"></i> Registrar
+                                    </button>
+                                @endif
                                 <a href="{{ url('users/productor')}}" class="btn btn-danger pull-right button-back"><i class="fa fa-backward fa-padding-right"></i>Atras</a>
                             </div>
                         </div>

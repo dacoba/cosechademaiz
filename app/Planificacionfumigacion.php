@@ -8,7 +8,7 @@ class Planificacionfumigacion extends Model
 {
     protected $table = 'planificacionfumigacions';
     protected $fillable = [
-        'numero_alerta', 'fecha_planificacion', 'estado', 'fumigacion_id',
+        'numero_alerta', 'fecha_planificacion', 'estado', 'preventivo_plagas', 'control_rutinario', 'control_malezas', 'control_insectos', 'control_enfermedades', 'comentario_fumigacion', 'fumigacion_id',
     ];
     function fumigacion(){
         return $this->belongsTo('App\Fumigacion');

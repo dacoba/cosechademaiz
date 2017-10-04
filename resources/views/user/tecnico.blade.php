@@ -12,23 +12,26 @@
 
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Registrar Cuenta de Tecnico</div>
-                @if (isset($mensaje))
+                <div class="panel-heading"> @if (isset($tecnico)) Actualizar @else Registrar @endif Cuenta de Tecnico</div>
+            @if (isset($mensaje))
                     <div class="alert alert-success">
                         <strong>¡Correcto! </strong>{{ $mensaje }}
                     </div>
                 @endif
                 <div class="panel-body">
+                    @if (isset($tecnico))
+                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/users/tecnico') }}/{{ $tecnico['id'] }}">
+                    @else
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/users/tecnico') }}">
+                    @endif
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('ci') ? ' has-error' : '' }}">
                             <label for="ci" class="col-md-4 control-label">CI</label>
 
                             <div class="col-md-6">
-                                <input id="ci" type="text" class="form-control" name="ci" value="{{ old('ci') }}">
-
-                                @if ($errors->has('ci'))
+                                <input id="ci" type="text" class="form-control" name="ci" value="{{ $tecnico['ci'] or old('ci') }}" @if (isset($tecnico)) readonly @endif>
+                            @if ($errors->has('ci'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('ci') }}</strong>
                                     </span>
@@ -40,9 +43,8 @@
                             <label for="nombre" class="col-md-4 control-label">Nombre</label>
 
                             <div class="col-md-6">
-                                <input id="nombre" type="text" class="form-control" name="nombre" value="{{ old('nombre') }}">
-
-                                @if ($errors->has('nombre'))
+                                <input id="nombre" type="text" class="form-control" name="nombre" value="{{ $tecnico['nombre'] or old('nombre') }}">
+                            @if ($errors->has('nombre'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('nombre') }}</strong>
                                     </span>
@@ -54,9 +56,8 @@
                             <label for="apellido" class="col-md-4 control-label">Apellido</label>
 
                             <div class="col-md-6">
-                                <input id="apellido" type="text" class="form-control" name="apellido" value="{{ old('apellido') }}">
-
-                                @if ($errors->has('apellido'))
+                                <input id="apellido" type="text" class="form-control" name="apellido" value="{{ $tecnico['apellido'] or old('apellido') }}">
+                            @if ($errors->has('apellido'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('apellido') }}</strong>
                                     </span>
@@ -68,9 +69,8 @@
                             <label for="email" class="col-md-4 control-label">Correo electronico</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
-
-                                @if ($errors->has('email'))
+                                <input id="email" type="email" class="form-control" name="email" value="{{ $tecnico['email'] or old('email') }}">
+                            @if ($errors->has('email'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
@@ -82,9 +82,8 @@
                             <label for="telefono" class="col-md-4 control-label">Telefono</label>
 
                             <div class="col-md-6">
-                                <input id="telefono" type="number" class="form-control" name="telefono" value="{{ old('telefono') }}">
-
-                                @if ($errors->has('telefono'))
+                                <input id="telefono" type="number" class="form-control" name="telefono" value="{{ $tecnico['telefono'] or old('telefono') }}">
+                            @if ($errors->has('telefono'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('telefono') }}</strong>
                                     </span>
@@ -96,9 +95,8 @@
                             <label for="direccion" class="col-md-4 control-label">Direccion</label>
 
                             <div class="col-md-6">
-                                <input id="direccion" type="text" class="form-control" name="direccion" value="{{ old('direccion') }}">
-
-                                @if ($errors->has('direccion'))
+                                <input id="direccion" type="text" class="form-control" name="direccion" value="{{ $tecnico['direccion'] or old('direccion') }}">
+                            @if ($errors->has('direccion'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('direccion') }}</strong>
                                     </span>
@@ -110,7 +108,7 @@
                             <label for="login" class="col-md-4 control-label">Login</label>
 
                             <div class="col-md-6">
-                                <input id="login" type="text" class="form-control" name="login" value="{{ old('login') }}">
+                                <input id="login" type="text" class="form-control" name="login" value="{{ $tecnico['login'] or old('login') }}" @if (isset($tecnico)) readonly @endif>
 
                                 @if ($errors->has('login'))
                                     <span class="help-block">
@@ -119,40 +117,47 @@
                                 @endif
                             </div>
                         </div>
+                        @if (!isset($tecnico))
+                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                                <label for="password" class="col-md-4 control-label">Contraseña</label>
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Contraseña</label>
+                                <div class="col-md-6">
+                                    <input id="password" type="password" class="form-control" name="password">
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password">
-
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
+                                    @if ($errors->has('password'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('password') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirme su Contraseña</label>
+                            <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                                <label for="password-confirm" class="col-md-4 control-label">Confirme su Contraseña</label>
 
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                                <div class="col-md-6">
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
 
-                                @if ($errors->has('password_confirmation'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                @endif
+                                    @if ($errors->has('password_confirmation'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-
+                        @endif
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary pull-right">
-                                    <i class="fa fa-btn fa-user"></i> Register
-                                </button>
+                                @if (isset($tecnico))
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <button type="submit" class="btn pull-right btn-warning margin-left-md">
+                                        <i class="fa fa-btn fa-pencil"></i> Modificar usuario
+                                    </button>
+                                @else
+                                    <button type="submit" class="btn btn-primary pull-right">
+                                        <i class="fa fa-btn fa-user"></i> Registrar
+                                    </button>
+                                @endif
                                 <a href="{{ url('users/tecnico')}}" class="btn btn-danger pull-right button-back"><i class="fa fa-backward fa-padding-right"></i>Atras</a>
                             </div>
                         </div>

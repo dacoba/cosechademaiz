@@ -56,137 +56,150 @@
                                 <tr>
                                     <th style="text-align: center">Fecha</th>
                                     <th style="text-align: center">Estado</th>
+                                    <th style="text-align: center">Opcion</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach ($planificacionfumigacions as $id => $planificacionfumigacion)
-                                    <tr>
+                                    <tr @if (isset($planificacionfumigacion_done['id']) and $planificacionfumigacion_done['id'] == $planificacionfumigacion['id']) style="background: rgba(74,75,237,0.58)" @endif>
                                         <td style="text-align: center">{{$planificacionfumigacion['fecha_planificacion']}}</td>
                                         <td style="text-align: center">{{$planificacionfumigacion['estado']}}</td>
+                                        <td style="text-align: center">
+                                            <form class="form-horizontal" role="form" method="POST" action="{{ url('/fumigacions/create') }}">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" name="planificacionfumigacion_id" value="{{$planificacionfumigacion['id']}}" >
+                                                <input type="hidden" name="siembra_id" value="{{$siembra_id}}" >
+                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionfumigacion['estado'] != 'ejecutado') disabled @endif>
+                                                    <i class="fa fa-btn fa-pencil"></i>
+                                                </button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
-                            <center>
-                                <form class="form-horizontal" role="form" method="POST" action="{{ url('/fumigacions') }}">
-                                    {{ csrf_field() }}
-
-                                    <div class="form-group">
-                                        <label for="preventivo_plagas" class="col-md-4 control-label">preventivo_plagas</label>
-                                        <div class="col-md-6">
-                                            <select id="preventivo_plagas" name="preventivo_plagas" class="form-control">
-                                                <option value="1" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($fumigacion['preventivo_plagas']) and $fumigacion['preventivo_plagas'] == '10') selected @endif >10</option>
-                                            </select>
+                            @if (isset($planificacionfumigacion_done))
+                                <center>
+                                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/fumigacions') }}">
+                                        {{ csrf_field() }}
+    
+                                        <div class="form-group">
+                                            <label for="preventivo_plagas" class="col-md-4 control-label">preventivo_plagas</label>
+                                            <div class="col-md-6">
+                                                <select id="preventivo_plagas" name="preventivo_plagas" class="form-control">
+                                                    <option value="1" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '1') selected @endif >1</option>
+                                                    <option value="2" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '2') selected @endif >2</option>
+                                                    <option value="3" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '3') selected @endif >3</option>
+                                                    <option value="4" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '4') selected @endif >4</option>
+                                                    <option value="5" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '5') selected @endif >5</option>
+                                                    <option value="6" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '6') selected @endif >6</option>
+                                                    <option value="7" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '7') selected @endif >7</option>
+                                                    <option value="8" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '8') selected @endif >8</option>
+                                                    <option value="9" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '9') selected @endif >9</option>
+                                                    <option value="10" @if (isset($planificacionfumigacion_done['preventivo_plagas']) and $planificacionfumigacion_done['preventivo_plagas'] == '10') selected @endif >10</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="control_rutinario" class="col-md-4 control-label">control_rutinario</label>
-                                        <div class="col-md-6">
-                                            <select id="control_rutinario" name="control_rutinario" class="form-control">
-                                                <option value="1" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($fumigacion['control_rutinario']) and $fumigacion['control_rutinario'] == '10') selected @endif >10</option>
-                                            </select>
+    
+                                        <div class="form-group">
+                                            <label for="control_rutinario" class="col-md-4 control-label">control_rutinario</label>
+                                            <div class="col-md-6">
+                                                <select id="control_rutinario" name="control_rutinario" class="form-control">
+                                                    <option value="1" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '1') selected @endif >1</option>
+                                                    <option value="2" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '2') selected @endif >2</option>
+                                                    <option value="3" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '3') selected @endif >3</option>
+                                                    <option value="4" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '4') selected @endif >4</option>
+                                                    <option value="5" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '5') selected @endif >5</option>
+                                                    <option value="6" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '6') selected @endif >6</option>
+                                                    <option value="7" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '7') selected @endif >7</option>
+                                                    <option value="8" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '8') selected @endif >8</option>
+                                                    <option value="9" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '9') selected @endif >9</option>
+                                                    <option value="10" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '10') selected @endif >10</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="control_malezas" class="col-md-4 control-label">control_malezas</label>
-                                        <div class="col-md-6">
-                                            <select id="control_malezas" name="control_malezas" class="form-control">
-                                                <option value="1" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($fumigacion['control_malezas']) and $fumigacion['control_malezas'] == '10') selected @endif >10</option>
-                                            </select>
+    
+                                        <div class="form-group">
+                                            <label for="control_malezas" class="col-md-4 control-label">control_malezas</label>
+                                            <div class="col-md-6">
+                                                <select id="control_malezas" name="control_malezas" class="form-control">
+                                                    <option value="1" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '1') selected @endif >1</option>
+                                                    <option value="2" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '2') selected @endif >2</option>
+                                                    <option value="3" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '3') selected @endif >3</option>
+                                                    <option value="4" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '4') selected @endif >4</option>
+                                                    <option value="5" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '5') selected @endif >5</option>
+                                                    <option value="6" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '6') selected @endif >6</option>
+                                                    <option value="7" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '7') selected @endif >7</option>
+                                                    <option value="8" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '8') selected @endif >8</option>
+                                                    <option value="9" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '9') selected @endif >9</option>
+                                                    <option value="10" @if (isset($planificacionfumigacion_done['control_malezas']) and $planificacionfumigacion_done['control_malezas'] == '10') selected @endif >10</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="control_insectos" class="col-md-4 control-label">control_insectos</label>
-                                        <div class="col-md-6">
-                                            <select id="control_insectos" name="control_insectos" class="form-control">
-                                                <option value="1" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($fumigacion['control_insectos']) and $fumigacion['control_insectos'] == '10') selected @endif >10</option>
-                                            </select>
+    
+                                        <div class="form-group">
+                                            <label for="control_insectos" class="col-md-4 control-label">control_insectos</label>
+                                            <div class="col-md-6">
+                                                <select id="control_insectos" name="control_insectos" class="form-control">
+                                                    <option value="1" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '1') selected @endif >1</option>
+                                                    <option value="2" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '2') selected @endif >2</option>
+                                                    <option value="3" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '3') selected @endif >3</option>
+                                                    <option value="4" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '4') selected @endif >4</option>
+                                                    <option value="5" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '5') selected @endif >5</option>
+                                                    <option value="6" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '6') selected @endif >6</option>
+                                                    <option value="7" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '7') selected @endif >7</option>
+                                                    <option value="8" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '8') selected @endif >8</option>
+                                                    <option value="9" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '9') selected @endif >9</option>
+                                                    <option value="10" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '10') selected @endif >10</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="control_enfermedades" class="col-md-4 control-label">control_enfermedades</label>
-                                        <div class="col-md-6">
-                                            <select id="control_enfermedades" name="control_enfermedades" class="form-control">
-                                                <option value="1" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($fumigacion['control_enfermedades']) and $fumigacion['control_enfermedades'] == '10') selected @endif >10</option>
-                                            </select>
+    
+                                        <div class="form-group">
+                                            <label for="control_enfermedades" class="col-md-4 control-label">control_enfermedades</label>
+                                            <div class="col-md-6">
+                                                <select id="control_enfermedades" name="control_enfermedades" class="form-control">
+                                                    <option value="1" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '1') selected @endif >1</option>
+                                                    <option value="2" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '2') selected @endif >2</option>
+                                                    <option value="3" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '3') selected @endif >3</option>
+                                                    <option value="4" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '4') selected @endif >4</option>
+                                                    <option value="5" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '5') selected @endif >5</option>
+                                                    <option value="6" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '6') selected @endif >6</option>
+                                                    <option value="7" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '7') selected @endif >7</option>
+                                                    <option value="8" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '8') selected @endif >8</option>
+                                                    <option value="9" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '9') selected @endif >9</option>
+                                                    <option value="10" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '10') selected @endif >10</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="form-group{{ $errors->has('comentario_fumigacion') ? ' has-error' : '' }}">
-                                        <label for="comentario_fumigacion" class="col-md-4 control-label">Comentario</label>
-
-                                        <div class="col-md-6">
-                                            <input id="comentario_fumigacion" type="text" class="form-control" name="comentario_fumigacion" value="{{ $fumigacion['comentario_fumigacion'] or old('comentario_fumigacion') }}">
-
-                                            @if ($errors->has('comentario_fumigacion'))
-                                                <span class="help-block">
-                                        <strong>{{ $errors->first('comentario_fumigacion') }}</strong>
-                                    </span>
-                                            @endif
+    
+                                        <div class="form-group{{ $errors->has('comentario_fumigacion') ? ' has-error' : '' }}">
+                                            <label for="comentario_fumigacion" class="col-md-4 control-label">Comentario</label>
+    
+                                            <div class="col-md-6">
+                                                <input id="comentario_fumigacion" type="text" class="form-control" name="comentario_fumigacion" value="{{ $planificacionfumigacion_done['comentario_fumigacion'] or old('comentario_fumigacion') }}">
+    
+                                                @if ($errors->has('comentario_fumigacion'))
+                                                    <span class="help-block">
+                                            <strong>{{ $errors->first('comentario_fumigacion') }}</strong>
+                                        </span>
+                                                @endif
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <input type="hidden" name="fumigacion_id" value="{{ $fumigacion_id }}" >
-                                    <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
-
-                                    <div class="form-group">
-                                        <div class="col-md-6 col-md-offset-4">
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="fa fa-btn fa-user"></i> Registrar
-                                            </button>
+    
+                                        <input type="hidden" name="planificacionfumigacion_id" value="{{ $planificacionfumigacion_done['id'] }}" >
+                                        <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
+    
+                                        <div class="form-group">
+                                            <div class="col-md-6 col-md-offset-4">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fa fa-btn fa-user"></i> Registrar
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
-                            </center>
+                                    </form>
+                                </center>
+                            @endif
                         @else
                             <center>
                                 Esta siembra aun no cuenta con una planificacion de fumigacion

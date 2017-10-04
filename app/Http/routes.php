@@ -18,12 +18,21 @@ Route::get('/', function () {
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
 Route::get('/users/tecnico', 'UsersController@indexTecnico');
 Route::get('/users/tecnico/create', 'UsersController@createTecnico');
+Route::get('/users/tecnico/{users}', 'UsersController@showTecnico');
 Route::post('/users/tecnico', 'UsersController@storeTecnico');
+Route::put('/users/tecnico/{users}', 'UsersController@updateTecnico');
+Route::get('/users/tecnico/{users}/edit', 'UsersController@editTecnico');
+
 Route::get('/users/productor', 'UsersController@indexProductor');
 Route::get('/users/productor/create', 'UsersController@createProductor');
+Route::get('/users/productor/{users}', 'UsersController@showProductor');
 Route::post('/users/productor', 'UsersController@storeProductor');
+Route::put('/users/productor/{users}', 'UsersController@updateProductor');
+Route::get('/users/productor/{users}/edit', 'UsersController@editProductor');
+
 Route::resource('/users', 'UsersController');
 Route::resource('/terrenos', 'TerrenosController');
 
@@ -44,7 +53,7 @@ Route::post('/planificacionfumigacions/siembras', 'PlanificacionfumigacionsContr
 Route::post('/planificacionfumigacions/addriego', 'PlanificacionfumigacionsController@addRiego');
 Route::resource('/planificacionfumigacions', 'PlanificacionfumigacionsController');
 Route::post('/fumigacions/create', 'FumigacionsController@postCreate');
-Route::resource('/fumigacions', 'FumigacionsController');
+Route::resource('/fumigacions', 'FumigacionsController', ['except' => ['create']]);
 
 Route::post('/cosechas/create', 'CosechasController@postCreate');
 Route::resource('/cosechas', 'CosechasController');

@@ -49,6 +49,10 @@ class FumigacionsController extends Controller
             }
             $fumigacion = Fumigacion::find($fumigacion_id);
             $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $fumigacion_id)->get();
+            if(isset($request['planificacionfumigacion_id'])){
+                $planificacionfumigacion_done = Planificacionfumigacion::find($request['planificacionfumigacion_id']);
+                return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $fumigacion_id, 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'fumigacion' => $fumigacion, 'planificacionfumigacion_done' => $planificacionfumigacion_done]);
+            }
             return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $fumigacion_id, 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'fumigacion' => $fumigacion]);
         };
         return view('fumigacion.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
@@ -62,7 +66,7 @@ class FumigacionsController extends Controller
      */
     public function store(Request $request)
     {
-        Fumigacion::where('id', $request['fumigacion_id'])
+        Planificacionfumigacion::where('id', $request['planificacionfumigacion_id'])
             ->update([
                 'preventivo_plagas' => $request['preventivo_plagas'],
                 'control_rutinario' => $request['control_rutinario'],
@@ -71,13 +75,13 @@ class FumigacionsController extends Controller
                 'control_enfermedades' => $request['control_enfermedades'],
                 'comentario_fumigacion' => $request['comentario_fumigacion'],
             ]);
+        $planificacionfumigacion_done = Planificacionfumigacion::find($request['planificacionfumigacion_id']);
         $siembras = Siembra::all();
 
-        $fumigacion = Fumigacion::find($request['fumigacion_id']);
+        $mensaje = "Planificacion de fumigacion registrado exitosamente";
 
-        $mensaje = "Riego registrado exitosamente";
-        $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $request['fumigacion_id'])->get();
-        return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $request['fumigacion_id'], 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'fumigacion' => $fumigacion]);
+        $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $planificacionfumigacion_done['fumigacion_id'])->get();
+        return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $planificacionfumigacion_done['fumigacion_id'], 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'mensaje' => $mensaje]);
 
     }
 

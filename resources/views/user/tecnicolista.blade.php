@@ -35,6 +35,7 @@
                             <th>Email</th>
                             <th style="text-align: center">Telefono</th>
                             <th>Direccion</th>
+                            <th style="text-align: center">Opcion</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -46,6 +47,10 @@
                                 <td>{{$tecnico['email']}}</td>
                                 <td style="text-align: center">{{$tecnico['telefono']}}</td>
                                 <td>{{$tecnico['direccion']}}</td>
+                                <td style="text-align: center">
+                                    <a href="{{ url('users/tecnico')}}/{{$tecnico['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
+                                    <a href="{{ url('users/tecnico')}}/{{$tecnico['id']}}/edit" class="btn btn-warning btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>

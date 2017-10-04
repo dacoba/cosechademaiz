@@ -35,6 +35,7 @@
                             <th>Email</th>
                             <th style="text-align: center">Telefono</th>
                             <th>Direccion</th>
+                            <th style="text-align: center">Opcion</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -46,6 +47,20 @@
                                 <td>{{$productor['email']}}</td>
                                 <td style="text-align: center">{{$productor['telefono']}}</td>
                                 <td>{{$productor['direccion']}}</td>
+                                <td style="text-align: center">
+                                    <a href="{{ url('users/productor')}}/{{$productor['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
+                                    <a href="{{ url('users/productor')}}/{{$productor['id']}}/edit" class="btn btn-warning btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                </td>
+                                {{--<td style="text-align: center">--}}
+                                    {{--<form class="form-horizontal" role="form" method="POST" action="{{ url('/fumigacions/create') }}">--}}
+                                        {{--{{ csrf_field() }}--}}
+                                        {{--<input type="hidden" name="planificacionfumigacion_id" value="{{$planificacionfumigacion['id']}}" >--}}
+                                        {{--<input type="hidden" name="siembra_id" value="{{$siembra_id}}" >--}}
+                                        {{--<button type="submit" class="btn btn-primary btn-xs" @if ($planificacionfumigacion['estado'] != 'ejecutado') disabled @endif>--}}
+                                            {{--<i class="fa fa-btn fa-pencil"></i>--}}
+                                        {{--</button>--}}
+                                    {{--</form>--}}
+                                {{--</td>--}}
                             </tr>
                         @endforeach
                         </tbody>
