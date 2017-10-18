@@ -44,9 +44,9 @@ class SendRiegoEmail extends Command
     public function handle()
     {
         $date_pre = date_create(date("Y-m-d"));
-        date_time_set($date_pre, date("H")-4, date("i")-1);
+        date_time_set($date_pre, date("H"), date("i")-1);
         $date_pos = date_create(date("Y-m-d"));
-        date_time_set($date_pos, date("H")-4, date("i")+1);
+        date_time_set($date_pos, date("H"), date("i")+1);
         $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','>=', $date_pre)->where('fecha_planificacion','<=',$date_pos)->get();
         $planificacionfumigacions = Planificacionfumigacion::with(['fumigacion', 'fumigacion.siembra', 'fumigacion.siembra.preparacionterreno', 'fumigacion.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','>=', $date_pre)->where('fecha_planificacion','<=',$date_pos)->get();
 

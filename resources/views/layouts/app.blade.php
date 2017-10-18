@@ -65,7 +65,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Terreno</a>
                         <ul class="dropdown-menu">
                             @if ( Auth::user()->tipo == 'Administrador')
-                                <li><a href="{{ url('/terrenos/create') }}">Administar Terreno</a></li>
+                                <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
                                 <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
                                 <li><a href="{{ url('/simuladors') }}">Simulador</a></li>
                             @else
@@ -93,6 +93,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reportes</a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ url('/reportes/siembras') }}">Reporte de Siembras</a></li>
+                            <li><a href="{{ url('/simuladors2') }}">Reporte General</a></li>
                         </ul>
                     </li>
                     @endif
@@ -132,11 +133,11 @@
             <div class="col-sm-12">
 
                 <ul class="social-links">
-                    <li><a href="index.html#" class="wow fadeInUp"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="index.html#" class="wow fadeInUp" data-wow-delay=".1s"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="index.html#" class="wow fadeInUp" data-wow-delay=".2s"><i class="fa fa-google-plus"></i></a></li>
-                    <li><a href="index.html#" class="wow fadeInUp" data-wow-delay=".4s"><i class="fa fa-pinterest"></i></a></li>
-                    <li><a href="index.html#" class="wow fadeInUp" data-wow-delay=".5s"><i class="fa fa-envelope"></i></a></li>
+                    <li><a href="" class="wow fadeInUp"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="" class="wow fadeInUp" data-wow-delay=".1s"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="" class="wow fadeInUp" data-wow-delay=".2s"><i class="fa fa-google-plus"></i></a></li>
+                    <li><a href="" class="wow fadeInUp" data-wow-delay=".4s"><i class="fa fa-pinterest"></i></a></li>
+                    <li><a href="" class="wow fadeInUp" data-wow-delay=".5s"><i class="fa fa-envelope"></i></a></li>
                 </ul>
 
                 <p class="copyright">

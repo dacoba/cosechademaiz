@@ -29,8 +29,15 @@ class TerrenosController extends Controller
     }
     public function index()
     {
-        $terrenos = Terreno::all();
-        return view('terreno.mostrar',['terrenos' => $terrenos]);
+//        foreach(timezone_abbreviations_list() as $abbr => $timezone){
+//            foreach($timezone as $val){
+//                if(isset($val['timezone_id'])){
+//                    var_dump($abbr,$val['timezone_id']);
+//                }
+//            }
+//        }
+        $terrenos = Terreno::with('productor')->get();
+        return view('terreno.terrenolista',['terrenos' => $terrenos]);
     }
 
     /**
@@ -62,6 +69,7 @@ class TerrenosController extends Controller
             'area_parcela' => $request['area_parcela'],
             'tipo_suelo' => $request['tipo_suelo'],
             'tipo_relieve' => $request['tipo_relieve'],
+            'estado' => 'Cerrado',
             'productor_id' => $request['productor_id'],
         ]);
         $mensaje = "Terreno registrado exitosamente";
@@ -77,7 +85,9 @@ class TerrenosController extends Controller
      */
     public function show($id)
     {
-        //
+        $terreno = Terreno::with('productor')->where('id', $id)->get();
+        $terreno = $terreno[0];
+        return view("terreno.terrenoshow",['terreno' => $terreno]);
     }
 
     /**

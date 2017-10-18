@@ -40,7 +40,7 @@ class SiembrasController extends Controller
      */
     public function create()
     {
-        $preparacionterrenos = Preparacionterreno::all();
+        $preparacionterrenos = Preparacionterreno::where('estado', "Preparacion")->get();
         return view("siembra.registrar", ['preparacionterrenos' => $preparacionterrenos]);
     }
 
@@ -65,7 +65,11 @@ class SiembrasController extends Controller
             'comentario_siembra' => $request['comentario_siembra'],
             'preparacionterreno_id' => $request['preparacionterreno_id'],
         ]);
-        $mensaje = "Terreno registrado exitosamente";
+        Preparacionterreno::where('id', $request['preparacionterreno_id'])
+        ->update([
+            'estado' => "Siembra",
+        ]);
+        $mensaje = "Siembra registrada exitosamente";
         $preparacionterrenos = Preparacionterreno::all();
         return view("siembra.registrar", ['preparacionterrenos' => $preparacionterrenos, 'mensaje' => $mensaje]);
     }

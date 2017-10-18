@@ -17,6 +17,13 @@ class PlanificacionriegosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected function getSiembrasEstate()
+    {
+        return Siembra::whereHas('preparacionterreno', function($query){
+            $query->where('estado', "Siembra");
+        })->get();
+    }
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -28,7 +35,7 @@ class PlanificacionriegosController extends Controller
 
     public function getSiembras()
     {
-        $siembras = Siembra::all();
+        $siembras = $this->getSiembrasEstate();
         return view('planificaionriego.siembra',['siembras' => $siembras]);
     }
 
@@ -36,7 +43,7 @@ class PlanificacionriegosController extends Controller
     {
         $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
         $riego_count = Riego::where('siembra_id', $request['siembra_id'])->count();
-        $siembras = Siembra::all();
+        $siembras = $this->getSiembrasEstate();
         if($riego_count)
         {
             foreach ($riego as $rig){
@@ -87,7 +94,7 @@ class PlanificacionriegosController extends Controller
         $query = 'CREATE EVENT planificacionriego_'.$planificacionriego['id'].' ON SCHEDULE AT \''.$request['fecha_planificacion'].'\' DO UPDATE planificacionriegos SET estado=\'ejecutado\' WHERE id='.$planificacionriego['id'];
         DB::unprepared($query);
         $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
-        $siembras = Siembra::all();
+        $siembras = $this->getSiembrasEstate();
         if($riego != [])
         {
             foreach ($riego as $rig){

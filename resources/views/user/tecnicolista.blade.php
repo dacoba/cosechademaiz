@@ -11,8 +11,10 @@
         </div>
 
         <div class="col-md-10 col-md-offset-1">
-            <div style="text-align: right;">
-                <a href="{{ url('users/tecnico/create')}}" class="btn btn-primary"><i class="fa fa-plus fa-padding-right"></i>Nuevo Tecnico</a>
+            <div style="text-align: right;" class="hidden-sm-up">
+
+                <a href="{{ url('users/tecnico/create')}}" class="btn btn-primary hidden-xs"><i class="fa fa-plus fa-padding-right"></i>Nuevo Tecnico</a>
+                <a href="{{ url('users/tecnico/create')}}" class="btn btn-primary hidden-sm hidden-md hidden-lg"><i class="fa fa-plus"></i></a>
                 <div class="input-group search-table">
                     <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search...">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>

@@ -38,6 +38,7 @@ Route::resource('/terrenos', 'TerrenosController');
 
 Route::post('/preparacionterrenos/create', 'PreparacionterrenosController@postCreate');
 Route::resource('/preparacionterrenos', 'PreparacionterrenosController', ['except' => ['create']]);
+Route::get('/preparacionterrenos/{terrenos}/create', 'PreparacionterrenosController@create');
 
 Route::resource('/siembras', 'SiembrasController');
 Route::get('/planificacionriegos/siembras', 'PlanificacionriegosController@getSiembras');
@@ -56,7 +57,7 @@ Route::post('/fumigacions/create', 'FumigacionsController@postCreate');
 Route::resource('/fumigacions', 'FumigacionsController', ['except' => ['create']]);
 
 Route::post('/cosechas/create', 'CosechasController@postCreate');
-Route::resource('/cosechas', 'CosechasController');
+Route::resource('/cosechas', 'CosechasController', ['except' => ['create']]);
 
 Route::get('/reportes/siembras', 'CosechasController@getreporteSiembra');
 Route::post('/reportes/siembras', 'CosechasController@postreporteSiembra');
@@ -65,3 +66,5 @@ Route::get('/simuladors', function () {
     return view('simulador.index');
 });
 
+Route::get('/simuladors2', 'CosechasController@indexSimulador');
+Route::post('/simuladors2', 'CosechasController@postSimulador');
