@@ -20,7 +20,7 @@ class PlanificacionriegosController extends Controller
     protected function getSiembrasEstate()
     {
         return Siembra::whereHas('preparacionterreno', function($query){
-            $query->where('estado', "Siembra");
+            $query->where('estado', "Planificaciones");
         })->get();
     }
 

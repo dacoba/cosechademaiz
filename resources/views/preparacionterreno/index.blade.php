@@ -96,6 +96,7 @@
                                 </div>
                             </div>
                             @if (isset($preterreno))
+                                <input type="hidden" name="preterreno_id" value="{{ $preterreno['id']  }}" >
                                 @if ( Auth::user()->tipo == 'Tecnico')
                                     <input type="hidden" name="tecnico_id" value="{{ $preterreno['tecnico_id']  }}" >
                                 @endif
@@ -194,7 +195,7 @@
                                         <label for="comentario_preparacion" class="col-md-4 control-label">Comentario</label>
 
                                         <div class="col-md-6">
-                                            <input id="comentario_preparacion" type="text" class="form-control" name="comentario_preparacion" value="{{ $preterreno[0]['comentario_preparacion'] or old('comentario_preparacion') }}">
+                                            <input id="comentario_preparacion" type="text" class="form-control" name="comentario_preparacion" value="{{ $preterreno['comentario_preparacion'] or old('comentario_preparacion') }}">
 
                                             @if ($errors->has('comentario_preparacion'))
                                                 <span class="help-block">

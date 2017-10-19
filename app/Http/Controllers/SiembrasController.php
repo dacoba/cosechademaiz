@@ -67,7 +67,7 @@ class SiembrasController extends Controller
         ]);
         Preparacionterreno::where('id', $request['preparacionterreno_id'])
         ->update([
-            'estado' => "Siembra",
+            'estado' => "Planificaciones",
         ]);
         $mensaje = "Siembra registrada exitosamente";
         $preparacionterrenos = Preparacionterreno::all();
