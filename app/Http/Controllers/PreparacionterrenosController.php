@@ -20,6 +20,7 @@ class PreparacionterrenosController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'ph' => 'between:1,14',
             'terreno_id' => 'required',
             'tecnico_id' => 'required',
         ]);

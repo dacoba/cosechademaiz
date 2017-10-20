@@ -67,7 +67,7 @@
                                         <input type="hidden" name="preparacionterreno_id" value="{{ $preterreno['id']  }}" >
                                     @endif
                                         <div class="form-group">
-                                        <label for="semilla" class="col-md-4 control-label">Semilla</label>
+                                        <label for="semilla" class="col-md-4 control-label">Semilla  <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Semilla utilizada para la siembra."></i></label>
                                         <div class="col-md-6">
                                             <select id="semilla" name="semilla" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($siembra['semilla']) and $siembra['semilla'] == '1') selected @endif >No Certificada</option>
@@ -78,7 +78,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="fertilizacion" class="col-md-4 control-label">Fertilizacion</label>
+                                        <label for="fertilizacion" class="col-md-4 control-label">Fertilizacion <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la utilizacion de diferentes quimicos o estrategias para fortalecer el crecimiento del maiz (10 es la correcta utilizacion de fertilizantes, 1 muy mala)"></i></label>
                                         <div class="col-md-6">
                                             <select id="fertilizacion" name="fertilizacion" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '1') selected @endif >1</option>
@@ -95,7 +95,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="densidad_siembra" class="col-md-4 control-label">Densidad de la Siembra</label>
+                                        <label for="densidad_siembra" class="col-md-4 control-label">Densidad de la Siembra <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la distancia de surco a surco (optimo 80cm) y de planta a planta (50cm optimo), 10 correcta distribucion, 1 muy mala"></i></label>
                                         <div class="col-md-6">
                                             <select id="densidad_siembra" name="densidad_siembra" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '1') selected @endif >1</option>
@@ -112,7 +112,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group{{ $errors->has('comentario_siembra') ? ' has-error' : '' }}">
-                                        <label for="comentario_siembra" class="col-md-4 control-label">Comentario</label>
+                                        <label for="comentario_siembra" class="col-md-4 control-label">Observacion</label>
                                         <div class="col-md-6">
                                             <input id="comentario_siembra" type="text" class="form-control" name="comentario_siembra" value="{{ old('comentario_siembra') }}">
                                             @if ($errors->has('comentario_siembra'))
@@ -144,9 +144,9 @@
                         <div class="col-md-7 col-lg-6">
                             <?php
                             $ph_aux = 10 - (abs($ph - 7) / 0.7);
-                            $plaga_suelo_aux = $plaga_suelo / 100;
-                            $drenage_aux = $drenage / 100;
-                            $maleza_preparacion_aux = $maleza_preparacion;
+                            $plaga_suelo_aux = 10 - ($plaga_suelo / 10);
+                            $drenage_aux = $drenage / 10;
+                            $maleza_preparacion_aux = $maleza_preparacion / 10;
                             $fertilizacion_aux = 7;
                             $semilla_aux = 7;
                             $densidad_siembra_aux = 7;
@@ -221,9 +221,9 @@
 
                                 function updateBarchar(){
                                     var ph = 10 - (Math.abs(<?=$ph?> - 7) / 0.7);
-                                    var plaga_suelo = <?=$plaga_suelo?> / 100;
-                                    var drenage = <?=$drenage?> / 100;
-                                    var maleza_preparacion = <?=$maleza_preparacion?>;
+                                    var plaga_suelo = 10 - (<?=$plaga_suelo?> / 10);
+                                    var drenage = <?=$drenage?> / 10;
+                                    var maleza_preparacion = <?=$maleza_preparacion?> / 10;
                                     var semilla = document.getElementById("semilla").value * 2.5;
                                     var fertilizacion = document.getElementById("fertilizacion").value;
                                     var densidad_siembra = document.getElementById("densidad_siembra").value;

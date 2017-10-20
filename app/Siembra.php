@@ -13,4 +13,8 @@ class Siembra extends Model
     function preparacionterreno(){
         return $this->belongsTo('App\Preparacionterreno');
     }
+    function riego()
+    {
+        return $this->hasOne('App\Riego');
+    }
 }

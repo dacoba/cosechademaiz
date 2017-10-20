@@ -78,6 +78,13 @@
                                 @endforeach
                                 </tbody>
                             </table>
+                            @if (!isset($planificacionfumigacion_done))
+                            <center>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                    <i class="fa fa-btn fa-user"></i> Añadir Planificacion
+                                </button>
+                            </center>
+                            @endif
                             @if (isset($planificacionfumigacion_done))
                                 <center>
                                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/fumigacions') }}">
@@ -202,7 +209,10 @@
                             @endif
                         @else
                             <center>
-                                Esta siembra aun no cuenta con una planificacion de fumigacion
+                                Esta siembra aun no cuenta con una planificacion de fumigacion<br>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                    <i class="fa fa-btn fa-user"></i> Iniciar Planificacion
+                                </button>
                             </center>
                         @endif
                     @else
@@ -213,6 +223,54 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog" style="margin-top: 100px">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Planificacion de riego</h4>
+            </div>
+            <div class="modal-body">
+                <p  style="text-align: center;">Fecha de la siguiente fumigacion.</p>
+                <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionfumigacions/addriego') }}">
+                    {{ csrf_field() }}
+                    <div class="row">
+                        <div class="form-group">
+                            <div class='col-md-10 col-md-offset-1 input-group date' id='datetimepicker1'>
+                                <input type='text' class="form-control" name="fecha_planificacion"/>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (isset($siembra_id))
+                            <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
+                            @if (isset($fumigacion_id))
+                                <input type="hidden" name="fumigacion_id" value="{{ $fumigacion_id }}" >
+                            @else
+                                <input type="hidden" name="newriego" value="True" >
+                            @endif
+                        @endif
+                        <div class="form-group">
+                            <div class="col-md-12" style="text-align: center;">
+                                <div style="text-align: center;">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fa fa-btn fa-user"></i>Registar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 </div>
 @endsection

@@ -7,6 +7,9 @@ use App\Siembra;
 use App\Riego;
 use App\Planificacionriego;
 use DB;
+use App\Preparacionterreno;
+use App\Terreno;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests;
 
@@ -22,6 +25,17 @@ class PlanificacionriegosController extends Controller
         return Siembra::whereHas('preparacionterreno', function($query){
             $query->where('estado', "Planificaciones");
         })->get();
+    }
+
+    protected function getTerrenos()
+    {
+        if (Auth::user()->tipo == 'Tecnico') {
+            return Preparacionterreno::with(['siembra', 'terreno', 'terreno.productor'])->where('estado', "Planificaciones")->where('tecnico_id', Auth::user()->id)->get();
+        }elseif (Auth::user()->tipo == 'Administrador') {
+            return Preparacionterreno::with(['siembra', 'terreno', 'terreno.productor'])->where('estado', "Planificaciones")->get();
+        }else{
+            return Terreno::where('estado', "Cerrado")->get();
+        }
     }
 
     public function __construct()
@@ -100,8 +114,9 @@ class PlanificacionriegosController extends Controller
             foreach ($riego as $rig){
                 $riego_id = $rig['id'];
             }
+            $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
             $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
-            return view('planificaionriego.siembra',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id']]);
+            return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'siembra' => $siembra]);
         };
         return view('planificaionriego.siembra',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
     }

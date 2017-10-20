@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Siembra;
 use App\Riego;
 use App\Planificacionriego;
+use App\Preparacionterreno;
+use App\Terreno;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests;
 
@@ -20,10 +23,20 @@ class RiegosController extends Controller
     {
         $this->middleware('auth');
     }
+    protected function getTerrenos()
+    {
+        if (Auth::user()->tipo == 'Tecnico') {
+            return Preparacionterreno::with(['siembra', 'terreno', 'terreno.productor'])->where('estado', "Planificaciones")->where('tecnico_id', Auth::user()->id)->get();
+        }elseif (Auth::user()->tipo == 'Administrador') {
+            return Preparacionterreno::with(['siembra', 'terreno', 'terreno.productor'])->where('estado', "Planificaciones")->get();
+        }else{
+            return Terreno::where('estado', "Cerrado")->get();
+        }
+    }
     public function index()
     {
-        $siembras = Siembra::all();
-        return view('riego.index',['siembras' => $siembras]);
+        $preterrenos = $this->getTerrenos();
+        return view('riego.lista',['preterrenos' => $preterrenos]);
     }
 
     /**
@@ -46,12 +59,13 @@ class RiegosController extends Controller
                 $riego_id = $rig['id'];
             }
             $riego = Riego::find($riego_id);
-            $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->get();
+            $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
+            $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.terreno', 'riego.siembra.preparacionterreno.tecnico'])->where('riego_id', $riego_id)->get();
             if(isset($request['planificacionriego_id'])){
                 $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
-                return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'planificacionriego_done' => $planificacionriego_done]);
+                return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'planificacionriego_done' => $planificacionriego_done, 'siembra' => $siembra]);
             }
-            return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego]);
+            return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'siembra' => $siembra]);
         };
         return view('riego.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
     }

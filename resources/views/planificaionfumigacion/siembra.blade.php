@@ -104,11 +104,6 @@
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionfumigacions/addriego') }}">
                     {{ csrf_field() }}
                     <div class="row">
-                        {{--<div class="form-group">--}}
-                            {{--<div class="col-md-12" style="text-align: center;">--}}
-                                {{--<input type="datetime" name="fecha_planificacion">--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
                         <div class="form-group">
                             <div class='col-md-10 col-md-offset-1 input-group date' id='datetimepicker1'>
                                 <input type='text' class="form-control" name="fecha_planificacion"/>

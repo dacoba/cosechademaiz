@@ -108,29 +108,31 @@
                                     <input type="hidden" name="tecnico_id" value="{{ $preterreno['tecnico_id']  }}" >
                                 @endif
                                 @if ( Auth::user()->tipo != 'Administrador')
+
+
                                     <div class="form-group">
-                                        <label for="ph" class="col-md-4 control-label">PH</label>
+                                        <label for="ph" class="col-md-4 control-label">PH <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de las caracteristicas del suelo, optima para la prduccion del maiz de 6 a 7 de pPH."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="0" max="14" id="ph" name="ph" class="form-control" @if (isset($preterreno['ph'])) value="{{ $preterreno['ph'] }}" @endif onchange="updateBarchar()"/>
+                                            <input type="text" id="ph" name="ph" class="form-control" @if (isset($preterreno['ph'])) value="{{ $preterreno['ph'] }}" @endif onchange="updateBarchar()"/>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo (%)</label>
+                                        <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencia de plagas en el terreno, evaluada en porcentage segun la existencia de plagas (Gusano Cogollero, Gusano Tierrero, Chicharrita, Gusano de la Mazorca)."></i></label>
                                         <div class="col-md-6">
                                             <input type="number" min="1" max="100" id="plaga_suelo" name="plaga_suelo" class="form-control" @if (isset($preterreno['plaga_suelo'])) value="{{ $preterreno['plaga_suelo'] }}" @endif onchange="updateBarchar()"/>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="drenage" class="col-md-4 control-label">Drenage (%)</label>
+                                        <label for="drenage" class="col-md-4 control-label">Drenage (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la permeabilidad (El maiz no soporta el encharcamiento y rapida de secacion)."></i></label>
                                         <div class="col-md-6">
                                             <input type="number" min="1" max="100" id="drenage" name="drenage" class="form-control" @if (isset($preterreno['drenage'])) value="{{ $preterreno['drenage'] }}" @endif onchange="updateBarchar()"/>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="erocion" class="col-md-4 control-label">Erocion</label>
+                                        <label for="erocion" class="col-md-4 control-label">Erocion <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Degradacion del suelo (Reduce la fertilidad por que proboca la perdida de minerales y materia organica), evaluacion 10 optima para la produccion, 1 muy mala (Elaborar estrategias de recuperacion del terreno)"></i></label>
                                         <div class="col-md-6">
                                             <select id="erocion" name="erocion" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '1') selected @endif >1</option>
@@ -148,20 +150,9 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="maleza_preparacion" class="col-md-4 control-label">Maleza Preparacion</label>
+                                        <label for="maleza_preparacion" class="col-md-4 control-label">Maleza Preparacion <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencias de malezas malignaas en el terreno, evaluado en porcentage segun la existencia de maleza."></i></label>
                                         <div class="col-md-6">
-                                            <select id="maleza_preparacion" name="maleza_preparacion" class="form-control" onchange="updateBarchar()">
-                                                <option value="1" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '10') selected @endif >10</option>
-                                            </select>
+                                            <input type="number" min="1" max="100" id="maleza_preparacion" name="maleza_preparacion" class="form-control" @if (isset($preterreno['maleza_preparacion'])) value="{{ $preterreno['maleza_preparacion'] }}" @endif onchange="updateBarchar()"/>
                                         </div>
                                     </div>
 
@@ -204,7 +195,7 @@
                         <div class="col-md-7 col-lg-6">
                             <style>
                                 text {
-                                    font: 12px sans-serif;
+                                    font: 0.61em sans-serif !important;
                                 }
                                 svg {
                                     display: block;
@@ -213,7 +204,7 @@
                                     margin: 0px;
                                     padding: 0px;
                                     height: 100%;
-                                    width: 100%;
+                                    width: 100% !important;
                                 }
                             </style>
                             <div id="chart1" style="height: 350px; width: 500px">
@@ -250,9 +241,9 @@
 
                                 function updateBarchar(){
                                     var ph = 10 - (Math.abs(document.getElementById("ph").value - 7) / 0.7);
-                                    var plaga_suelo = document.getElementById("plaga_suelo").value / 100;
-                                    var drenage = document.getElementById("drenage").value / 100;
-                                    var maleza_preparacion = document.getElementById("maleza_preparacion").value;
+                                    var plaga_suelo = 10 - (document.getElementById("plaga_suelo").value / 10);
+                                    var drenage = document.getElementById("drenage").value / 10;
+                                    var maleza_preparacion = document.getElementById("maleza_preparacion").value / 10;
                                     var fertilizacion = 7;
                                     var semilla = 7;
                                     var densidad_siembra = 7;

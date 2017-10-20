@@ -16,4 +16,8 @@ class Preparacionterreno extends Model
     function tecnico(){
         return $this->belongsTo('App\User');
     }
+    function siembra()
+    {
+        return $this->hasOne('App\Siembra');
+    }
 }

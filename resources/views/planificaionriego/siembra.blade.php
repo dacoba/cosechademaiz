@@ -92,7 +92,6 @@
 </div>
 <div class="modal fade" id="myModal" role="dialog" style="margin-top: 100px">
     <div class="modal-dialog">
-
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -104,11 +103,6 @@
                 <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionriegos/addriego') }}">
                     {{ csrf_field() }}
                     <div class="row">
-                        {{--<div class="form-group">--}}
-                            {{--<div class="col-md-12" style="text-align: center;">--}}
-                                {{--<input type="datetime" name="fecha_planificacion">--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
                         <div class="form-group">
                             <div class='col-md-10 col-md-offset-1 input-group date' id='datetimepicker1'>
                                 <input type='text' class="form-control" name="fecha_planificacion" required/>

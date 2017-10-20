@@ -75,17 +75,12 @@
                     </li>
                     <li><a href="{{ url('/siembras') }}">Siembra</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Riego</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Planificaciones</a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ url('/planificacionriegos/siembras') }}">Planificacion</a></li>
-                            <li><a href="{{ url('/riegos') }}">Administrar Riego</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Fumigacion</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ url('/planificacionfumigacions/siembras') }}">Planificacion</a></li>
-                            <li><a href="{{ url('/fumigacions') }}">Administrar Fumigacion</a></li>
+                            {{--<li><a href="{{ url('/planificacionriegos/siembras') }}">Planificacion</a></li>--}}
+                            <li><a href="{{ url('/riegos') }}">Planificacion de Riego</a></li>
+                            {{--<li><a href="{{ url('/planificacionfumigacions/siembras') }}">Planificacion</a></li>--}}
+                            <li><a href="{{ url('/fumigacions') }}">Planificacion de Fumigacion</a></li>
                         </ul>
                     </li>
                     <li><a href="{{ url('/cosechas') }}">Cosecha</a></li>
