@@ -75,13 +75,13 @@ class PreparacionterrenosController extends Controller
     public function store(Request $request)
     {
 //        $preterreno_count = Preparacionterreno::where('terreno_id', $request['terreno_id'])->count();
-        if (isset($preterreno_id)) {
-            $preterreno_aux = Preparacionterreno::find($preterreno_id);
+        if (isset($request['preterreno_id'])) {
+            $preterreno_aux = Preparacionterreno::find($request['preterreno_id']);
             $estado_aux = $preterreno_aux['estado'];
             if (Auth::user()->tipo == 'Tecnico' and $estado_aux == 'Preparacion') {
                 $estado_aux = 'Siembra';
             }
-            Preparacionterreno::where('id', $preterreno_id)
+            Preparacionterreno::where('id', $request['preterreno_id'])
                 ->update([
                     'ph' => $request['ph'],
                     'plaga_suelo' => $request['plaga_suelo'],
@@ -92,7 +92,7 @@ class PreparacionterrenosController extends Controller
                     'estado' => $estado_aux,
                     'tecnico_id' => $request['tecnico_id'],
                 ]);
-            $preterreno = Preparacionterreno::with(['terreno', 'terreno.productor'])->where('terreno_id', $request['terreno_id'])->get()[0];
+            $preterreno = Preparacionterreno::with(['terreno', 'terreno.productor'])->where('id', $request['preterreno_id'])->get()[0];
             $mensaje = "Preparacion de terreno actualizada exitosamente";
         } else {
             $validator = $this->validator($request->all());

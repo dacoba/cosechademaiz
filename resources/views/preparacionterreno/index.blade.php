@@ -47,8 +47,11 @@
                 {{--</div>--}}
             {{--</div>--}}
         {{--</form>--}}
-
-        <div class="col-md-8 col-md-offset-2">
+        @if ( Auth::user()->tipo == 'Tecnico')
+            <div class="col-md-12">
+        @else
+            <div class="col-md-8 col-md-offset-2">
+        @endif
             <div class="panel panel-default">
                 <div class="panel-heading">Registrar Preparacion del Terreno</div>
 
@@ -77,7 +80,11 @@
                         </tr>
                         </tbody>
                     </table>
-                    <center>
+                    @if ( Auth::user()->tipo == 'Tecnico')
+                    <div class="row">
+                        <div class="col-lg-6 col-md-5">
+                    @endif
+                            <center>
                         <form class="form-horizontal" role="form" method="POST" action="{{ url('/preparacionterrenos') }}">
                             {{ csrf_field() }}
                             <div class="form-group{{ $errors->has('tecnico_id') ? ' has-error' : '' }}">
@@ -104,7 +111,7 @@
                                     <div class="form-group">
                                         <label for="ph" class="col-md-4 control-label">PH</label>
                                         <div class="col-md-6">
-                                            <select id="ph" name="ph" class="form-control">
+                                            <select id="ph" name="ph" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($preterreno['ph']) and $preterreno['ph'] == '1') selected @endif >1</option>
                                                 <option value="2" @if (isset($preterreno['ph']) and $preterreno['ph'] == '2') selected @endif >2</option>
                                                 <option value="3" @if (isset($preterreno['ph']) and $preterreno['ph'] == '3') selected @endif >3</option>
@@ -122,7 +129,7 @@
                                     <div class="form-group">
                                         <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo</label>
                                         <div class="col-md-6">
-                                            <select id="plaga_suelo" name="plaga_suelo" class="form-control">
+                                            <select id="plaga_suelo" name="plaga_suelo" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '1') selected @endif >1</option>
                                                 <option value="2" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '2') selected @endif >2</option>
                                                 <option value="3" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '3') selected @endif >3</option>
@@ -140,7 +147,7 @@
                                     <div class="form-group">
                                         <label for="drenage" class="col-md-4 control-label">Drenage</label>
                                         <div class="col-md-6">
-                                            <select id="drenage" name="drenage" class="form-control">
+                                            <select id="drenage" name="drenage" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '1') selected @endif >1</option>
                                                 <option value="2" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '2') selected @endif >2</option>
                                                 <option value="3" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '3') selected @endif >3</option>
@@ -158,7 +165,7 @@
                                     <div class="form-group">
                                         <label for="erocion" class="col-md-4 control-label">Erocion</label>
                                         <div class="col-md-6">
-                                            <select id="erocion" name="erocion" class="form-control">
+                                            <select id="erocion" name="erocion" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '1') selected @endif >1</option>
                                                 <option value="2" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '2') selected @endif >2</option>
                                                 <option value="3" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '3') selected @endif >3</option>
@@ -176,7 +183,7 @@
                                     <div class="form-group">
                                         <label for="maleza_preparacion" class="col-md-4 control-label">Maleza Preparacion</label>
                                         <div class="col-md-6">
-                                            <select id="maleza_preparacion" name="maleza_preparacion" class="form-control">
+                                            <select id="maleza_preparacion" name="maleza_preparacion" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '1') selected @endif >1</option>
                                                 <option value="2" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '2') selected @endif >2</option>
                                                 <option value="3" @if (isset($preterreno['maleza_preparacion']) and $preterreno['maleza_preparacion'] == '3') selected @endif >3</option>
@@ -225,6 +232,75 @@
                             </div>
                         </form>
                     </center>
+                    @if ( Auth::user()->tipo == 'Tecnico')
+                        </div>
+                        <div class="col-md-7 col-lg-6">
+                            <style>
+                                text {
+                                    font: 12px sans-serif;
+                                }
+                                svg {
+                                    display: block;
+                                }
+                                html, body, #chart1, svg {
+                                    margin: 0px;
+                                    padding: 0px;
+                                    height: 100%;
+                                    width: 100%;
+                                }
+                            </style>
+                            <div id="chart1" style="height: 350px; width: 500px">
+                                <svg></svg>
+                            </div>
+                            <script>
+                                $(function() {
+                                    updateBarchar();
+                                })
+                                var chartBar;
+                                historicalBarChart = [
+                                    {
+                                        key: "Cumulative Return",
+                                        values: [
+                                            {
+                                                "label" : "Problemas de produccion" ,
+                                                "value" : 1
+                                            } ,
+                                            {
+                                                "label" : "Altura de tallo" ,
+                                                "value" : 1
+                                            } ,
+                                            {
+                                                "label" : "Humedad del terreno" ,
+                                                "value" : 1
+                                            } ,
+                                            {
+                                                "label" : "Remdimiento de produccion" ,
+                                                "value" : 1
+                                            }
+                                        ]
+                                    }
+                                ];
+
+                                function updateBarchar(){
+                                    var ph = document.getElementById("ph").value;
+                                    var plaga_suelo = document.getElementById("plaga_suelo").value;
+                                    var drenage = document.getElementById("drenage").value;
+                                    var maleza_preparacion = document.getElementById("maleza_preparacion").value;
+                                    var fertilizacion = 7;
+                                    var semilla = 7;
+                                    var densidad_siembra = 7;
+
+                                    historicalBarChart[0].values[0].value = (100/330) * (((100/10)*ph)+((50/10)*drenage)+((95/10)*plaga_suelo)+((60/10)*maleza_preparacion)+((25/10)*densidad_siembra));
+                                    historicalBarChart[0].values[1].value = (100/365) * (((90/10)*ph)+((60/10)*drenage)+((55/10)*fertilizacion)+((50/10)*maleza_preparacion)+((90/10)*semilla)+((20/10)*densidad_siembra));
+                                    historicalBarChart[0].values[2].value = (100/200) * (((95/10)*drenage)+((45/10)*maleza_preparacion)+((60/10)*densidad_siembra));
+                                    historicalBarChart[0].values[3].value = (100/495) * (((90/10)*ph)+((75/10)*drenage)+((65/10)*fertilizacion)+((50/10)*plaga_suelo)+((40/10)*maleza_preparacion)+((100/10)*semilla)+((75/10)*densidad_siembra));
+
+                                    chartBar.update();
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
