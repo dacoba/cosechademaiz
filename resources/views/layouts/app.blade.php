@@ -73,7 +73,7 @@
                             @endif
                         </ul>
                     </li>
-                    <li><a href="{{ url('/siembras/create') }}">Siembra</a></li>
+                    <li><a href="{{ url('/siembras') }}">Siembra</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Riego</a>
                         <ul class="dropdown-menu">

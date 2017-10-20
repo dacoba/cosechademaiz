@@ -111,54 +111,21 @@
                                     <div class="form-group">
                                         <label for="ph" class="col-md-4 control-label">PH</label>
                                         <div class="col-md-6">
-                                            <select id="ph" name="ph" class="form-control" onchange="updateBarchar()">
-                                                <option value="1" @if (isset($preterreno['ph']) and $preterreno['ph'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($preterreno['ph']) and $preterreno['ph'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($preterreno['ph']) and $preterreno['ph'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($preterreno['ph']) and $preterreno['ph'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($preterreno['ph']) and $preterreno['ph'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($preterreno['ph']) and $preterreno['ph'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($preterreno['ph']) and $preterreno['ph'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($preterreno['ph']) and $preterreno['ph'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($preterreno['ph']) and $preterreno['ph'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($preterreno['ph']) and $preterreno['ph'] == '10') selected @endif >10</option>
-                                            </select>
+                                            <input type="number" min="0" max="14" id="ph" name="ph" class="form-control" @if (isset($preterreno['ph'])) value="{{ $preterreno['ph'] }}" @endif onchange="updateBarchar()"/>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo</label>
+                                        <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo (%)</label>
                                         <div class="col-md-6">
-                                            <select id="plaga_suelo" name="plaga_suelo" class="form-control" onchange="updateBarchar()">
-                                                <option value="1" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($preterreno['plaga_suelo']) and $preterreno['plaga_suelo'] == '10') selected @endif >10</option>
-                                            </select>
+                                            <input type="number" min="1" max="100" id="plaga_suelo" name="plaga_suelo" class="form-control" @if (isset($preterreno['plaga_suelo'])) value="{{ $preterreno['plaga_suelo'] }}" @endif onchange="updateBarchar()"/>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="drenage" class="col-md-4 control-label">Drenage</label>
+                                        <label for="drenage" class="col-md-4 control-label">Drenage (%)</label>
                                         <div class="col-md-6">
-                                            <select id="drenage" name="drenage" class="form-control" onchange="updateBarchar()">
-                                                <option value="1" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($preterreno['drenage']) and $preterreno['drenage'] == '10') selected @endif >10</option>
-                                            </select>
+                                            <input type="number" min="1" max="100" id="drenage" name="drenage" class="form-control" @if (isset($preterreno['drenage'])) value="{{ $preterreno['drenage'] }}" @endif onchange="updateBarchar()"/>
                                         </div>
                                     </div>
 
@@ -199,7 +166,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('comentario_preparacion') ? ' has-error' : '' }}">
-                                        <label for="comentario_preparacion" class="col-md-4 control-label">Comentario</label>
+                                        <label for="comentario_preparacion" class="col-md-4 control-label">Observaciones</label>
 
                                         <div class="col-md-6">
                                             <input id="comentario_preparacion" type="text" class="form-control" name="comentario_preparacion" value="{{ $preterreno['comentario_preparacion'] or old('comentario_preparacion') }}">
@@ -282,9 +249,9 @@
                                 ];
 
                                 function updateBarchar(){
-                                    var ph = document.getElementById("ph").value;
-                                    var plaga_suelo = document.getElementById("plaga_suelo").value;
-                                    var drenage = document.getElementById("drenage").value;
+                                    var ph = 10 - (Math.abs(document.getElementById("ph").value - 7) / 0.7);
+                                    var plaga_suelo = document.getElementById("plaga_suelo").value / 100;
+                                    var drenage = document.getElementById("drenage").value / 100;
                                     var maleza_preparacion = document.getElementById("maleza_preparacion").value;
                                     var fertilizacion = 7;
                                     var semilla = 7;

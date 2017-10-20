@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Siembra;
 use Illuminate\Http\Request;
 use App\Preparacionterreno;
+use App\User;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests;
 
@@ -20,6 +22,16 @@ class SiembrasController extends Controller
     {
         $this->middleware('auth');
     }
+    protected function getTerrenos()
+    {
+        if (Auth::user()->tipo == 'Tecnico') {
+            return Preparacionterreno::with(['terreno', 'terreno.productor'])->where('estado', "Siembra")->where('tecnico_id', Auth::user()->id)->get();
+        }elseif (Auth::user()->tipo == 'Administrador') {
+            return Preparacionterreno::with(['terreno', 'terreno.productor'])->where('estado', "Siembra")->get();
+        }else{
+            return Terreno::where('estado', "Cerrado")->get();
+        }
+    }
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -29,8 +41,8 @@ class SiembrasController extends Controller
 
     public function index()
     {
-        $siembras = Siembra::all();
-        return view('siembra.mostrar',['siembras' => $siembras]);
+        $preterrenos = $this->getTerrenos();
+        return view('siembra.lista',['preterrenos' => $preterrenos]);
     }
 
     /**
@@ -52,26 +64,36 @@ class SiembrasController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = $this->validator($request->all());
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
+        if(isset($request['preparacionterreno_id'])) {
+            $validator = $this->validator($request->all());
+            if ($validator->fails()) {
+                $this->throwValidationException(
+                    $request, $validator
+                );
+            }
+            Siembra::create([
+                'semilla' => $request['semilla'],
+                'fertilizacion' => $request['fertilizacion'],
+                'densidad_siembra' => $request['densidad_siembra'],
+                'comentario_siembra' => $request['comentario_siembra'],
+                'preparacionterreno_id' => $request['preparacionterreno_id'],
+            ]);
+            Preparacionterreno::where('id', $request['preparacionterreno_id'])
+                ->update([
+                    'estado' => "Planificaciones",
+                ]);
+        }else{
+            Siembra::where('id', $request['siembra_id'])
+                ->update([
+                    'semilla' => $request['semilla'],
+                    'fertilizacion' => $request['fertilizacion'],
+                    'densidad_siembra' => $request['densidad_siembra'],
+                    'comentario_siembra' => $request['comentario_siembra'],
+                ]);
         }
-        Siembra::create([
-            'semilla' => $request['semilla'],
-            'fertilizacion' => $request['fertilizacion'],
-            'densidad_siembra' => $request['densidad_siembra'],
-            'comentario_siembra' => $request['comentario_siembra'],
-            'preparacionterreno_id' => $request['preparacionterreno_id'],
-        ]);
-        Preparacionterreno::where('id', $request['preparacionterreno_id'])
-        ->update([
-            'estado' => "Planificaciones",
-        ]);
         $mensaje = "Siembra registrada exitosamente";
-        $preparacionterrenos = Preparacionterreno::all();
-        return view("siembra.registrar", ['preparacionterrenos' => $preparacionterrenos, 'mensaje' => $mensaje]);
+        $preterrenos = $this->getTerrenos();
+        return view('siembra.lista',['preterrenos' => $preterrenos]);
     }
 
     /**
@@ -93,7 +115,15 @@ class SiembrasController extends Controller
      */
     public function edit($id)
     {
-        //
+        $terrenos = $this->getTerrenos();
+        $tecnicos = User::where('tipo', "Tecnico")->get();
+        $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.tecnico', 'preparacionterreno.terreno', 'preparacionterreno.terreno.productor'])->where('preparacionterreno_id', $id)->get();
+        if(count($siembra) <= 0){
+            $preterreno = Preparacionterreno::with(['tecnico', 'terreno', 'terreno.productor'])->where('id', $id)->get()[0];
+            return view('siembra.index',['terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos]);
+
+        }
+        return view('siembra.index',['terrenos' => $terrenos, 'siembra' => $siembra[0], 'tecnicos' => $tecnicos]);
     }
 
     /**
