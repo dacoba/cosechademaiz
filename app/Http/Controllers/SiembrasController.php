@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Siembra;
 use Illuminate\Http\Request;
 use App\Preparacionterreno;
+use App\Simulador;
 use App\User;
 use Validator;
 use Illuminate\Support\Facades\Auth;
-
 use App\Http\Requests;
 
 class SiembrasController extends Controller
@@ -71,7 +71,7 @@ class SiembrasController extends Controller
                     $request, $validator
                 );
             }
-            Siembra::create([
+            $siembra = Siembra::create([
                 'semilla' => $request['semilla'],
                 'fertilizacion' => $request['fertilizacion'],
                 'densidad_siembra' => $request['densidad_siembra'],
@@ -82,6 +82,18 @@ class SiembrasController extends Controller
                 ->update([
                     'estado' => "Planificaciones",
                 ]);
+            if (Auth::user()->tipo == 'Tecnico'){
+                Simulador::create([
+                    'numero_simulacion' => 2,
+                    'problemas' => $request['simulador_problemas'],
+                    'altura' => $request['simulador_altura'],
+                    'humedad' => $request['simulador_humedad'],
+                    'rendimiento' => $request['simulador_rendimiento'],
+                    'tipo' => "Siembra",
+                    'siembra_id' => $siembra['id'],
+                    'preparacionterreno_id' => $siembra['preparacionterreno_id'],
+                ]);
+            }
         }else{
             Siembra::where('id', $request['siembra_id'])
                 ->update([
@@ -120,7 +132,8 @@ class SiembrasController extends Controller
         $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.tecnico', 'preparacionterreno.terreno', 'preparacionterreno.terreno.productor'])->where('preparacionterreno_id', $id)->get();
         if(count($siembra) <= 0){
             $preterreno = Preparacionterreno::with(['tecnico', 'terreno', 'terreno.productor'])->where('id', $id)->get()[0];
-            return view('siembra.index',['terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos]);
+            $simulador = Simulador::where('preparacionterreno_id', $id)->where('tipo', "Preparacion")->get()[0];
+            return view('siembra.index',['terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos, 'simulador' => $simulador]);
 
         }
         return view('siembra.index',['terrenos' => $terrenos, 'siembra' => $siembra[0], 'tecnicos' => $tecnicos]);

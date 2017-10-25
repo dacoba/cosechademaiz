@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Terreno;
 use App\User;
 use App\Preparacionterreno;
+use App\Simulador;
 use Validator;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,25 +57,6 @@ class PreparacionterrenosController extends Controller
             return view('preparacionterreno.lista',['preterrenos' => $preterrenos]);
         }
     }
-//    public function postCreate(Request $request)
-//    {
-//        $preterreno_count = Preparacionterreno::where('terreno_id', $request['terreno_id'])->count();
-//        $terrenos = $this->getTerrenos();
-//        $tecnicos = User::where('tipo', "Tecnico")->get();
-//        if($preterreno_count)
-//        {
-//            $preterreno = Preparacionterreno::where('terreno_id', $request['terreno_id'])->get();
-//            return view('preparacionterreno.index',['terreno_id' => $request['terreno_id'], 'terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos]);
-//        }
-//        return view('preparacionterreno.index',['terreno_id' => $request['terreno_id'], 'terrenos' => $terrenos, 'tecnicos' => $tecnicos]);
-//    }
-//
-//    public function create()
-//    {
-//        $terrenos = Terreno::where('estado', "Cerrado")->get();
-//        $tecnicos = User::where('tipo', "Tecnico")->get();
-//        return view("preparacionterreno.registrar", ['terrenos' => $terrenos, 'tecnicos' => $tecnicos]);
-//    }
 
     public function create($id)
     {
@@ -113,6 +95,17 @@ class PreparacionterrenosController extends Controller
                     'estado' => $estado_aux,
                     'tecnico_id' => $request['tecnico_id'],
                 ]);
+            if (Auth::user()->tipo == 'Tecnico'){
+                Simulador::create([
+                    'numero_simulacion' => 1,
+                    'problemas' => $request['simulador_problemas'],
+                    'altura' => $request['simulador_altura'],
+                    'humedad' => $request['simulador_humedad'],
+                    'rendimiento' => $request['simulador_rendimiento'],
+                    'tipo' => "Preparacion",
+                    'preparacionterreno_id' => $request['preterreno_id'],
+                ]);
+            }
             $preterreno = Preparacionterreno::with(['terreno', 'terreno.productor'])->where('id', $request['preterreno_id'])->get()[0];
             $mensaje = "Preparacion de terreno actualizada exitosamente";
         } else {
@@ -139,12 +132,12 @@ class PreparacionterrenosController extends Controller
                 ]);
             $mensaje = "Cosecha iniciada exitosamente";
         }
-        $terrenos = $this->getTerrenos();
-        $tecnicos = User::where('tipo', "Tecnico")->get();
-        if (Auth::user()->tipo != 'Administrador') {
-            return view('preparacionterreno.index', ['terreno_id' => $request['terreno_id'], 'terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos]);
-        }else{
-            return view('preparacionterreno.index', ['terreno_id' => $request['terreno_id'], 'terrenos' => $terrenos, 'mensaje' => $mensaje, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos]);
+        $preterrenos = $this->getTerrenos();
+        if (Auth::user()->tipo == 'Administrador') {
+            $terrenos = Terreno::with('productor')->where('estado', "Cerrado")->get();
+            return view('preparacionterreno.lista',['preterrenos' => $preterrenos, 'terrenos' => $terrenos]);
+        } else {
+            return view('preparacionterreno.lista',['preterrenos' => $preterrenos]);
         }
     }
 

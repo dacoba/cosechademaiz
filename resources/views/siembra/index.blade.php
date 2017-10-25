@@ -12,7 +12,7 @@
         @if ( Auth::user()->tipo == 'Tecnico')
             <div class="col-md-12">
         @else
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-12">
         @endif
             <div class="panel panel-default">
                 <div class="panel-heading">Registrar Preparacion del Terreno</div>
@@ -40,6 +40,7 @@
                                     $ph = $siembra['preparacionterreno']['ph'];
                                     $plaga_suelo = $siembra['preparacionterreno']['plaga_suelo'];
                                     $drenage = $siembra['preparacionterreno']['drenage'];
+                                    $erocion = $siembra['preparacionterreno']['erocion'];
                                     $maleza_preparacion = $siembra['preparacionterreno']['maleza_preparacion'];
                                 ?>
                             @else
@@ -50,6 +51,7 @@
                                 $ph = $preterreno['ph'];
                                 $plaga_suelo = $preterreno['plaga_suelo'];
                                 $drenage = $preterreno['drenage'];
+                                $erocion = $preterreno['erocion'];
                                 $maleza_preparacion = $preterreno['maleza_preparacion'];
                                 ?>
                             @endif
@@ -92,8 +94,8 @@
                                         </label>
                                         <div class="col-md-6">
                                             <select id="fertilizacion" name="fertilizacion" class="form-control" onchange="updateBarchar()">
-                                                <option value="1" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '1') selected @endif >Fertiliacion no Correcta</option>
-                                                <option value="10" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '10') selected @endif >Fertilizacion Correcta</option>
+                                                <option value="0" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '1') selected @endif >Fertiliacion no Correcta</option>
+                                                <option value="1" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '10') selected @endif >Fertilizacion Correcta</option>
                                             </select>
                                         </div>
                                     </div>
@@ -125,6 +127,12 @@
                                             @endif
                                         </div>
                                     </div>
+
+                                    <input type="hidden" name="simulador_problemas" id="simulador_problemas" value="">
+                                    <input type="hidden" name="simulador_altura" id="simulador_altura" value="">
+                                    <input type="hidden" name="simulador_humedad" id="simulador_humedad" value="">
+                                    <input type="hidden" name="simulador_rendimiento" id="simulador_rendimiento" value="">
+
                                     <div class="form-group">
                                         <div class="col-md-6 col-md-offset-4">
                                             <button type="submit" class="btn btn-primary">
@@ -145,25 +153,6 @@
                             </center>
                         </div>
                         <div class="col-md-7 col-lg-6">
-                            <?php
-                            $ph_aux = 10 - (abs($ph - 7) / 0.7);
-                            $plaga_suelo_aux = 10 - ($plaga_suelo / 10);
-                            $drenage_aux = $drenage / 10;
-                            $maleza_preparacion_aux = $maleza_preparacion / 10;
-                            $fertilizacion_aux = 7;
-                            $semilla_aux = 7;
-                            $densidad_siembra_aux = 7;
-
-                            $problemas = (100/330) * (((100/10)*$ph_aux)+((50/10)*$drenage_aux)+((95/10)*$plaga_suelo_aux)+((60/10)*$maleza_preparacion_aux)+((25/10)*$densidad_siembra_aux));
-                            $altura = (100/365) * (((90/10)*$ph_aux)+((60/10)*$drenage_aux)+((55/10)*$fertilizacion_aux)+((50/10)*$maleza_preparacion_aux)+((90/10)*$semilla_aux)+((20/10)*$densidad_siembra_aux));
-                            $humedad = (100/200) * (((95/10)*$drenage_aux)+((45/10)*$maleza_preparacion_aux)+((60/10)*$densidad_siembra_aux));
-                            $rendimiento = (100/495) * (((90/10)*$ph_aux)+((75/10)*$drenage_aux)+((65/10)*$fertilizacion_aux)+((50/10)*$plaga_suelo_aux)+((40/10)*$maleza_preparacion_aux)+((100/10)*$semilla_aux)+((75/10)*$densidad_siembra_aux));
-
-                            $problemas = round($problemas, 2);
-                            $altura = round($altura, 2);
-                            $humedad = round($humedad, 2);
-                            $rendimiento = round($rendimiento, 2);
-                            ?>
                             <style>
                                 text {
                                     font: 12px sans-serif;
@@ -184,10 +173,10 @@
                             </style>
                             <table width="80%" border="1px grey" style="margin-left: auto;margin-right: auto;">
                                 <tr>
-                                    <td class="preterreno" style="background: rgb(31, 119, 180);"><?=$problemas?> %</td>
-                                    <td class="preterreno" style="background: rgb(174, 199, 232);"><?=$altura?> %</td>
-                                    <td class="preterreno" style="background: rgb(255, 127, 14);"><?=$humedad?> %</td>
-                                    <td class="preterreno" style="background: rgb(255, 187, 120);"><?=$rendimiento?> %</td>
+                                    <td class="preterreno" style="background: rgb(31, 119, 180);"><?=round($simulador['problemas'], 2);?> %</td>
+                                    <td class="preterreno" style="background: rgb(174, 199, 232);"><?=round($simulador['altura'], 2);?> %</td>
+                                    <td class="preterreno" style="background: rgb(255, 127, 14);"><?=round($simulador['humedad'], 2);?> %</td>
+                                    <td class="preterreno" style="background: rgb(255, 187, 120);"><?=round($simulador['rendimiento'], 2);?> %</td>
                                 </tr>
                             </table>
                             <div id="chart1" style="height: 350px; width: 500px">
@@ -223,18 +212,34 @@
                                 ];
 
                                 function updateBarchar(){
-                                    var ph = 10 - (Math.abs(<?=$ph?> - 7) / 0.7);
+
+                                    var ph_ini = <?=$ph?>;
+                                    var fertilizacion = document.getElementById("fertilizacion").value;
+                                    var ph_aux = ((7 - ph_ini) * fertilizacion) + ph_ini
+                                    var ph = 10 - (Math.abs(ph_aux - 7) / 0.7);
+
                                     var plaga_suelo = 10 - (<?=$plaga_suelo?> / 10);
                                     var drenage = <?=$drenage?> / 10;
-                                    var maleza_preparacion = <?=$maleza_preparacion?> / 10;
-                                    var semilla = document.getElementById("semilla").value * 2.5;
-                                    var fertilizacion = document.getElementById("fertilizacion").value;
-                                    var densidad_siembra = document.getElementById("densidad_siembra").value;
+                                    var maleza_preparacion = 10 - (<?=$maleza_preparacion?> / 10);
+                                    var erocion = <?=$erocion?> / 10;
 
-                                    historicalBarChart[0].values[0].value = (100/330) * (((100/10)*ph)+((50/10)*drenage)+((95/10)*plaga_suelo)+((60/10)*maleza_preparacion)+((25/10)*densidad_siembra));
-                                    historicalBarChart[0].values[1].value = (100/365) * (((90/10)*ph)+((60/10)*drenage)+((55/10)*fertilizacion)+((50/10)*maleza_preparacion)+((90/10)*semilla)+((20/10)*densidad_siembra));
-                                    historicalBarChart[0].values[2].value = (100/200) * (((95/10)*drenage)+((45/10)*maleza_preparacion)+((60/10)*densidad_siembra));
-                                    historicalBarChart[0].values[3].value = (100/495) * (((90/10)*ph)+((75/10)*drenage)+((65/10)*fertilizacion)+((50/10)*plaga_suelo)+((40/10)*maleza_preparacion)+((100/10)*semilla)+((75/10)*densidad_siembra));
+                                    var semilla = document.getElementById("semilla").value * 2.5;
+                                    var enfermedades = 7.5;
+
+                                    var simulador_problemas = 100 - (100/475) * (((100/10)*ph)+((50/10)*drenage)+((100/10)*plaga_suelo)+((65/10)*maleza_preparacion)+((100/10)*enfermedades)+((60/10)*erocion));
+                                    var simulador_altura = (100/290) * (((90/10)*ph)+((60/10)*drenage)+((20/10)*enfermedades)+((30/10)*erocion)+((90/10)*semilla));
+                                    var simulador_humedad = (100/145) * (((100/10)*drenage)+((45/10)*maleza_preparacion));
+                                    var simulador_rendimiento = (100/535) * (((100/10)*ph)+((75/10)*drenage)+((100/10)*enfermedades)+((100/10)*plaga_suelo)+((30/10)*maleza_preparacion)+((50/10)*semilla)+((80/10)*erocion));
+
+                                    document.getElementById("simulador_problemas").value = simulador_problemas;
+                                    document.getElementById("simulador_altura").value = simulador_altura;
+                                    document.getElementById("simulador_humedad").value = simulador_humedad;
+                                    document.getElementById("simulador_rendimiento").value = simulador_rendimiento;
+
+                                    historicalBarChart[0].values[0].value = simulador_problemas;
+                                    historicalBarChart[0].values[1].value = simulador_altura;
+                                    historicalBarChart[0].values[2].value = simulador_humedad;
+                                    historicalBarChart[0].values[3].value = simulador_rendimiento;
 
                                     chartBar.update();
                                 }

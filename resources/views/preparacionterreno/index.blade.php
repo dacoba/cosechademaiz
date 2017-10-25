@@ -126,7 +126,7 @@
                                     <div class="form-group{{ $errors->has('plaga_suelo') ? ' has-error' : '' }}">
                                         <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencia de plagas en el terreno, evaluada en porcentage segun la existencia de plagas (Gusano Cogollero, Gusano Tierrero, Chicharrita, Gusano de la Mazorca)."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="75" step="0.01" id="plaga_suelo" name="plaga_suelo" class="form-control" value="{{ $plaga_suelo or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="50" step="0.01" id="plaga_suelo" name="plaga_suelo" class="form-control" value="{{ $plaga_suelo or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
                                             @if ($errors->has('plaga_suelo'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('plaga_suelo') }}</strong>
@@ -162,7 +162,7 @@
                                     <div class="form-group{{ $errors->has('maleza_preparacion') ? ' has-error' : '' }}">
                                         <label for="maleza_preparacion" class="col-md-4 control-label">Maleza Preparacion (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencias de malezas malignaas en el terreno, evaluado en porcentage segun la existencia de maleza."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="100" step="0.01" id="maleza_preparacion" name="maleza_preparacion" class="form-control" value="{{ $maleza_preparacion or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="75" step="0.01" id="maleza_preparacion" name="maleza_preparacion" class="form-control" value="{{ $maleza_preparacion or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
                                             @if ($errors->has('maleza_preparacion'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('maleza_preparacion') }}</strong>
@@ -298,6 +298,15 @@
                                     document.getElementById("simulador_altura").value = simulador_altura;
                                     document.getElementById("simulador_humedad").value = simulador_humedad;
                                     document.getElementById("simulador_rendimiento").value = simulador_rendimiento;
+
+                                    var ph_validate_sim = document.getElementById("ph").value;
+                                    var plaga_suelo_validate_sim = document.getElementById("plaga_suelo").value;
+                                    if(ph_validate_sim < 4|| ph_validate_sim > 10 || plaga_suelo_validate_sim > 75){
+                                        simulador_problemas = 100;
+                                        simulador_altura = 0;
+                                        simulador_humedad = 0;
+                                        simulador_rendimiento = 0;
+                                    }
 
                                     historicalBarChart[0].values[0].value = simulador_problemas;
                                     historicalBarChart[0].values[1].value = simulador_altura;
