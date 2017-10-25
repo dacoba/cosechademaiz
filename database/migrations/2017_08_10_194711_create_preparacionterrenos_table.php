@@ -14,11 +14,11 @@ class CreatePreparacionterrenosTable extends Migration
     {
         Schema::create('preparacionterrenos', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('ph');
-            $table->integer('plaga_suelo');
-            $table->integer('drenage');
-            $table->integer('erocion');
-            $table->integer('maleza_preparacion');
+            $table->double('ph');
+            $table->double('plaga_suelo');
+            $table->double('drenage');
+            $table->double('erocion');
+            $table->double('maleza_preparacion');
             $table->string('comentario_preparacion');
             $table->string('estado');
             $table->integer('terreno_id')->unsigned();

@@ -77,12 +77,12 @@
                                         $humedad = round($humedad, 2);
                                         $rendimiento = round($rendimiento, 2);
                                         ?>
-                                        <td style="text-align: center"><?=$problemas?></td>
-                                        <td style="text-align: center"><?=$altura?></td>
-                                        <td style="text-align: center"><?=$humedad?></td>
-                                        <td style="text-align: center"><?=$rendimiento?></td>
+                                        <td style="text-align: center"><?=$problemas?> %</td>
+                                        <td style="text-align: center"><?=$altura?> %</td>
+                                        <td style="text-align: center"><?=$humedad?> %</td>
+                                        <td style="text-align: center"><?=$rendimiento?> %</td>
                                         <?php
-                                            $drenage_aux = $planificacionriego['drenage'] / 100;
+                                            $drenage_aux = $planificacionriego['problemas_drenaje'] / 10;
                                         ?>
                                     </tr>
                                 @endforeach
@@ -305,7 +305,6 @@
                 </form>
             </div>
         </div>
-
     </div>
 </div>
 @endsection

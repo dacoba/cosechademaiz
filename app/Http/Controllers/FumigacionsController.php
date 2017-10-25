@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Siembra;
 use App\Riego;
 use App\Planificacionfumigacion;
+use App\Preparacionterreno;
+use App\Terreno;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests;
 
@@ -21,10 +24,20 @@ class FumigacionsController extends Controller
     {
         $this->middleware('auth');
     }
+    protected function getTerrenos()
+    {
+        if (Auth::user()->tipo == 'Tecnico') {
+            return Preparacionterreno::with(['siembra', 'terreno', 'terreno.productor'])->where('estado', "Planificaciones")->where('tecnico_id', Auth::user()->id)->get();
+        }elseif (Auth::user()->tipo == 'Administrador') {
+            return Preparacionterreno::with(['siembra', 'terreno', 'terreno.productor'])->where('estado', "Planificaciones")->get();
+        }else{
+            return Terreno::where('estado', "Cerrado")->get();
+        }
+    }
     public function index()
     {
-        $siembras = Siembra::all();
-        return view('fumigacion.index',['siembras' => $siembras]);
+        $preterrenos = $this->getTerrenos();
+        return view('fumigacion.lista',['preterrenos' => $preterrenos]);
     }
 
     /**
@@ -48,12 +61,13 @@ class FumigacionsController extends Controller
                 $fumigacion_id = $fum['id'];
             }
             $fumigacion = Fumigacion::find($fumigacion_id);
+            $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
             $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $fumigacion_id)->get();
             if(isset($request['planificacionfumigacion_id'])){
                 $planificacionfumigacion_done = Planificacionfumigacion::find($request['planificacionfumigacion_id']);
-                return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $fumigacion_id, 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'fumigacion' => $fumigacion, 'planificacionfumigacion_done' => $planificacionfumigacion_done]);
+                return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $fumigacion_id, 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'fumigacion' => $fumigacion, 'planificacionfumigacion_done' => $planificacionfumigacion_done, 'siembra' => $siembra]);
             }
-            return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $fumigacion_id, 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'fumigacion' => $fumigacion]);
+            return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $fumigacion_id, 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'fumigacion' => $fumigacion, 'siembra' => $siembra]);
         };
         return view('fumigacion.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
     }
@@ -75,13 +89,13 @@ class FumigacionsController extends Controller
                 'control_enfermedades' => $request['control_enfermedades'],
                 'comentario_fumigacion' => $request['comentario_fumigacion'],
             ]);
+        $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
         $planificacionfumigacion_done = Planificacionfumigacion::find($request['planificacionfumigacion_id']);
         $siembras = Siembra::all();
 
         $mensaje = "Planificacion de fumigacion registrado exitosamente";
-
         $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $planificacionfumigacion_done['fumigacion_id'])->get();
-        return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $planificacionfumigacion_done['fumigacion_id'], 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'mensaje' => $mensaje]);
+        return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $planificacionfumigacion_done['fumigacion_id'], 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'mensaje' => $mensaje, 'siembra' => $siembra]);
 
     }
 

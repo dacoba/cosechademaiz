@@ -136,8 +136,9 @@ class PlanificacionfumigacionsController extends Controller
             foreach ($fumigacion as $fum){
                 $fumigacion_id = $fum['id'];
             }
+            $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
             $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $fumigacion_id)->get();
-            return view('planificaionfumigacion.siembra',['siembras' => $siembras, 'fumigacion_id' => $fumigacion_id, 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id']]);
+            return view('fumigacion.index',['siembras' => $siembras, 'fumigacion_id' => $fumigacion_id, 'planificacionfumigacions' => $planificacionfumigacions, 'siembra_id' => $request['siembra_id'], 'fumigacion' => $fumigacion, 'siembra' => $siembra]);
         };
         return view('planificaionfumigacion.siembra',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
     }

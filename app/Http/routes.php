@@ -53,6 +53,7 @@ Route::get('/planificacionfumigacions/siembras', 'PlanificacionfumigacionsContro
 Route::post('/planificacionfumigacions/siembras', 'PlanificacionfumigacionsController@postSiembras');
 Route::post('/planificacionfumigacions/addriego', 'PlanificacionfumigacionsController@addRiego');
 Route::resource('/planificacionfumigacions', 'PlanificacionfumigacionsController');
+
 Route::post('/fumigacions/create', 'FumigacionsController@postCreate');
 Route::resource('/fumigacions', 'FumigacionsController', ['except' => ['create']]);
 

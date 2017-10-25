@@ -66,6 +66,7 @@
                         <tr style="background-color: #f1f1f1;">
                             <th style="text-align: right">Area Parcela</th>
                             <th>Productor</th>
+                            <th>Tecnico</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -73,9 +74,11 @@
                             @if (isset($preterreno))
                                 <td style="text-align: right">{{$preterreno['terreno']['area_parcela']}} Hec.</td>
                                 <td>{{$preterreno['terreno']['productor']['nombre']}} {{$preterreno['terreno']['productor']['apellido']}}</td>
+                                <td>{{$preterreno['tecnico']['nombre']}} {{$preterreno['tecnico']['apellido']}}</td>
                             @else
                                 <td style="text-align: right">{{$terreno['area_parcela']}} Hec.</td>
                                 <td>{{$terreno['productor']['nombre']}} {{$terreno['productor']['apellido']}}</td>
+                                <td>Sin Tecnico Asignado</td>
                             @endif
                         </tr>
                         </tbody>
@@ -84,75 +87,87 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-5">
                     @endif
-                            <center>
+                    <center>
                         <form class="form-horizontal" role="form" method="POST" action="{{ url('/preparacionterrenos') }}">
                             {{ csrf_field() }}
-                            <div class="form-group{{ $errors->has('tecnico_id') ? ' has-error' : '' }}">
-                                <label for="tecnico_id" class="col-md-4 control-label">Tecnico</label>
-                                <div class="col-md-6">
-                                    <select name="tecnico_id" class="form-control" @if ( Auth::user()->tipo == 'Tecnico') disabled @endif>
-                                        @foreach ( $tecnicos as $tecnico )
-                                            <option value="{{$tecnico['id']}}" @if (isset($preterreno['tecnico_id']) and $preterreno['tecnico_id'] == $tecnico['id']) selected @endif >{{$tecnico['nombre']}} {{$tecnico['apellido']}}</option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('tecnico_id'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('tecnico_id') }}</strong>
-                                        </span>
-                                    @endif
+                            @if (Auth::user()->tipo == 'Administrador')
+                                <div class="form-group{{ $errors->has('tecnico_id') ? ' has-error' : '' }}">
+                                    <label for="tecnico_id" class="col-md-4 control-label">Tecnico</label>
+                                    <div class="col-md-6">
+                                        <select name="tecnico_id" class="form-control" @if ( Auth::user()->tipo == 'Tecnico') disabled @endif>
+                                            @foreach ( $tecnicos as $tecnico )
+                                                <option value="{{$tecnico['id']}}" @if (isset($preterreno['tecnico_id']) and $preterreno['tecnico_id'] == $tecnico['id']) selected @endif >{{$tecnico['nombre']}} {{$tecnico['apellido']}}</option>
+                                            @endforeach
+                                        </select>
+                                        @if ($errors->has('tecnico_id'))
+                                            <span class="help-block">
+                                                <strong>{{ $errors->first('tecnico_id') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                             @if (isset($preterreno))
                                 <input type="hidden" name="preterreno_id" value="{{ $preterreno['id']  }}" >
-                                @if ( Auth::user()->tipo == 'Tecnico')
-                                    <input type="hidden" name="tecnico_id" value="{{ $preterreno['tecnico_id']  }}" >
-                                @endif
                                 @if ( Auth::user()->tipo != 'Administrador')
-
-
-                                    <div class="form-group">
+                                    <input type="hidden" name="tecnico_id" value="{{ $preterreno['tecnico_id']  }}" >
+                                    <div class="form-group{{ $errors->has('ph') ? ' has-error' : '' }}">
                                         <label for="ph" class="col-md-4 control-label">PH <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de las caracteristicas del suelo, optima para la prduccion del maiz de 6 a 7 de pPH."></i></label>
                                         <div class="col-md-6">
-                                            <input type="text" id="ph" name="ph" class="form-control" @if (isset($preterreno['ph'])) value="{{ $preterreno['ph'] }}" @endif onchange="updateBarchar()"/>
+                                            <input type="number" id="ph" name="ph" step="0.01" min="4.00" max="10.00" class="form-control" value="{{ $ph or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            @if ($errors->has('ph'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('ph') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group{{ $errors->has('plaga_suelo') ? ' has-error' : '' }}">
                                         <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencia de plagas en el terreno, evaluada en porcentage segun la existencia de plagas (Gusano Cogollero, Gusano Tierrero, Chicharrita, Gusano de la Mazorca)."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="100" id="plaga_suelo" name="plaga_suelo" class="form-control" @if (isset($preterreno['plaga_suelo'])) value="{{ $preterreno['plaga_suelo'] }}" @endif onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="75" step="0.01" id="plaga_suelo" name="plaga_suelo" class="form-control" value="{{ $plaga_suelo or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            @if ($errors->has('plaga_suelo'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('plaga_suelo') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group{{ $errors->has('drenage') ? ' has-error' : '' }}">
                                         <label for="drenage" class="col-md-4 control-label">Drenage (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la permeabilidad (El maiz no soporta el encharcamiento y rapida de secacion)."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="100" id="drenage" name="drenage" class="form-control" @if (isset($preterreno['drenage'])) value="{{ $preterreno['drenage'] }}" @endif onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="100" step="0.01" id="drenage" name="drenage" class="form-control" value="{{ $drenage or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            @if ($errors->has('drenage'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('drenage') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="erocion" class="col-md-4 control-label">Erocion <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Degradacion del suelo (Reduce la fertilidad por que proboca la perdida de minerales y materia organica), evaluacion 10 optima para la produccion, 1 muy mala (Elaborar estrategias de recuperacion del terreno)"></i></label>
+                                    <div class="form-group{{ $errors->has('erocion') ? ' has-error' : '' }}">
+                                        <label for="erocion" class="col-md-4 control-label">Erocion (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Degradacion del suelo (Reduce la fertilidad por que proboca la perdida de minerales y materia organica), evaluacion 10 optima para la produccion, 1 muy mala (Elaborar estrategias de recuperacion del terreno)"></i></label>
                                         <div class="col-md-6">
-                                            <select id="erocion" name="erocion" class="form-control" onchange="updateBarchar()">
-                                                <option value="1" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($preterreno['erocion']) and $preterreno['erocion'] == '10') selected @endif >10</option>
-                                            </select>
+                                            <input type="number" min="1" max="100" step="0.01" id="erocion" name="erocion" class="form-control" value="{{ $erocion or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            @if ($errors->has('erocion'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('erocion') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="maleza_preparacion" class="col-md-4 control-label">Maleza Preparacion <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencias de malezas malignaas en el terreno, evaluado en porcentage segun la existencia de maleza."></i></label>
+                                    <div class="form-group{{ $errors->has('maleza_preparacion') ? ' has-error' : '' }}">
+                                        <label for="maleza_preparacion" class="col-md-4 control-label">Maleza Preparacion (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencias de malezas malignaas en el terreno, evaluado en porcentage segun la existencia de maleza."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="100" id="maleza_preparacion" name="maleza_preparacion" class="form-control" @if (isset($preterreno['maleza_preparacion'])) value="{{ $preterreno['maleza_preparacion'] }}" @endif onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="100" step="0.01" id="maleza_preparacion" name="maleza_preparacion" class="form-control" value="{{ $maleza_preparacion or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            @if ($errors->has('maleza_preparacion'))
+                                                <span class="help-block">
+                                                    <strong>{{ $errors->first('maleza_preparacion') }}</strong>
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -160,7 +175,7 @@
                                         <label for="comentario_preparacion" class="col-md-4 control-label">Observaciones</label>
 
                                         <div class="col-md-6">
-                                            <input id="comentario_preparacion" type="text" class="form-control" name="comentario_preparacion" value="{{ $preterreno['comentario_preparacion'] or old('comentario_preparacion') }}">
+                                            <input id="comentario_preparacion" type="text" class="form-control" name="comentario_preparacion" value="{{ $maleza_preparacion or old('comentario_preparacion') }}">
 
                                             @if ($errors->has('comentario_preparacion'))
                                                 <span class="help-block">
@@ -169,6 +184,12 @@
                                             @endif
                                         </div>
                                     </div>
+
+                                    <input type="hidden" name="simulador_problemas" id="simulador_problemas" value="">
+                                    <input type="hidden" name="simulador_altura" id="simulador_altura" value="">
+                                    <input type="hidden" name="simulador_humedad" id="simulador_humedad" value="">
+                                    <input type="hidden" name="simulador_rendimiento" id="simulador_rendimiento" value="">
+
                                 @endif
                             @endif
                             <input type="hidden" name="terreno_id" value="{{ $terreno_id }}" >
@@ -178,9 +199,9 @@
                                         <i class="fa fa-btn fa-user"></i>
                                         @if ( Auth::user()->tipo == 'Administrador')
                                             @if (isset($preterreno))
-                                                Asignar Tecnico
+                                                Reasignar Tecnico
                                             @else
-                                                Iniciar Cosecha
+                                                Asignar Tecnico
                                             @endif
                                         @else
                                             Registrar Datos
@@ -240,21 +261,51 @@
                                 ];
 
                                 function updateBarchar(){
-                                    var ph = 10 - (Math.abs(document.getElementById("ph").value - 7) / 0.7);
-                                    var plaga_suelo = 10 - (document.getElementById("plaga_suelo").value / 10);
-                                    var drenage = document.getElementById("drenage").value / 10;
-                                    var maleza_preparacion = document.getElementById("maleza_preparacion").value / 10;
-                                    var fertilizacion = 7;
-                                    var semilla = 7;
-                                    var densidad_siembra = 7;
+                                    var ph_validate = document.getElementById("ph").value;
+                                    ph_validate = ph_validate < 4 ? 4 : ph_validate;
+                                    ph_validate = ph_validate > 10 ? 10 : ph_validate;
+                                    var ph = 10 - (Math.abs(ph_validate - 7) / 0.7);
 
-                                    historicalBarChart[0].values[0].value = (100/330) * (((100/10)*ph)+((50/10)*drenage)+((95/10)*plaga_suelo)+((60/10)*maleza_preparacion)+((25/10)*densidad_siembra));
-                                    historicalBarChart[0].values[1].value = (100/365) * (((90/10)*ph)+((60/10)*drenage)+((55/10)*fertilizacion)+((50/10)*maleza_preparacion)+((90/10)*semilla)+((20/10)*densidad_siembra));
-                                    historicalBarChart[0].values[2].value = (100/200) * (((95/10)*drenage)+((45/10)*maleza_preparacion)+((60/10)*densidad_siembra));
-                                    historicalBarChart[0].values[3].value = (100/495) * (((90/10)*ph)+((75/10)*drenage)+((65/10)*fertilizacion)+((50/10)*plaga_suelo)+((40/10)*maleza_preparacion)+((100/10)*semilla)+((75/10)*densidad_siembra));
+                                    var plaga_suelo_validate = document.getElementById("plaga_suelo").value;
+                                    plaga_suelo_validate = plaga_suelo_validate < 0 ? 0 : plaga_suelo_validate;
+                                    plaga_suelo_validate = plaga_suelo_validate > 100 ? 100 : plaga_suelo_validate;
+                                    var plaga_suelo = 10 - (plaga_suelo_validate / 10);
+
+                                    var drenage_validate = document.getElementById("drenage").value;
+                                    drenage_validate = drenage_validate < 0 ? 0 : drenage_validate;
+                                    drenage_validate = drenage_validate > 100 ? 100 : drenage_validate;
+                                    var drenage = drenage_validate / 10;
+
+                                    var maleza_preparacion_validate = document.getElementById("maleza_preparacion").value;
+                                    maleza_preparacion_validate = maleza_preparacion_validate < 0 ? 0 : maleza_preparacion_validate;
+                                    maleza_preparacion_validate = maleza_preparacion_validate > 100 ? 100 : maleza_preparacion_validate;
+                                    var maleza_preparacion = 10 - (maleza_preparacion_validate / 10);
+
+                                    var erocion_validate = document.getElementById("erocion").value;
+                                    erocion_validate = erocion_validate < 0 ? 0 : erocion_validate;
+                                    erocion_validate = erocion_validate > 100 ? 100 : erocion_validate;
+                                    var erocion = erocion_validate / 10;
+
+                                    var enfermedades = 7.5;
+                                    var semilla = 7.5;
+
+                                    var simulador_problemas = 100 - (100/475) * (((100/10)*ph)+((50/10)*drenage)+((100/10)*plaga_suelo)+((65/10)*maleza_preparacion)+((100/10)*enfermedades)+((60/10)*erocion));
+                                    var simulador_altura = (100/290) * (((90/10)*ph)+((60/10)*drenage)+((20/10)*enfermedades)+((30/10)*erocion)+((90/10)*semilla));
+                                    var simulador_humedad = (100/145) * (((100/10)*drenage)+((45/10)*maleza_preparacion));
+                                    var simulador_rendimiento = (100/535) * (((100/10)*ph)+((75/10)*drenage)+((100/10)*enfermedades)+((100/10)*plaga_suelo)+((30/10)*maleza_preparacion)+((50/10)*semilla)+((80/10)*erocion));
+
+                                    document.getElementById("simulador_problemas").value = simulador_problemas;
+                                    document.getElementById("simulador_altura").value = simulador_altura;
+                                    document.getElementById("simulador_humedad").value = simulador_humedad;
+                                    document.getElementById("simulador_rendimiento").value = simulador_rendimiento;
+
+                                    historicalBarChart[0].values[0].value = simulador_problemas;
+                                    historicalBarChart[0].values[1].value = simulador_altura;
+                                    historicalBarChart[0].values[2].value = simulador_humedad;
+                                    historicalBarChart[0].values[3].value = simulador_rendimiento;
 
                                     chartBar.update();
-                                }
+                                }r
                             </script>
                         </div>
                     </div>

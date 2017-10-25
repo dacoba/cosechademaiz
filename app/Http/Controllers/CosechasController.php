@@ -9,6 +9,8 @@ use App\Riego;
 use App\Planificacionriego;
 use App\Fumigacion;
 use App\Planificacionfumigacion;
+use Illuminate\Support\Facades\Auth;
+use App\Preparacionterreno;
 
 use App\Http\Requests;
 
@@ -85,9 +87,21 @@ class CosechasController extends Controller
 
         return view('simulador.index2',['siembras' => $siembras, 'datos' => $datos]);
     }
+    protected function getSiembrasEstate()
+    {
+        if (Auth::user()->tipo == 'Administrador') {
+            return Siembra::with(['preparacionterreno'])->whereHas('preparacionterreno', function ($query) {
+                $query->where('estado', "Planificaciones");
+            })->get();
+        }else{
+            return Siembra::with(['preparacionterreno'])->whereHas('preparacionterreno', function ($query) {
+                $query->where('estado', "Planificaciones")->where('tecnico_id', Auth::user()->id);
+            })->get();
+        }
+    }
     public function index()
     {
-        $siembras = Siembra::all();
+        $siembras =  $this->getSiembrasEstate();
         return view('cosecha.index',['siembras' => $siembras]);
     }
     public function getreporteSiembra()
@@ -101,7 +115,7 @@ class CosechasController extends Controller
         $riego_count = Riego::where('siembra_id', $request['siembra_id'])->count();
         $fumigacion = Fumigacion::where('siembra_id', $request['siembra_id'])->get();
         $fumigacion_count = Fumigacion::where('siembra_id', $request['siembra_id'])->count();
-        $siembras = Siembra::all();
+        $siembras =  $this->getSiembrasEstate();
         $siembra = Siembra::find($request['siembra_id']);
         $cosecha = [];
         $cosecha = Cosecha::where('siembra_id', $request['siembra_id'])->get();
@@ -173,7 +187,7 @@ class CosechasController extends Controller
         $riego_count = Riego::where('siembra_id', $request['siembra_id'])->count();
         $fumigacion = Fumigacion::where('siembra_id', $request['siembra_id'])->get();
         $fumigacion_count = Fumigacion::where('siembra_id', $request['siembra_id'])->count();
-        $siembras = Siembra::all();
+        $siembras = $this->getSiembrasEstate();
         if($riego_count and $fumigacion_count)
         {
             $band = True;
@@ -202,10 +216,11 @@ class CosechasController extends Controller
                 $band = False;
             }
             if($band){
+                $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
                 $cosecha_count = Cosecha::where('siembra_id', $request['siembra_id'])->count();
                 if($cosecha_count){
                     $cosecha = Cosecha::where('siembra_id', $request['siembra_id'])->get();
-                    return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band, 'cosecha' => $cosecha]);
+                    return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band, 'cosecha' => $cosecha, 'siembra' => $siembra]);
                 }
             }
             return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band]);
@@ -242,9 +257,13 @@ class CosechasController extends Controller
                 'comentario_cosecha' => $request['comentario_cosecha'],
                 'siembra_id' => $request['siembra_id'],
             ]);
+            Preparacionterreno::where('id', $request['preparacionterreno_id'])
+                ->update([
+                    'estado' => "Cerrado"
+                ]);
         }
         $mensaje = "Cosecha registrado exitosamente";
-        $siembras = Siembra::all();
+        $siembras = $this->getSiembrasEstate();
         $band = True;
         return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band, 'cosecha' => $cosecha]);
     }

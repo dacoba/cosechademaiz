@@ -20,7 +20,18 @@ class PreparacionterrenosController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'ph' => 'between:1,14',
+            'terreno_id' => 'required',
+            'tecnico_id' => 'required',
+        ]);
+    }
+    protected function validatorUpdate(array $data)
+    {
+        return Validator::make($data, [
+            'ph' => 'required',
+            'plaga_suelo' => 'required',
+            'drenage' => 'required',
+            'erocion' => 'required',
+            'maleza_preparacion' => 'required',
             'terreno_id' => 'required',
             'tecnico_id' => 'required',
         ]);
@@ -75,12 +86,21 @@ class PreparacionterrenosController extends Controller
 
     public function store(Request $request)
     {
-//        $preterreno_count = Preparacionterreno::where('terreno_id', $request['terreno_id'])->count();
         if (isset($request['preterreno_id'])) {
             $preterreno_aux = Preparacionterreno::find($request['preterreno_id']);
             $estado_aux = $preterreno_aux['estado'];
             if (Auth::user()->tipo == 'Tecnico' and $estado_aux == 'Preparacion') {
                 $estado_aux = 'Siembra';
+            }
+            if (Auth::user()->tipo == 'Tecnico'){
+                $validator = $this->validatorUpdate($request->all());
+            }else{
+                $validator = $this->validator($request->all());
+            }
+            if ($validator->fails()) {
+                $this->throwValidationException(
+                    $request, $validator
+                );
             }
             Preparacionterreno::where('id', $request['preterreno_id'])
                 ->update([

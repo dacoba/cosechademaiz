@@ -78,19 +78,22 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="fertilizacion" class="col-md-4 control-label">Fertilizacion <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la utilizacion de diferentes quimicos o estrategias para fortalecer el crecimiento del maiz (10 es la correcta utilizacion de fertilizantes, 1 muy mala)"></i></label>
+                                        <label for="fertilizacion" class="col-md-4 control-label">Fertilizacion
+                                            @if (isset($ph_aux) and $ph_aux < 5)
+                                                <i class="fa fa-question-circle" aria-hidden="true" style="color:#d49e41;cursor: pointer;" title="Evaluacion de la utilizacion de diferentes quimicos. El Ph registrado es menor a 5, se recomienda el uso de nitrtos que elevan el Ph"></i>
+                                            @endif
+                                            @if (isset($ph_aux) and $ph_aux >=5 and $ph_aux <= 7)
+                                                <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la utilizacion de diferentes quimicos. El Ph registrado esta entre 5 y 7, "></i>
+                                            @endif
+                                            @if (isset($ph_aux) and $ph_aux == '1')
+                                                <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la utilizacion de diferentes quimicos o estrategias para fortalecer el crecimiento del maiz (10 es la correcta utilizacion de fertilizantes, 1 muy mala)"></i>
+                                            @endif
+                                            <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la utilizacion de diferentes quimicos o estrategias para fortalecer el crecimiento del maiz (10 es la correcta utilizacion de fertilizantes, 1 muy mala)"></i>
+                                        </label>
                                         <div class="col-md-6">
                                             <select id="fertilizacion" name="fertilizacion" class="form-control" onchange="updateBarchar()">
-                                                <option value="1" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '10') selected @endif >10</option>
+                                                <option value="1" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '1') selected @endif >Fertiliacion no Correcta</option>
+                                                <option value="10" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '10') selected @endif >Fertilizacion Correcta</option>
                                             </select>
                                         </div>
                                     </div>
@@ -181,10 +184,10 @@
                             </style>
                             <table width="80%" border="1px grey" style="margin-left: auto;margin-right: auto;">
                                 <tr>
-                                    <td class="preterreno" style="background: rgb(31, 119, 180);"><?=$problemas?></td>
-                                    <td class="preterreno" style="background: rgb(174, 199, 232);"><?=$altura?></td>
-                                    <td class="preterreno" style="background: rgb(255, 127, 14);"><?=$humedad?></td>
-                                    <td class="preterreno" style="background: rgb(255, 187, 120);"><?=$rendimiento?></td>
+                                    <td class="preterreno" style="background: rgb(31, 119, 180);"><?=$problemas?> %</td>
+                                    <td class="preterreno" style="background: rgb(174, 199, 232);"><?=$altura?> %</td>
+                                    <td class="preterreno" style="background: rgb(255, 127, 14);"><?=$humedad?> %</td>
+                                    <td class="preterreno" style="background: rgb(255, 187, 120);"><?=$rendimiento?> %</td>
                                 </tr>
                             </table>
                             <div id="chart1" style="height: 350px; width: 500px">

@@ -85,12 +85,13 @@ class RiegosController extends Controller
                 'problemas_drenaje' => $request['problemas_drenaje'],
                 'comentario_riego' => $request['comentario_riego'],
             ]);
+        $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
         $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
         $siembras = Siembra::all();
 
         $mensaje = "Planificacion de riego registrado exitosamente";
         $planificacionriegos = Planificacionriego::where('riego_id', $planificacionriego_done['riego_id'])->get();
-        return view('riego.index',['siembras' => $siembras, 'riego_id' => $planificacionriego_done['riego_id'], 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'mensaje' => $mensaje]);
+        return view('riego.index',['siembras' => $siembras, 'riego_id' => $planificacionriego_done['riego_id'], 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'mensaje' => $mensaje, 'siembra' => $siembra]);
 
     }
 

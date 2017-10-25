@@ -56,79 +56,35 @@
                                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/cosechas') }}">
                                         {{ csrf_field() }}
                                         <div class="form-group">
-                                            <label for="problemas_produccion" class="col-md-4 control-label">problemas_produccion</label>
+                                            <label for="problemas_produccion" class="col-md-4 control-label">Problemas de Produccion</label>
                                             <div class="col-md-6">
-                                                <select id="problemas_produccion" name="problemas_produccion" class="form-control">
-                                                    <option value="1" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '1') selected @endif >1</option>
-                                                    <option value="2" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '2') selected @endif >2</option>
-                                                    <option value="3" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '3') selected @endif >3</option>
-                                                    <option value="4" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '4') selected @endif >4</option>
-                                                    <option value="5" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '5') selected @endif >5</option>
-                                                    <option value="6" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '6') selected @endif >6</option>
-                                                    <option value="7" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '7') selected @endif >7</option>
-                                                    <option value="8" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '8') selected @endif >8</option>
-                                                    <option value="9" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '9') selected @endif >9</option>
-                                                    <option value="10" @if (isset($cosecha[0]['problemas_produccion']) and $cosecha[0]['problemas_produccion'] == '10') selected @endif >10</option>
-                                                </select>
+                                                <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control" @if (isset($cosecha[0]['problemas_produccion'])) value="{{ $cosecha[0]['problemas_produccion'] }}" @endif onchange="updateBarchar()"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="altura_tallo" class="col-md-4 control-label">altura_tallo</label>
+                                            <label for="altura_tallo" class="col-md-4 control-label">Altura del Tallo</label>
                                             <div class="col-md-6">
-                                                <select id="altura_tallo" name="altura_tallo" class="form-control">
-                                                    <option value="1" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '1') selected @endif >1</option>
-                                                    <option value="2" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '2') selected @endif >2</option>
-                                                    <option value="3" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '3') selected @endif >3</option>
-                                                    <option value="4" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '4') selected @endif >4</option>
-                                                    <option value="5" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '5') selected @endif >5</option>
-                                                    <option value="6" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '6') selected @endif >6</option>
-                                                    <option value="7" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '7') selected @endif >7</option>
-                                                    <option value="8" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '8') selected @endif >8</option>
-                                                    <option value="9" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '9') selected @endif >9</option>
-                                                    <option value="10" @if (isset($cosecha[0]['altura_tallo']) and $cosecha[0]['altura_tallo'] == '10') selected @endif >10</option>
-                                                </select>
+                                                <input type="number" min="1" max="100" id="altura_tallo" name="altura_tallo" class="form-control" @if (isset($cosecha[0]['altura_tallo'])) value="{{ $cosecha[0]['altura_tallo'] }}" @endif onchange="updateBarchar()"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="humedad_terreno" class="col-md-4 control-label">humedad_terreno</label>
+                                            <label for="humedad_terreno" class="col-md-4 control-label">Humedad del Terreno</label>
                                             <div class="col-md-6">
-                                                <select id="humedad_terreno" name="humedad_terreno" class="form-control">
-                                                    <option value="1" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '1') selected @endif >1</option>
-                                                    <option value="2" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '2') selected @endif >2</option>
-                                                    <option value="3" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '3') selected @endif >3</option>
-                                                    <option value="4" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '4') selected @endif >4</option>
-                                                    <option value="5" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '5') selected @endif >5</option>
-                                                    <option value="6" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '6') selected @endif >6</option>
-                                                    <option value="7" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '7') selected @endif >7</option>
-                                                    <option value="8" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '8') selected @endif >8</option>
-                                                    <option value="9" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '9') selected @endif >9</option>
-                                                    <option value="10" @if (isset($cosecha[0]['humedad_terreno']) and $cosecha[0]['humedad_terreno'] == '10') selected @endif >10</option>
-                                                </select>
+                                                <input type="number" min="1" max="100" id="humedad_terreno" name="humedad_terreno" class="form-control" @if (isset($cosecha[0]['humedad_terreno'])) value="{{ $cosecha[0]['humedad_terreno'] }}" @endif onchange="updateBarchar()"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="rendimiento_produccion" class="col-md-4 control-label">rendimiento_produccion</label>
+                                            <label for="rendimiento_produccion" class="col-md-4 control-label">Rendimiento de la Produccion</label>
                                             <div class="col-md-6">
-                                                <select id="rendimiento_produccion" name="rendimiento_produccion" class="form-control">
-                                                    <option value="1" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '1') selected @endif >1</option>
-                                                    <option value="2" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '2') selected @endif >2</option>
-                                                    <option value="3" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '3') selected @endif >3</option>
-                                                    <option value="4" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '4') selected @endif >4</option>
-                                                    <option value="5" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '5') selected @endif >5</option>
-                                                    <option value="6" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '6') selected @endif >6</option>
-                                                    <option value="7" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '7') selected @endif >7</option>
-                                                    <option value="8" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '8') selected @endif >8</option>
-                                                    <option value="9" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '9') selected @endif >9</option>
-                                                    <option value="10" @if (isset($cosecha[0]['rendimiento_produccion']) and $cosecha[0]['rendimiento_produccion'] == '10') selected @endif >10</option>
-                                                </select>
+                                                <input type="number" min="1" max="100" id="rendimiento_produccion" name="rendimiento_produccion" class="form-control" @if (isset($cosecha[0]['rendimiento_produccion'])) value="{{ $cosecha[0]['rendimiento_produccion'] }}" @endif onchange="updateBarchar()"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group{{ $errors->has('comentario_cosecha') ? ' has-error' : '' }}">
-                                            <label for="comentario_cosecha" class="col-md-4 control-label">Comentario</label>
+                                            <label for="comentario_cosecha" class="col-md-4 control-label">Observaciones</label>
 
                                             <div class="col-md-6">
                                                 <input id="comentario_cosecha" type="text" class="form-control" name="comentario_cosecha" value="{{ $cosecha[0]['comentario_cosecha'] or old('comentario_cosecha') }}">
@@ -142,7 +98,9 @@
                                         </div>
 
                                         <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
-
+                                        @if(isset($siembra))
+                                            <input type="hidden" name="preparacionterreno_id" value="{{ $siembra['preparacionterreno_id'] }}" >
+                                        @endif
                                         <div class="form-group">
                                             <div class="col-md-6 col-md-offset-4">
                                                 <button type="submit" class="btn btn-primary">
