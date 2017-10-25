@@ -13,4 +13,8 @@ class Planificacionriego extends Model
     function riego(){
         return $this->belongsTo('App\Riego');
     }
+    function simulador()
+    {
+        return $this->hasOne('App\Simulador');
+    }
 }

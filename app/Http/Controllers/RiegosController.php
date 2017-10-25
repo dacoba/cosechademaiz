@@ -8,6 +8,7 @@ use App\Riego;
 use App\Planificacionriego;
 use App\Preparacionterreno;
 use App\Terreno;
+use App\Simulador;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests;
@@ -60,12 +61,14 @@ class RiegosController extends Controller
             }
             $riego = Riego::find($riego_id);
             $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
+            $simulador = Simulador::orderBy('numero_simulacion', 'asc')->where('preparacionterreno_id', $siembra['preparacionterreno_id'])->get();
+
             $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.terreno', 'riego.siembra.preparacionterreno.tecnico'])->where('riego_id', $riego_id)->get();
             if(isset($request['planificacionriego_id'])){
                 $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
-                return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'planificacionriego_done' => $planificacionriego_done, 'siembra' => $siembra]);
+                return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'planificacionriego_done' => $planificacionriego_done, 'siembra' => $siembra, 'simulador' => $simulador]);
             }
-            return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'siembra' => $siembra]);
+            return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'siembra' => $siembra, 'simulador' => $simulador]);
         };
         return view('riego.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id']]);
     }
@@ -84,7 +87,22 @@ class RiegosController extends Controller
                 'comportamiento_lluvia' => $request['comportamiento_lluvia'],
                 'problemas_drenaje' => $request['problemas_drenaje'],
                 'comentario_riego' => $request['comentario_riego'],
+                'estado' => "Registrado",
             ]);
+        if (Auth::user()->tipo == 'Tecnico'){
+            $simulador = Simulador::where('preparacionterreno_id', $request['preparacionterreno_id'])->orderBy('numero_simulacion', 'desc')->limit(1)->get()[0];
+            $sig_num = $simulador['numero_simulacion'] + 1;
+            Simulador::create([
+                'numero_simulacion' => $sig_num,
+                'problemas' => $request['simulador_problemas'],
+                'altura' => $request['simulador_altura'],
+                'humedad' => $request['simulador_humedad'],
+                'rendimiento' => $request['simulador_rendimiento'],
+                'tipo' => "Riego",
+                'planificacionriego_id' => $request['planificacionriego_id'],
+                'preparacionterreno_id' => $request['preparacionterreno_id'],
+            ]);
+        }
         $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
         $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
         $siembras = Siembra::all();

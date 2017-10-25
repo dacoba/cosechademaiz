@@ -38,21 +38,36 @@
                                     $ph = $siembra['preparacionterreno']['ph'];
                                     $plaga_suelo = $siembra['preparacionterreno']['plaga_suelo'];
                                     $drenage = $siembra['preparacionterreno']['drenage'];
+                                    $erocion = $siembra['preparacionterreno']['erocion'];
                                     $maleza_preparacion = $siembra['preparacionterreno']['maleza_preparacion'];
                                     $semilla = $siembra['semilla'];
                                     $fertilizacion = $siembra['fertilizacion'];
-                                    $densidad_siembra = $siembra['densidad_siembra'];
 
-                                    $ph_aux = 10 - (abs($ph - 7) / 0.7);
-                                    $plaga_suelo_aux = 10 - ($plaga_suelo / 10);
-                                    $drenage_aux = $drenage / 10;
-                                    $maleza_preparacion_aux = $maleza_preparacion / 10;
-                                    $semilla_aux = $semilla * 2.5;
-                                    $fertilizacion_aux = $fertilizacion;
-                                    $densidad_siembra_aux = $densidad_siembra;
+                                    $acum_comportamiento_lluvia = 0;
+                                    $acum_problemas_drenaje = 0;
+                                    $cont_riegos = 0;
+                                    $cont_riegos_total = 0;
                                 }
                                 ?>
+                                <script>
+                                    var simulador_2 = 0;
+                                    var simulador_problemas_2 = 0;
+                                    var simulador_altura_2 = 0;
+                                    var simulador_humedad_2 = 0;
+                                    var simulador_rendimiento_2 = 0;
+                                </script>
+                                <?php $numero_simulacion = 0;?>
                                 @foreach ($planificacionriegos as $id => $planificacionriego)
+                                    @if (isset($planificacionriego_done['metodos_riego']) and $planificacionriego_done['id'] == $planificacionriego['id'] and $planificacionriego['estado'] == "Registrado")
+                                        <script>
+                                            var simulador_2 = 1;
+                                            var simulador_problemas_2 = <?=round($planificacionriego['simulador']['problemas'], 2)?>;
+                                            var simulador_altura_2 = <?=round($planificacionriego['simulador']['altura'], 2)?>;
+                                            var simulador_humedad_2 = <?=round($planificacionriego['simulador']['humedad'], 2)?>;
+                                            var simulador_rendimiento_2 = <?=round($planificacionriego['simulador']['rendimiento'], 2)?>;
+                                        </script>
+                                        <?php $numero_simulacion = $planificacionriego['simulador']['numero_simulacion'];?>
+                                    @endif
                                     <tr @if (isset($planificacionriego_done['metodos_riego']) and $planificacionriego_done['id'] == $planificacionriego['id']) style="background: rgba(202, 202, 224, 0.58);" @endif>
                                         <td style="text-align: center">{{$planificacionriego['fecha_planificacion']}}</td>
                                         <td style="text-align: center">{{$planificacionriego['estado']}}</td>
@@ -61,30 +76,24 @@
                                             {{ csrf_field() }}
                                                 <input type="hidden" name="planificacionriego_id" value="{{$planificacionriego['id']}}" >
                                                 <input type="hidden" name="siembra_id" value="{{$siembra_id}}" >
-                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionriego['estado'] != 'ejecutado') disabled @endif>
+                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionriego['estado'] != 'ejecutado' and $planificacionriego['estado'] != 'Registrado') disabled @endif>
                                                     <i class="fa fa-btn fa-pencil"></i>
                                                 </button>
                                             </form>
                                         </td>
-                                        <?php
-                                        $problemas = (100/330) * (((100/10)*$ph_aux)+((50/10)*$drenage_aux)+((95/10)*$plaga_suelo_aux)+((60/10)*$maleza_preparacion_aux)+((25/10)*$densidad_siembra_aux));
-                                        $altura = (100/365) * (((90/10)*$ph_aux)+((60/10)*$drenage_aux)+((55/10)*$fertilizacion_aux)+((50/10)*$maleza_preparacion_aux)+((90/10)*$semilla_aux)+((20/10)*$densidad_siembra_aux));
-                                        $humedad = (100/200) * (((95/10)*$drenage_aux)+((45/10)*$maleza_preparacion_aux)+((60/10)*$densidad_siembra_aux));
-                                        $rendimiento = (100/495) * (((90/10)*$ph_aux)+((75/10)*$drenage_aux)+((65/10)*$fertilizacion_aux)+((50/10)*$plaga_suelo_aux)+((40/10)*$maleza_preparacion_aux)+((100/10)*$semilla_aux)+((75/10)*$densidad_siembra_aux));
-
-                                        $problemas = round($problemas, 2);
-                                        $altura = round($altura, 2);
-                                        $humedad = round($humedad, 2);
-                                        $rendimiento = round($rendimiento, 2);
-                                        ?>
-                                        <td style="text-align: center"><?=$problemas?> %</td>
-                                        <td style="text-align: center"><?=$altura?> %</td>
-                                        <td style="text-align: center"><?=$humedad?> %</td>
-                                        <td style="text-align: center"><?=$rendimiento?> %</td>
-                                        <?php
-                                            $drenage_aux = $planificacionriego['problemas_drenaje'] / 10;
-                                        ?>
+                                        <td style="text-align: center"><?=round($planificacionriego['simulador']['problemas'], 2)?> %</td>
+                                        <td style="text-align: center"><?=round($planificacionriego['simulador']['altura'], 2)?> %</td>
+                                        <td style="text-align: center"><?=round($planificacionriego['simulador']['humedad'], 2)?> %</td>
+                                        <td style="text-align: center"><?=round($planificacionriego['simulador']['rendimiento'], 2)?> %</td>
                                     </tr>
+                                    <?php
+                                        if($planificacionriego['estado'] == 'Registrado'){
+                                            $acum_comportamiento_lluvia += $planificacionriego['comportamiento_lluvia'];
+                                            $acum_problemas_drenaje += $planificacionriego['problemas_drenaje'];
+                                            $cont_riegos += 1;
+                                        }
+                                        $cont_riegos_total += 1;
+                                    ?>
                                 @endforeach
                                 </tbody>
                             </table>
@@ -113,46 +122,39 @@
                                         </div>
     
                                         <div class="form-group">
-                                            <label for="comportamiento_lluvia" class="col-md-4 control-label">Comportamiento de lluvia</label>
+                                            <label for="comportamiento_lluvia" class="col-md-4 control-label">Comportamiento de lluvia (%)</label>
                                             <div class="col-md-6">
-                                                <select id="comportamiento_lluvia" name="comportamiento_lluvia" class="form-control">
-                                                    <option value="1" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '1') selected @endif >1</option>
-                                                    <option value="2" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '2') selected @endif >2</option>
-                                                    <option value="3" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '3') selected @endif >3</option>
-                                                    <option value="4" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '4') selected @endif >4</option>
-                                                    <option value="5" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '5') selected @endif >5</option>
-                                                    <option value="6" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '6') selected @endif >6</option>
-                                                    <option value="7" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '7') selected @endif >7</option>
-                                                    <option value="8" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '8') selected @endif >8</option>
-                                                    <option value="9" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '9') selected @endif >9</option>
-                                                    <option value="10" @if (isset($planificacionriego_done['comportamiento_lluvia']) and $planificacionriego_done['comportamiento_lluvia'] == '10') selected @endif >10</option>
-                                                </select>
+                                                <input type="number" min="1" max="100" id="comportamiento_lluvia" name="comportamiento_lluvia" class="form-control" @if (isset($planificacionriego_done['comportamiento_lluvia'])) value="{{ $planificacionriego_done['comportamiento_lluvia'] }}" @endif style="text-align:right" onchange="updateBarchar()"/>
                                             </div>
                                         </div>
     
                                         <div class="form-group">
-                                            <label for="problemas_drenaje" class="col-md-4 control-label">Problemas de drenaje (%)</label>
+                                            <label for="problemas_drenaje" class="col-md-4 control-label">Drenaje (%)</label>
                                             <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="problemas_drenaje" name="problemas_drenaje" class="form-control" @if (isset($planificacionriego_done['problemas_drenaje'])) value="{{ $planificacionriego_done['problemas_drenaje'] }}" @endif onchange="updateBarchar()"/>
+                                                <input type="number" min="1" max="100" id="problemas_drenaje" name="problemas_drenaje" class="form-control" @if (isset($planificacionriego_done['problemas_drenaje'])) value="{{ $planificacionriego_done['problemas_drenaje'] }}" @endif style="text-align:right" onchange="updateBarchar()"/>
                                             </div>
                                         </div>
     
                                         <div class="form-group{{ $errors->has('comentario_riego') ? ' has-error' : '' }}">
                                             <label for="comentario_riego" class="col-md-4 control-label">Observacion</label>
-    
                                             <div class="col-md-6">
                                                 <input id="comentario_riego" type="text" class="form-control" name="comentario_riego" value="{{ $planificacionriego_done['comentario_riego'] or old('comentario_riego') }}">
-    
                                                 @if ($errors->has('comentario_riego'))
                                                     <span class="help-block">
-                                            <strong>{{ $errors->first('comentario_riego') }}</strong>
-                                        </span>
+                                                        <strong>{{ $errors->first('comentario_riego') }}</strong>
+                                                    </span>
                                                 @endif
                                             </div>
                                         </div>
     
                                         <input type="hidden" name="planificacionriego_id" value="{{ $planificacionriego_done['id'] }}" >
                                         <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
+                                        <input type="hidden" name="preparacionterreno_id" value="{{ $siembra['preparacionterreno']['id'] }}" >
+
+                                        <input type="hidden" name="simulador_problemas" id="simulador_problemas" value="">
+                                        <input type="hidden" name="simulador_altura" id="simulador_altura" value="">
+                                        <input type="hidden" name="simulador_humedad" id="simulador_humedad" value="">
+                                        <input type="hidden" name="simulador_rendimiento" id="simulador_rendimiento" value="">
     
                                         <div class="form-group">
                                             <div class="col-md-6 col-md-offset-4">
@@ -183,14 +185,6 @@
                                             font-weight: bold;
                                         }
                                     </style>
-                                    <table width="80%" border="1px grey" style="margin-left: auto;margin-right: auto;">
-                                        <tr>
-                                            <td class="preterreno" style="background: rgb(31, 119, 180);"><?=$problemas?></td>
-                                            <td class="preterreno" style="background: rgb(174, 199, 232);"><?=$altura?></td>
-                                            <td class="preterreno" style="background: rgb(255, 127, 14);"><?=$humedad?></td>
-                                            <td class="preterreno" style="background: rgb(255, 187, 120);"><?=$rendimiento?></td>
-                                        </tr>
-                                    </table>
                                     <div id="chart1" style="height: 350px; width: 500px">
                                         <svg></svg>
                                     </div>
@@ -224,24 +218,187 @@
                                         ];
 
                                         function updateBarchar(){
-                                            var ph = <?=$ph_aux?>;
-                                            var plaga_suelo = <?=$plaga_suelo_aux?>;
-                                            var drenage = document.getElementById("problemas_drenaje").value / 10;
-                                            var maleza_preparacion = <?=$maleza_preparacion_aux?>;
-                                            var semilla = <?=$semilla_aux?>;
-                                            var fertilizacion = <?=$fertilizacion_aux?>;
-                                            var densidad_siembra = <?=$densidad_siembra_aux?>;
 
-                                            historicalBarChart[0].values[0].value = (100/330) * (((100/10)*ph)+((50/10)*drenage)+((95/10)*plaga_suelo)+((60/10)*maleza_preparacion)+((25/10)*densidad_siembra));
-                                            historicalBarChart[0].values[1].value = (100/365) * (((90/10)*ph)+((60/10)*drenage)+((55/10)*fertilizacion)+((50/10)*maleza_preparacion)+((90/10)*semilla)+((20/10)*densidad_siembra));
-                                            historicalBarChart[0].values[2].value = (100/200) * (((95/10)*drenage)+((45/10)*maleza_preparacion)+((60/10)*densidad_siembra));
-                                            historicalBarChart[0].values[3].value = (100/495) * (((90/10)*ph)+((75/10)*drenage)+((65/10)*fertilizacion)+((50/10)*plaga_suelo)+((40/10)*maleza_preparacion)+((100/10)*semilla)+((75/10)*densidad_siembra));
+                                            var ph_ini = <?=$ph?>;
+                                            var fertilizacion = <?=$fertilizacion?>;
+                                            var ph_aux = ((7 - ph_ini) * fertilizacion) + ph_ini
+                                            var ph = 10 - (Math.abs(ph_aux - 7) / 0.7);
+
+                                            var drenage = <?=$drenage?> / 10;
+                                            var comportamiento_lluvia = document.getElementById("comportamiento_lluvia").value / 10;
+                                            var problemas_drenaje = document.getElementById("problemas_drenaje").value / 10;
+
+                                            var acum_comportamiento_lluvia = <?=$acum_comportamiento_lluvia?> / 10;
+                                            var acum_problemas_drenaje = <?=$acum_problemas_drenaje?> / 10;
+                                            var cont_riegos = <?=$cont_riegos?>;
+                                            var $cont_riegos_total = <?=$cont_riegos_total?>;
+
+                                            if(cont_riegos != $cont_riegos_total){
+                                                drenage = (drenage + acum_comportamiento_lluvia + acum_problemas_drenaje + comportamiento_lluvia + problemas_drenaje) / ((cont_riegos * 2) + 3);
+                                            }else{
+                                                drenage = (drenage + acum_comportamiento_lluvia + acum_problemas_drenaje) / ((cont_riegos * 2) + 1);
+                                            }
+
+                                            var plaga_suelo = 10 - (<?=$plaga_suelo?> / 10);
+                                            var maleza_preparacion = 10 - (<?=$maleza_preparacion?> / 10);
+                                            var erocion = <?=$erocion?> / 10;
+
+                                            var semilla = <?=$semilla?> * 2.5;
+                                            var enfermedades = 7.5;
+
+                                            var simulador_problemas = 100 - (100/475) * (((100/10)*ph)+((50/10)*drenage)+((100/10)*plaga_suelo)+((65/10)*maleza_preparacion)+((100/10)*enfermedades)+((60/10)*erocion));
+                                            var simulador_altura = (100/290) * (((90/10)*ph)+((60/10)*drenage)+((20/10)*enfermedades)+((30/10)*erocion)+((90/10)*semilla));
+                                            var simulador_humedad = (100/145) * (((100/10)*drenage)+((45/10)*maleza_preparacion));
+                                            var simulador_rendimiento = (100/535) * (((100/10)*ph)+((75/10)*drenage)+((100/10)*enfermedades)+((100/10)*plaga_suelo)+((30/10)*maleza_preparacion)+((50/10)*semilla)+((80/10)*erocion));
+
+                                            if (simulador_2 == 1){
+                                                simulador_problemas = simulador_problemas_2;
+                                                simulador_altura = simulador_altura_2;
+                                                simulador_humedad = simulador_humedad_2;
+                                                simulador_rendimiento = simulador_rendimiento_2;
+                                            }
+                                            document.getElementById("simulador_problemas").value = simulador_problemas;
+                                            document.getElementById("simulador_altura").value = simulador_altura;
+                                            document.getElementById("simulador_humedad").value = simulador_humedad;
+                                            document.getElementById("simulador_rendimiento").value = simulador_rendimiento;
+
+                                            historicalBarChart[0].values[0].value = simulador_problemas;
+                                            historicalBarChart[0].values[1].value = simulador_altura;
+                                            historicalBarChart[0].values[2].value = simulador_humedad;
+                                            historicalBarChart[0].values[3].value = simulador_rendimiento;
 
                                             chartBar.update();
                                         }
                                     </script>
                                 </div>
                             </div>
+                                <div class="row">
+                                    <?php $datos = [];?>
+                                    <?php
+                                        if(isset($simulador)){
+                                            if($numero_simulacion != 0){
+                                                for($i=0;$i<=$numero_simulacion-1;$i++){
+                                                    $datos[$i][0] = $simulador[$i]['problemas'];
+                                                    $datos[$i][1] = $simulador[$i]['altura'];
+                                                    $datos[$i][2] = $simulador[$i]['humedad'];
+                                                    $datos[$i][3] = $simulador[$i]['rendimiento'];
+                                                }
+                                                $datos = \GuzzleHttp\json_encode($datos);
+                                            }
+                                        }
+                                    ?>
+                                    <style>
+                                        text {
+                                            font: 12px sans-serif;
+                                        }
+                                        svg {
+                                            display: block;
+                                        }
+                                        html, body, #chart1, svg {
+                                            margin: 0px;
+                                            padding: 0px;
+                                            height: 100%;
+                                            width: 100%;
+                                        }
+                                    </style>
+                                    <div id="chart0" style="height: 400px;"></div>
+                                    <div class="text-center">
+                                    </div>
+
+                                    <script>
+                                        var chart;
+                                        var data;
+                                        var datos = <?=$datos?>;
+                                        var randomizeFillOpacity = function() {
+                                            var rand = Math.random(0,1);
+                                            for (var i = 0; i < 100; i++) {
+                                                data[4].values[i].y = Math.sin(i/(5 + rand)) * .4 * rand - .25;
+                                            }
+                                            data[4].fillOpacity = rand;
+                                            chart.update();
+                                            for (var i = 0; i < 4; i++) {
+                                                historicalBarChart[0].values[i].value = (Math.random() + 0.01) * 10;
+                                            }
+                                            chartBar.update();
+                                        };
+                                        nv.addGraph(function() {
+                                            chart = nv.models.lineChart()
+                                                .options({
+                                                    duration: 300,
+                                                    useInteractiveGuideline: true
+                                                })
+                                            ;
+                                            chart.xAxis
+                                                .axisLabel("Cambios)")
+                                                .tickFormat(d3.format(',.1f'))
+                                                .staggerLabels(true)
+                                            ;
+
+                                            chart.yAxis
+                                                .axisLabel('Medida (valor)')
+                                                .tickFormat(function(d) {
+                                                    if (d == null) {
+                                                        return 'N/A';
+                                                    }
+                                                    return d3.format(',.2f')(d);
+                                                })
+                                            ;
+
+                                            data = sinAndCos();
+
+                                            d3.select('#chart0').append('svg')
+                                                .datum(data)
+                                                .call(chart);
+
+                                            nv.utils.windowResize(chart.update);
+
+                                            return chart;
+                                        });
+                                        function sinAndCos() {
+                                            var sin = [],
+                                                sin2 = [],
+                                                cos = [],
+                                                rand = [],
+                                                rand2 = []
+                                            ;
+                                            for (var i = 0; i < datos.length; i++) {
+                                                sin.push({x: i, y: datos[i][0] }); //the nulls are to show how defined works
+                                                sin2.push({x: i, y: datos[i][1] });
+                                                cos.push({x: i, y: datos[i][1] });
+//                                rand.push({x:i, y: Math.random() / 10});
+                                                rand.push({x:i, y: datos[i][2] });
+                                                rand2.push({x: i, y: datos[i][3] })
+                                            }
+
+                                            return [
+                                                {
+//                                    area: true,
+                                                    values: sin,
+                                                    key: "Problemas de produccion",
+                                                    color: "#ff7f0e",
+                                                    strokeWidth: 4,
+                                                    classed: 'dashed'
+                                                },
+                                                {
+                                                    values: cos,
+                                                    key: "Altura de tallo",
+                                                    color: "#2ca02c"
+                                                },
+                                                {
+                                                    values: rand,
+                                                    key: "Humedad del terreno",
+                                                    color: "#2222ff"
+                                                },
+                                                {
+                                                    values: rand2,
+                                                    key: "Remdimiento de produccion",
+                                                    color: "#667711",
+                                                    strokeWidth: 3.5
+                                                },
+                                            ];
+                                        }
+                                    </script>
+                                </div>
                             @endif
                         @else
                             <center>

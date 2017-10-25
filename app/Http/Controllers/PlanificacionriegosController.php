@@ -100,7 +100,7 @@ class PlanificacionriegosController extends Controller
         }
         $planificacionriego = Planificacionriego::create([
             'fecha_planificacion' => $request['fecha_planificacion'],
-            'estado' => "planificado",
+            'estado' => "Planificado",
             'riego_id' => $request['riego_id'],
         ]);
         $event_on= "SET GLOBAL event_scheduler =  \"ON\"";
