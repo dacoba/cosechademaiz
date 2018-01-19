@@ -9,6 +9,7 @@ use App\Fumigacion;
 use App\Planificacionfumigacion;
 use Mail;
 use DateTime;
+use Illuminate\Support\Facades\Artisan;
 
 class SendRiegoEmail extends Command
 {
@@ -17,7 +18,7 @@ class SendRiegoEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'email:riego';
+    protected $signature = 'email:riego {--sleep=60}';
 
     /**
      * The console command description.
@@ -43,40 +44,46 @@ class SendRiegoEmail extends Command
      */
     public function handle()
     {
-        $date_pre = date_create(date("Y-m-d"));
-        date_time_set($date_pre, date("H"), date("i")-1);
-        $date_pos = date_create(date("Y-m-d"));
-        date_time_set($date_pos, date("H"), date("i")+1);
-        $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','>=', $date_pre)->where('fecha_planificacion','<=',$date_pos)->get();
-        $planificacionfumigacions = Planificacionfumigacion::with(['fumigacion', 'fumigacion.siembra', 'fumigacion.siembra.preparacionterreno', 'fumigacion.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','>=', $date_pre)->where('fecha_planificacion','<=',$date_pos)->get();
+        while (true) {
+            $date_pre = date_create(date("Y-m-d"));
+            date_time_set($date_pre, date("H"), date("i")-1);
+            $date_pos = date_create(date("Y-m-d"));
+            date_time_set($date_pos, date("H"), date("i")+1);
+            $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','>=', $date_pre)->where('fecha_planificacion','<=',$date_pos)->get();
+            $planificacionfumigacions = Planificacionfumigacion::with(['fumigacion', 'fumigacion.siembra', 'fumigacion.siembra.preparacionterreno', 'fumigacion.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','>=', $date_pre)->where('fecha_planificacion','<=',$date_pos)->get();
 
-        foreach($planificacionriegos as $planificacionriego) {
-            Planificacionriego::where('id', $planificacionriego['id'])
-                ->update([
-                    'estado' => 'ejecutado',
-                ]);
-            $email_tecnico = $planificacionriego['riego']['siembra']['preparacionterreno']['tecnico']['email'];
-            Mail::queue('emails.riego', ['planificacionriego' => $planificacionriego], function ($mail) use ($email_tecnico) {
-                $mail->to($email_tecnico)
-                    ->from('noreply@toco.com', 'Toco')
-                    ->subject('Alerta Planificacion de Riego!');
-            });
+            foreach($planificacionriegos as $planificacionriego) {
+                Planificacionriego::where('id', $planificacionriego['id'])
+                    ->update([
+                        'estado' => 'ejecutado',
+                    ]);
+                $email_tecnico = $planificacionriego['riego']['siembra']['preparacionterreno']['tecnico']['email'];
+                Mail::queue('emails.riego', ['planificacionriego' => $planificacionriego], function ($mail) use ($email_tecnico) {
+                    $mail->to($email_tecnico)
+                        ->from('noreply@toco.com', 'Toco')
+                        ->subject('Alerta Planificacion de Riego!');
+                });
+            }
+
+            foreach($planificacionfumigacions as $planificacionfumigacion) {
+                Planificacionfumigacion::where('id', $planificacionfumigacion['id'])
+                    ->update([
+                        'estado' => 'ejecutado',
+                    ]);
+                $email_tecnico = $planificacionfumigacion['fumigacion']['siembra']['preparacionterreno']['tecnico']['email'];
+                Mail::queue('emails.fumigacion', ['planificacionfumigacion' => $planificacionfumigacion], function ($mail) use ($email_tecnico) {
+                    $mail->to($email_tecnico)
+                        ->from('noreply@toco.com', 'Toco')
+                        ->subject('Alerta Planificacion de Fumigacion!');
+                });
+
+            }
+
+            $this->info('Mensages de planificacion enviados!');
+
+            $this->call('schedule:run');
+
+            sleep($this->option('sleep'));
         }
-
-        foreach($planificacionfumigacions as $planificacionfumigacion) {
-            Planificacionfumigacion::where('id', $planificacionfumigacion['id'])
-                ->update([
-                    'estado' => 'ejecutado',
-                ]);
-            $email_tecnico = $planificacionfumigacion['fumigacion']['siembra']['preparacionterreno']['tecnico']['email'];
-            Mail::queue('emails.fumigacion', ['planificacionfumigacion' => $planificacionfumigacion], function ($mail) use ($email_tecnico) {
-                $mail->to($email_tecnico)
-                    ->from('noreply@toco.com', 'Toco')
-                    ->subject('Alerta Planificacion de Fumigacion!');
-            });
-
-        }
-
-        $this->info('Mensages de planificacion enviados!');
     }
 }
