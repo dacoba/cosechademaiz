@@ -14,7 +14,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-        $this->app['request']->server->set('HTTPS', $this->app->environment() != 'local');
     }
 
     /**
@@ -26,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
     {
         //
 //        $this->app['request']->server->set('HTTPS', true);
-//        $this->app['request']->server->set('HTTPS', $this->app->environment() != 'local');
+        $this->app['request']->server->set('HTTPS', $this->app->environment() != 'local');
     }
 }
