@@ -24,7 +24,10 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
-        $this->app['request']->server->set('HTTPS', true);
+        if(env('REDIRECT_HTTPS')) {
+            $this->app['request']->server->set('HTTPS', true);
+        }
+//        $this->app['request']->server->set('HTTPS', true);
 //        $this->app['request']->server->set('HTTPS', $this->app->environment() != 'local');
     }
 }
