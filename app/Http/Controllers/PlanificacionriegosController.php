@@ -103,10 +103,6 @@ class PlanificacionriegosController extends Controller
             'estado' => "Planificado",
             'riego_id' => $request['riego_id'],
         ]);
-//        $event_on= "SET GLOBAL event_scheduler =  \"ON\"";
-//        DB::unprepared($event_on);
-//        $query = 'CREATE EVENT planificacionriego_'.$planificacionriego['id'].' ON SCHEDULE AT \''.$request['fecha_planificacion'].'\' DO UPDATE planificacionriegos SET estado=\'ejecutado\' WHERE id='.$planificacionriego['id'];
-//        DB::unprepared($query);
         $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
         $siembras = $this->getSiembrasEstate();
         if($riego != [])
