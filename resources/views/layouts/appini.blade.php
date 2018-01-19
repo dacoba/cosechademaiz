@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean - One Page Personal Portfolio</title>
+    <title>Cosecha</title>
 
     <!-- CSS -->
     <link href="{{URL::asset('assets/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">
