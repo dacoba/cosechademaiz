@@ -158,8 +158,6 @@ return [
         /*
                  * Application Providers ...
                  */
-        Snowfire\Beautymail\BeautymailServiceProvider::class,
-
     ],
 
     /*
