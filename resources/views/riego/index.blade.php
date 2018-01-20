@@ -287,7 +287,7 @@
                                             }
                                         }
                                     ?>
-                                    <?php $datos = \GuzzleHttp\json_encode($datos);?>
+                                    <?php $datos = json_encode($datos);?>
                                     <style>
                                         text {
                                             font: 12px sans-serif;
