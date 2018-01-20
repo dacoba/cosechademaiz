@@ -45,12 +45,12 @@ class SendRiegoEmail extends Command
     public function handle()
     {
         while (true) {
-            $date_pre = date_create(date("Y-m-d"));
-            date_time_set($date_pre, date("H"), date("i")-1);
-            $date_pos = date_create(date("Y-m-d"));
-            date_time_set($date_pos, date("H"), date("i")+1);
-            $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','>', $date_pre)->where('fecha_planificacion','<=',$date_pos)->get();
-            $planificacionfumigacions = Planificacionfumigacion::with(['fumigacion', 'fumigacion.siembra', 'fumigacion.siembra.preparacionterreno', 'fumigacion.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','>', $date_pre)->where('fecha_planificacion','<=',$date_pos)->get();
+            $current_date = date_create(date("Y-m-d"));
+            date_time_set($current_date, date("H"), date("i"));
+            echo date_format($current_date,"Y-m-d H:i:s");
+
+            $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','<=',$current_date)->get();
+            $planificacionfumigacions = Planificacionfumigacion::with(['fumigacion', 'fumigacion.siembra', 'fumigacion.siembra.preparacionterreno', 'fumigacion.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','<=',$current_date)->get();
 
             foreach($planificacionriegos as $planificacionriego) {
                 Planificacionriego::where('id', $planificacionriego['id'])
