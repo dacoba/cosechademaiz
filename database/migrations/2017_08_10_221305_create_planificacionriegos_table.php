@@ -18,8 +18,8 @@ class CreatePlanificacionriegosTable extends Migration
             $table->datetime('fecha_planificacion');
             $table->string('estado');
             $table->integer('metodos_riego');
-            $table->integer('comportamiento_lluvia');
-            $table->integer('problemas_drenaje');
+            $table->double('comportamiento_lluvia');
+            $table->double('problemas_drenaje');
             $table->boolean('email_send')->default(false);
             $table->string('comentario_riego');
             $table->integer('riego_id')->unsigned();

@@ -16,7 +16,8 @@ class CreateSiembrasTable extends Migration
             $table->increments('id');
             $table->integer('semilla');
             $table->integer('fertilizacion');
-            $table->integer('densidad_siembra');
+            $table->double('distancia_surco');
+            $table->double('distancia_planta');
             $table->string('comentario_siembra');
             $table->integer('preparacionterreno_id')->unsigned();
             $table->foreign('preparacionterreno_id')->references('id')->on('preparacionterrenos')->onDelete('restrict')->onUpdate('cascade');

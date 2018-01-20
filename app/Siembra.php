@@ -8,7 +8,7 @@ class Siembra extends Model
 {
     protected $table = 'siembras';
     protected $fillable = [
-        'semilla', 'fertilizacion', 'densidad_siembra', 'comentario_siembra', 'preparacionterreno_id',
+        'semilla', 'fertilizacion', 'distancia_surco', 'distancia_planta', 'comentario_siembra', 'preparacionterreno_id',
     ];
     function preparacionterreno(){
         return $this->belongsTo('App\Preparacionterreno');

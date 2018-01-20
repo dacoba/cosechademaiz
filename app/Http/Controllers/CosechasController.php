@@ -116,7 +116,7 @@ class CosechasController extends Controller
         $fumigacion = Fumigacion::where('siembra_id', $request['siembra_id'])->get();
         $fumigacion_count = Fumigacion::where('siembra_id', $request['siembra_id'])->count();
         $siembras =  $this->getSiembrasEstate();
-        $siembra = Siembra::find($request['siembra_id']);
+        $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
         $cosecha = [];
         $cosecha = Cosecha::where('siembra_id', $request['siembra_id'])->get();
         if($riego_count and $fumigacion_count)
@@ -129,7 +129,7 @@ class CosechasController extends Controller
             $riego_lista = Planificacionriego::where('riego_id', $riego_id)->get();
             $planificacionriegosend = Planificacionriego::where([
                 ['riego_id', '=', $riego_id],
-                ['estado', '=', 'ejecutado'],
+                ['estado', '=', 'Registrado'],
             ])->count();
             $riego = 100 / $planificacionriegos * $planificacionriegosend;
             if(is_float($riego))
@@ -197,7 +197,7 @@ class CosechasController extends Controller
             $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->count();
             $planificacionriegosend = Planificacionriego::where([
                 ['riego_id', '=', $riego_id],
-                ['estado', '=', 'ejecutado'],
+                ['estado', '=', 'Registrado'],
             ])->count();
             if ($planificacionriegos != $planificacionriegosend)
             {

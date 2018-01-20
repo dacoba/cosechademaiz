@@ -100,20 +100,15 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="densidad_siembra" class="col-md-4 control-label">Densidad de la Siembra <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la distancia de surco a surco (optimo 80cm) y de planta a planta (50cm optimo), 10 correcta distribucion, 1 muy mala"></i></label>
+                                        <label for="distancia_surco" class="col-md-4 control-label">Distancia entre surcos <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la distancia de surco a surco (optimo 80cm) y de planta a planta (50cm optimo), 10 correcta distribucion, 1 muy mala"></i></label>
                                         <div class="col-md-6">
-                                            <select id="densidad_siembra" name="densidad_siembra" class="form-control" onchange="updateBarchar()">
-                                                <option value="1" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '1') selected @endif >1</option>
-                                                <option value="2" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '2') selected @endif >2</option>
-                                                <option value="3" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '3') selected @endif >3</option>
-                                                <option value="4" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '4') selected @endif >4</option>
-                                                <option value="5" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '5') selected @endif >5</option>
-                                                <option value="6" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '6') selected @endif >6</option>
-                                                <option value="7" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '7') selected @endif >7</option>
-                                                <option value="8" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '8') selected @endif >8</option>
-                                                <option value="9" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '9') selected @endif >9</option>
-                                                <option value="10" @if (isset($siembra['densidad_siembra']) and $siembra['densidad_siembra'] == '10') selected @endif >10</option>
-                                            </select>
+                                            <input type="number" id="distancia_surco" name="distancia_surco" step="0.01" class="form-control" value="{{ $distancia_surco or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="distancia_planta" class="col-md-4 control-label">Distancia entre plantas <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la distancia de surco a surco (optimo 80cm) y de planta a planta (50cm optimo), 10 correcta distribucion, 1 muy mala"></i></label>
+                                        <div class="col-md-6">
+                                            <input type="number" id="distancia_planta" name="distancia_planta" step="0.01" class="form-control" value="{{ $distancia_planta or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
                                         </div>
                                     </div>
                                     <div class="form-group{{ $errors->has('comentario_siembra') ? ' has-error' : '' }}">

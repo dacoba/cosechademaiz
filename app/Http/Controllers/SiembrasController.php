@@ -74,7 +74,8 @@ class SiembrasController extends Controller
             $siembra = Siembra::create([
                 'semilla' => $request['semilla'],
                 'fertilizacion' => $request['fertilizacion'],
-                'densidad_siembra' => $request['densidad_siembra'],
+                'distancia_surco' => $request['distancia_surco'],
+                'distancia_planta' => $request['distancia_planta'],
                 'comentario_siembra' => $request['comentario_siembra'],
                 'preparacionterreno_id' => $request['preparacionterreno_id'],
             ]);
@@ -99,7 +100,8 @@ class SiembrasController extends Controller
                 ->update([
                     'semilla' => $request['semilla'],
                     'fertilizacion' => $request['fertilizacion'],
-                    'densidad_siembra' => $request['densidad_siembra'],
+                    'distancia_surco' => $request['distancia_surco'],
+                    'distancia_planta' => $request['distancia_planta'],
                     'comentario_siembra' => $request['comentario_siembra'],
                 ]);
         }

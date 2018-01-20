@@ -124,14 +124,14 @@
                                         <div class="form-group">
                                             <label for="comportamiento_lluvia" class="col-md-4 control-label">Comportamiento de lluvia (%)</label>
                                             <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="comportamiento_lluvia" name="comportamiento_lluvia" class="form-control" @if (isset($planificacionriego_done['comportamiento_lluvia'])) value="{{ $planificacionriego_done['comportamiento_lluvia'] }}" @endif style="text-align:right" onchange="updateBarchar()"/>
+                                                <input type="number" min="1" max="100" step="0.01" id="comportamiento_lluvia" name="comportamiento_lluvia" class="form-control" @if (isset($planificacionriego_done['comportamiento_lluvia'])) value="{{ $planificacionriego_done['comportamiento_lluvia'] or '0.00' }}" @endif style="text-align:right" onchange="updateBarchar()"/>
                                             </div>
                                         </div>
     
                                         <div class="form-group">
                                             <label for="problemas_drenaje" class="col-md-4 control-label">Drenaje (%)</label>
                                             <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="problemas_drenaje" name="problemas_drenaje" class="form-control" @if (isset($planificacionriego_done['problemas_drenaje'])) value="{{ $planificacionriego_done['problemas_drenaje'] }}" @endif style="text-align:right" onchange="updateBarchar()"/>
+                                                <input type="number" min="1" max="100" step="0.01" id="problemas_drenaje" name="problemas_drenaje" class="form-control" @if (isset($planificacionriego_done['problemas_drenaje'])) value="{{ $planificacionriego_done['problemas_drenaje'] or '0.00' }}" @endif style="text-align:right" onchange="updateBarchar()"/>
                                             </div>
                                         </div>
     
@@ -278,15 +278,16 @@
                                         if(isset($simulador)){
                                             if($numero_simulacion != 0){
                                                 for($i=0;$i<=$numero_simulacion-1;$i++){
-                                                    $datos[$i][0] = $simulador[$i]['problemas'];
-                                                    $datos[$i][1] = $simulador[$i]['altura'];
-                                                    $datos[$i][2] = $simulador[$i]['humedad'];
-                                                    $datos[$i][3] = $simulador[$i]['rendimiento'];
+                                                    $datos[$i][0] = $simulador[$i]['tipo'];
+                                                    $datos[$i][1] = $simulador[$i]['problemas'];
+                                                    $datos[$i][2] = $simulador[$i]['altura'];
+                                                    $datos[$i][3] = $simulador[$i]['humedad'];
+                                                    $datos[$i][4] = $simulador[$i]['rendimiento'];
                                                 }
-                                                $datos = \GuzzleHttp\json_encode($datos);
                                             }
                                         }
                                     ?>
+                                    <?php $datos = \GuzzleHttp\json_encode($datos);?>
                                     <style>
                                         text {
                                             font: 12px sans-serif;
@@ -329,13 +330,24 @@
                                                 })
                                             ;
                                             chart.xAxis
-                                                .axisLabel("Cambios)")
+                                                .axisLabel("Etapas en la Cosecha")
                                                 .tickFormat(d3.format(',.1f'))
                                                 .staggerLabels(true)
+                                                .tickValues(['Label 1','Label 2','Label 3','Label 4','Label 5','Label 6','Label 7','Label 8'])
                                             ;
 
+                                            var tipo = [];
+                                            for (var i = 0; i < datos.length; i++) {
+                                                tipo.push(datos[i][0]);
+                                            }
+
+                                            chart.xAxis.tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
+                                                .tickFormat(function(d){
+                                                    return tipo[d]
+                                                });
+
                                             chart.yAxis
-                                                .axisLabel('Medida (valor)')
+                                                .axisLabel('Medida (Porcentaje)')
                                                 .tickFormat(function(d) {
                                                     if (d == null) {
                                                         return 'N/A';
@@ -362,17 +374,13 @@
                                                 rand2 = []
                                             ;
                                             for (var i = 0; i < datos.length; i++) {
-                                                sin.push({x: i, y: datos[i][0] }); //the nulls are to show how defined works
-                                                sin2.push({x: i, y: datos[i][1] });
-                                                cos.push({x: i, y: datos[i][1] });
-//                                rand.push({x:i, y: Math.random() / 10});
-                                                rand.push({x:i, y: datos[i][2] });
-                                                rand2.push({x: i, y: datos[i][3] })
+                                                sin.push({x: i, y: datos[i][1] });
+                                                cos.push({x: i, y: datos[i][2] });
+                                                rand.push({x:i, y: datos[i][3] });
+                                                rand2.push({x: i, y: datos[i][4] });
                                             }
-
                                             return [
                                                 {
-//                                    area: true,
                                                     values: sin,
                                                     key: "Problemas de produccion",
                                                     color: "#ff7f0e",

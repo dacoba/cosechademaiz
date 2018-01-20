@@ -77,50 +77,6 @@
                                     </div>
                                 </center>
                                 </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <center>
-                                        <h2 class="h2-reports">Siembra</h2>
-                                        <div id="chart1" style="height: 250px;">
-                                            <svg></svg>
-                                        </div>
-                                        <p><strong>Comentario: </strong>{{$siembra['comentario_siembra']}}</p>
-                                    </center>
-                                    <style>
-                                        text {
-                                            font: 12px sans-serif;
-                                        }
-                                        svg {
-                                            display: block;
-                                        }
-                                        html, body, #chart1, svg {
-                                            margin: 0px;
-                                            padding: 0px;
-                                            height: 100%;
-                                            width: 100%;
-                                        }
-                                    </style>
-                                    <script>
-                                        historicalBarChart = [
-                                            {
-                                                key: "Cumulative Return",
-                                                values: [
-                                                    {
-                                                        "label" : "Semilla" ,
-                                                        "value" : <?=$siembra['semilla']?>
-                                                    } ,
-                                                    {
-                                                        "label" : "Fertilizacion" ,
-                                                        "value" : <?=$siembra['fertilizacion']?>
-                                                    } ,
-                                                    {
-                                                        "label" : "Densidad de la siembra" ,
-                                                        "value" : <?=$siembra['densidad_siembra']?>
-                                                    }
-                                                ]
-                                            }
-                                        ];
-                                    </script>
-                                </div>
                                 @if(isset($cosecha[0]))
                                     <div class="col-lg-6 col-md-12">
                                         <style>
@@ -191,7 +147,6 @@
                                     </div>
                                 @endif
                                 <div class="col-lg-6 col-md-12">
-
                                     <center>
                                         <h2 class="h2-reports">Riegos y Fumigaciones</h2>
                                     </center>
@@ -204,7 +159,21 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+                                        <?php
+                                        $camtidad_riegos = count($riego_lista);
+                                        $acum_problemas_drenaje = 0;
+                                        $acum_comportamiento_lluvia = 0;
+
+                                        $camtidad_fumigaciones = count($fumigacion_lista);
+                                        $acum_preventivo_plagas = 0;
+                                        $acum_control_malezas = 0;
+                                        $acum_control_enfermedades = 0;
+                                        ?>
                                         @foreach ($riego_lista as $riego_one)
+                                            <?php
+                                                $acum_problemas_drenaje += $riego_one['problemas_drenaje'];
+                                                $acum_comportamiento_lluvia += $riego_one['comportamiento_lluvia'];
+                                            ?>
                                             <tr style="background: rgba(0, 38, 255, 0.29);">
                                                 <td style="text-align: center">Riego</td>
                                                 <td style="text-align: center">{{$riego_one['fecha_planificacion']}}</td>
@@ -212,6 +181,11 @@
                                             </tr>
                                         @endforeach
                                         @foreach ($fumigacion_lista as $fumigacion_one)
+                                            <?php
+                                                $acum_preventivo_plagas += $fumigacion_one['preventivo_plagas'];
+                                                $acum_control_malezas += $fumigacion_one['control_malezas'];
+                                                $acum_control_enfermedades += $fumigacion_one['control_enfermedades'];
+                                            ?>
                                             <tr style="background: #cea4de;">
                                                 <td style="text-align: center">Fumigacion</td>
                                                 <td style="text-align: center">{{$fumigacion_one['fecha_planificacion']}}</td>
@@ -220,6 +194,111 @@
                                         @endforeach
                                         </tbody>
                                     </table>
+                                </div>
+                                @if(isset($cosecha[0]))
+                                    <div class="col-lg-6 col-md-12">
+                                        <center>
+                                            <h2 class="h2-reports">Estimacion de Produccion de Maiz</h2>
+                                        </center>
+                                        <?php
+                                        $plantas_por_hectarea = (1/($siembra['distancia_surco'] * $siembra['distancia_planta']))*10000;
+                                        $rendimiento_produccion = ceil($cosecha[0]['rendimiento_produccion']/25)-1;
+                                        $produccion_maiz = $rendimiento_produccion * $plantas_por_hectarea * 0.375 * 0.001;
+                                        ?>
+                                        <center>
+                                            La estimacion de produccion de maiz en base al rendimiento de <?=$cosecha[0]['rendimiento_produccion']?> %
+                                            se estima la produccion de <?=round($produccion_maiz,1) * $siembra['preparacionterreno']['terreno']['area_parcela']?> Toneladas por hectarea aproximadamente.
+                                        </center>
+                                    </div>
+                                @endif
+                                <div class="col-lg-12 col-md-12">
+                                    <center>
+                                        <h2 class="h2-reports">Control de Calidad</h2>
+                                        <div id="chart1" style="height: 250px;">
+                                            <svg></svg>
+                                        </div>
+                                        <p><strong>Comentario: </strong>{{$siembra['comentario_siembra']}}</p>
+                                    </center>
+                                    <style>
+                                        text {
+                                            font: 12px sans-serif;
+                                        }
+                                        svg {
+                                            display: block;
+                                        }
+                                        html, body, #chart1, svg {
+                                            margin: 0px;
+                                            padding: 0px;
+                                            height: 100%;
+                                            width: 100%;
+                                        }
+                                    </style>
+                                    <?php
+                                        $ph_ini = $siembra['preparacionterreno']['ph'];
+                                        $fertilizacion = $siembra['fertilizacion'];
+                                        $ph_aux = ((7 - $ph_ini) * $fertilizacion) + $ph_ini;
+                                        $var_ph = 10 - (abs($ph_aux - 7) / 0.7);
+
+                                        $plaga_suelo_ini = 10 - ($siembra['preparacionterreno']['plaga_suelo'] / 10);
+                                        $acum_preventivo_plagas = 10 - ($acum_preventivo_plagas / (10 * $camtidad_fumigaciones));
+                                        $var_plagas = ($plaga_suelo_ini + $acum_preventivo_plagas) / 2;
+
+                                        $drenage_ini = $siembra['preparacionterreno']['drenage'] / 10;
+                                        $acum_problemas_drenaje = $acum_problemas_drenaje / (10 * $camtidad_riegos);
+                                        $acum_comportamiento_lluvia = $acum_comportamiento_lluvia / (10 * $camtidad_riegos);
+                                        $var_drenage = ($drenage_ini + $acum_problemas_drenaje + $acum_comportamiento_lluvia) / 3;
+
+                                        $var_erocion = $siembra['preparacionterreno']['erocion'] / 10;
+
+                                        $malezas_ini = 10 - ($siembra['preparacionterreno']['maleza_preparacion'] / 10);
+                                        $acum_control_malezas = 10 - ($acum_control_malezas / (10 * $camtidad_fumigaciones));
+                                        $var_malezas = ($malezas_ini + $acum_control_malezas) / 2;
+
+                                        $var_enfermedades = $acum_control_enfermedades / (10 * $camtidad_fumigaciones);
+
+                                        $media = ($var_ph + $var_plagas + $var_drenage + $var_erocion + $var_malezas + $var_enfermedades) / 6;
+                                        $varianza = (pow(($var_ph - $media), 2) + pow(($var_plagas - $media), 2) + pow(($var_drenage - $media), 2) + pow(($var_erocion - $media), 2) + pow(($var_malezas - $media), 2) + pow(($var_enfermedades - $media), 2)) / 6;
+                                        $desviacion_estandar = sqrt($varianza);
+                                    ?>
+                                    <script>
+                                        historicalBarChart = [
+                                            {
+                                                key: "Cumulative Return",
+                                                values: [
+                                                    {
+                                                        "label" : "Ph" ,
+                                                        "value" : <?=$var_ph?>
+                                                    } ,
+                                                    {
+                                                        "label" : "Plagas" ,
+                                                        "value" : <?=$var_plagas?>
+                                                    } ,
+                                                    {
+                                                        "label" : "Drenaje" ,
+                                                        "value" : <?=$var_drenage?>
+                                                    } ,
+                                                    {
+                                                        "label" : "Erocion" ,
+                                                        "value" : <?=$var_erocion?>
+                                                    } ,
+                                                    {
+                                                        "label" : "Malezas" ,
+                                                        "value" : <?=$var_malezas?>
+                                                    } ,
+                                                    {
+                                                        "label" : "Enfermedades" ,
+                                                        "value" : <?=$var_enfermedades?>
+                                                    }
+                                                ]
+                                            }
+                                        ];
+                                    </script>
+
+                                    <center>
+                                        <strong>Media : </strong><?=$media?><br>
+                                        <strong>Varianza : </strong><?=$varianza?><br>
+                                        <strong>Desviación Estándar : </strong><?=$desviacion_estandar?><br>
+                                    </center>
                                 </div>
                             </div>
                         @else
