@@ -22,6 +22,7 @@ class CreatePlanificacionfumigacionsTable extends Migration
             $table->integer('control_malezas');
             $table->integer('control_insectos');
             $table->integer('control_enfermedades');
+            $table->boolean('email_send')->default(false);
             $table->string('comentario_fumigacion');
             $table->integer('fumigacion_id')->unsigned();
             $table->foreign('fumigacion_id')->references('id')->on('fumigacions')->onDelete('restrict')->onUpdate('cascade');
