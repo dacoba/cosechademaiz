@@ -18,7 +18,7 @@ class SendRiegoEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'email:riego {--sleep=60}';
+    protected $signature = 'email:riego {--sleep=60 --timeout 61}';
 
     /**
      * The console command description.
