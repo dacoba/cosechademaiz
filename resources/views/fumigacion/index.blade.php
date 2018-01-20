@@ -61,7 +61,7 @@
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="planificacionfumigacion_id" value="{{$planificacionfumigacion['id']}}" >
                                                 <input type="hidden" name="siembra_id" value="{{$siembra_id}}" >
-                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionfumigacion['estado'] != 'ejecutado') disabled @endif>
+                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionfumigacion['estado'] != 'Ejecutado') disabled @endif>
                                                     <i class="fa fa-btn fa-pencil"></i>
                                                 </button>
                                             </form>

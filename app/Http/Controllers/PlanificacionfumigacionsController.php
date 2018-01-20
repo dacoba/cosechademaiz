@@ -122,7 +122,7 @@ class PlanificacionfumigacionsController extends Controller
         }
         $planificacionfumigacion = Planificacionfumigacion::create([
             'fecha_planificacion' => $request['fecha_planificacion'],
-            'estado' => "planificado",
+            'estado' => "Planificado",
             'fumigacion_id' => $request['fumigacion_id'],
         ]);
         $fumigacion = Fumigacion::where('siembra_id', $request['siembra_id'])->get();

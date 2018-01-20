@@ -49,13 +49,13 @@ class SendRiegoEmail extends Command
             date_time_set($current_date, date("H"), date("i"));
             echo date_format($current_date,"Y-m-d H:i:s");
 
-            $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','<=',$current_date)->get();
-            $planificacionfumigacions = Planificacionfumigacion::with(['fumigacion', 'fumigacion.siembra', 'fumigacion.siembra.preparacionterreno', 'fumigacion.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('fecha_planificacion','<=',$current_date)->get();
+            $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('estado','=','Planificado')->where('fecha_planificacion','<=',$current_date)->get();
+            $planificacionfumigacions = Planificacionfumigacion::with(['fumigacion', 'fumigacion.siembra', 'fumigacion.siembra.preparacionterreno', 'fumigacion.siembra.preparacionterreno.tecnico'])->whereYear('fecha_planificacion', '=', date('Y'))->whereMonth('fecha_planificacion', '=', date('m'))->whereDay('fecha_planificacion', '=', date('d'))->where('estado','=','Planificado')->where('fecha_planificacion','<=',$current_date)->get();
 
             foreach($planificacionriegos as $planificacionriego) {
                 Planificacionriego::where('id', $planificacionriego['id'])
                     ->update([
-                        'estado' => 'ejecutado',
+                        'estado' => 'Ejecutado',
                     ]);
                 $email_tecnico = $planificacionriego['riego']['siembra']['preparacionterreno']['tecnico']['email'];
                 Mail::queue('emails.riego', ['planificacionriego' => $planificacionriego], function ($mail) use ($email_tecnico) {
@@ -69,7 +69,7 @@ class SendRiegoEmail extends Command
             foreach($planificacionfumigacions as $planificacionfumigacion) {
                 Planificacionfumigacion::where('id', $planificacionfumigacion['id'])
                     ->update([
-                        'estado' => 'ejecutado',
+                        'estado' => 'Ejecutado',
                     ]);
                 $email_tecnico = $planificacionfumigacion['fumigacion']['siembra']['preparacionterreno']['tecnico']['email'];
                 Mail::queue('emails.fumigacion', ['planificacionfumigacion' => $planificacionfumigacion], function ($mail) use ($email_tecnico) {

@@ -76,7 +76,7 @@
                                             {{ csrf_field() }}
                                                 <input type="hidden" name="planificacionriego_id" value="{{$planificacionriego['id']}}" >
                                                 <input type="hidden" name="siembra_id" value="{{$siembra_id}}" >
-                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionriego['estado'] != 'ejecutado' and $planificacionriego['estado'] != 'Registrado') disabled @endif>
+                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionriego['estado'] != 'Ejecutado' and $planificacionriego['estado'] != 'Registrado') disabled @endif>
                                                     <i class="fa fa-btn fa-pencil"></i>
                                                 </button>
                                             </form>
