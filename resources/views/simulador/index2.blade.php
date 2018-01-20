@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container pfblock"">
+    <div class="container pfblock">
     <div class="row">
 
         <div class="col-sm-6 col-sm-offset-3">

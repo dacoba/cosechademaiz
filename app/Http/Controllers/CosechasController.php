@@ -29,7 +29,7 @@ class CosechasController extends Controller
     {
         $siembras = Siembra::all();
         $datos = [];
-        $datos = \GuzzleHttp\json_encode($datos);
+        $datos = json_encode($datos);
         return view('simulador.index2',['siembras' => $siembras, 'datos' => $datos]);
     }
     public function postSimulador(Request $request)
@@ -83,7 +83,7 @@ class CosechasController extends Controller
         $datos[2][5] = rand(1,10);
         $datos[2][6] = rand(1,10);
 
-        $datos = \GuzzleHttp\json_encode($datos);
+        $datos = json_encode($datos);
 
         return view('simulador.index2',['siembras' => $siembras, 'datos' => $datos]);
     }
