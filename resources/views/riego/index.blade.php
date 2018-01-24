@@ -432,6 +432,11 @@
     </div>
 </div>
 <div class="modal fade" id="myModal" role="dialog" style="margin-top: 100px">
+    <script>
+        function validar(f){
+            f.enviar.disabled=true;
+            return true}
+    </script>
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -441,7 +446,7 @@
             </div>
             <div class="modal-body">
                 <p  style="text-align: center;">Fecha del siguiente riego.</p>
-                <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionriegos/addriego') }}">
+                <form class="form-horizontal" role="form" method="POST" action="{{ url('/planificacionriegos/addriego') }}" onsubmit="return validar(this)">
                     {{ csrf_field() }}
                     <div class="row">
                         <div class="form-group">
@@ -465,7 +470,7 @@
                         <div class="form-group">
                             <div class="col-md-12" style="text-align: center;">
                                 <div style="text-align: center;">
-                                    <button type="submit" class="btn btn-success">
+                                    <button name="enviar" type="submit" class="btn btn-success">
                                         <i class="fa fa-btn fa-user"></i>Registar
                                     </button>
                                 </div>
