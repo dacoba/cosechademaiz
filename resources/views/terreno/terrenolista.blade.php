@@ -49,7 +49,9 @@
                                 <td style="text-align: center">{{$terreno['estado']}}</td>
                                 <td style="text-align: center">
                                     <a href="{{ url('terrenos')}}/{{$terreno['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
-                                    <a href="{{ url('terrenos')}}/{{$terreno['id']}}/edit" class="btn btn-warning btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                    @if ( Auth::user()->tipo == 'Administrador')
+                                        <a href="{{ url('terrenos')}}/{{$terreno['id']}}/edit" class="btn btn-warning btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

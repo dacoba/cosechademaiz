@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Simulador;
 use Illuminate\Http\Request;
 use App\User;
 use App\Terreno;
+use App\Preparacionterreno;
 use Validator;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Requests;
 
@@ -19,6 +22,14 @@ class TerrenosController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+    protected function getTerrenos()
+    {
+        if (Auth::user()->tipo == 'Productor') {
+            return Terreno::with('productor')->where('productor_id', Auth::user()->id)->where('estado', 'Abierto')->get();
+        }else{
+            return Terreno::with('productor')->get();
+        }
     }
     protected function validator(array $data)
     {
@@ -36,7 +47,7 @@ class TerrenosController extends Controller
 //                }
 //            }
 //        }
-        $terrenos = Terreno::with('productor')->get();
+        $terrenos = $this->getTerrenos();
         return view('terreno.terrenolista',['terrenos' => $terrenos]);
     }
 
@@ -85,8 +96,12 @@ class TerrenosController extends Controller
      */
     public function show($id)
     {
-        $terreno = Terreno::with('productor')->where('id', $id)->get();
-        $terreno = $terreno[0];
+        $terreno = Terreno::with('productor')->where('id', $id)->first();
+        if (Auth::user()->tipo == 'Productor') {
+            $preterreno = Preparacionterreno::with('tecnico', 'siembra')->where('terreno_id', $terreno['id'])->orderBy('id', 'desc')->first();
+            $simuladors = Simulador::where('preparacionterreno_id', $preterreno['id'])->get();
+            return view("terreno.terrenoshow",['terreno' => $terreno, 'preterreno' => $preterreno, 'simuladors' => $simuladors]);
+        }
         return view("terreno.terrenoshow",['terreno' => $terreno]);
     }
 

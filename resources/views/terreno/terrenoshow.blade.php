@@ -6,7 +6,7 @@
 
         <div class="col-sm-8 col-sm-offset-2">
             <div class="pfblock-header">
-                <h2 class="pfblock-title">Administar Cuentas de Productor</h2>
+                <h2 class="pfblock-title">Administar Terrenos</h2>
             </div>
         </div>
 
@@ -62,11 +62,39 @@
                             <label for="estado" class="col-md-4 control-label">Estado</label>
 
                             <div class="col-md-6 show-user">
-                                {{$terreno['estado']}}
+                                {{$preterreno['estado']}}
                             </div>
                         </div>
+                        @if ( Auth::user()->tipo == 'Productor')
+                            @if (isset($preterreno))
+                                <center><h2>Preprapracion del terreno</h2></center>
 
-
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td><b>PH</b></td>
+                                        <td>{{$preterreno['ph']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Plaga Suelo</b></td>
+                                        <td>{{$preterreno['plaga_suelo']}} %</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Drenaje</b></td>
+                                        <td>{{$preterreno['drenaje']}} %</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Erocion</b></td>
+                                        <td>{{$preterreno['erocion']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Maleza Preparacion</b></td>
+                                        <td>{{$preterreno['maleza_preparacion']}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            @endif
+                        @endif
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
                                 <a href="{{ url('terrenos')}}" class="btn btn-danger pull-right button-back-alone"><i class="fa fa-backward fa-padding-right"></i>Atras</a>
