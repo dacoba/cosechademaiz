@@ -40,20 +40,41 @@
                                     $drenage = $siembra['preparacionterreno']['drenage'];
                                     $maleza_preparacion = $siembra['preparacionterreno']['maleza_preparacion'];
                                     $semilla = $siembra['semilla'];
+                                    $erocion = $siembra['preparacionterreno']['erocion'];
                                     $fertilizacion = $siembra['fertilizacion'];
-                                    $densidad_siembra = $siembra['densidad_siembra'];
 
-                                    $ph_aux = 10 - (abs($ph - 7) / 0.7);
-                                    $plaga_suelo_aux = 10 - ($plaga_suelo / 10);
-                                    $drenage_aux = $drenage / 10;
-                                    $maleza_preparacion_aux = $maleza_preparacion / 10;
-                                    $semilla_aux = $semilla * 2.5;
-                                    $fertilizacion_aux = $fertilizacion;
-                                    $densidad_siembra_aux = $densidad_siembra;
+//                                    $ph_aux = 10 - (abs($ph - 7) / 0.7);
+//                                    $plaga_suelo_aux = 10 - ($plaga_suelo / 10);
+//                                    $drenage_aux = $drenage / 10;
+//                                    $maleza_preparacion_aux = $maleza_preparacion / 10;
+//                                    $semilla_aux = $semilla * 2.5;
+//                                    $fertilizacion_aux = $fertilizacion;
+                                    $acum_control_enfermedades = 0;
+                                    $acum_preventivo_plagas = 0;
+                                    $acum_control_malezas = 0;
+                                    $cont_fumigacions = 0;
+                                    $cont_fumigacions_total = 0;
                                 }
                                 ?>
+                                <script>
+                                    var simulador_2 = 0;
+                                    var simulador_problemas_2 = 0;
+                                    var simulador_altura_2 = 0;
+                                    var simulador_humedad_2 = 0;
+                                    var simulador_rendimiento_2 = 0;
+                                </script>
                                 @foreach ($planificacionfumigacions as $id => $planificacionfumigacion)
-                                    <tr @if (isset($planificacionfumigacion_done['id']) and $planificacionfumigacion_done['id'] == $planificacionfumigacion['id']) style="background: rgba(74,75,237,0.58)" @endif>
+                                    @if (isset($planificacionfumigacion_done) and $planificacionfumigacion_done['id'] == $planificacionfumigacion['id'] and $planificacionfumigacion['estado'] == "Registrado")
+                                        <script>
+                                            var simulador_2 = 1;
+                                            var simulador_problemas_2 = <?=round($planificacionfumigacion['simulador']['problemas'], 2)?>;
+                                            var simulador_altura_2 = <?=round($planificacionfumigacion['simulador']['altura'], 2)?>;
+                                            var simulador_humedad_2 = <?=round($planificacionfumigacion['simulador']['humedad'], 2)?>;
+                                            var simulador_rendimiento_2 = <?=round($planificacionfumigacion['simulador']['rendimiento'], 2)?>;
+                                        </script>
+                                        <?php $numero_simulacion = $planificacionfumigacion['simulador']['numero_simulacion'];?>
+                                    @endif
+                                    <tr @if (isset($planificacionfumigacion_done['id']) and $planificacionfumigacion_done['id'] == $planificacionfumigacion['id']) style="background: rgba(202, 202, 224, 0.58);" @endif>
                                         <td style="text-align: center">{{$planificacionfumigacion['fecha_planificacion']}}</td>
                                         <td style="text-align: center">{{$planificacionfumigacion['estado']}}</td>
                                         <td style="text-align: center">
@@ -61,37 +82,36 @@
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="planificacionfumigacion_id" value="{{$planificacionfumigacion['id']}}" >
                                                 <input type="hidden" name="siembra_id" value="{{$siembra_id}}" >
-                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionfumigacion['estado'] != 'Ejecutado') disabled @endif>
+                                                <button type="submit" class="btn btn-primary btn-xs" @if ($planificacionfumigacion['estado'] != 'Ejecutado' and $planificacionfumigacion['estado'] != 'Registrado') disabled @endif>
                                                     <i class="fa fa-btn fa-pencil"></i>
                                                 </button>
                                             </form>
                                         </td>
-                                        <?php
-                                        $problemas = (100/330) * (((100/10)*$ph_aux)+((50/10)*$drenage_aux)+((95/10)*$plaga_suelo_aux)+((60/10)*$maleza_preparacion_aux)+((25/10)*$densidad_siembra_aux));
-                                        $altura = (100/365) * (((90/10)*$ph_aux)+((60/10)*$drenage_aux)+((55/10)*$fertilizacion_aux)+((50/10)*$maleza_preparacion_aux)+((90/10)*$semilla_aux)+((20/10)*$densidad_siembra_aux));
-                                        $humedad = (100/200) * (((95/10)*$drenage_aux)+((45/10)*$maleza_preparacion_aux)+((60/10)*$densidad_siembra_aux));
-                                        $rendimiento = (100/495) * (((90/10)*$ph_aux)+((75/10)*$drenage_aux)+((65/10)*$fertilizacion_aux)+((50/10)*$plaga_suelo_aux)+((40/10)*$maleza_preparacion_aux)+((100/10)*$semilla_aux)+((75/10)*$densidad_siembra_aux));
-
-                                        $problemas = round($problemas, 2);
-                                        $altura = round($altura, 2);
-                                        $humedad = round($humedad, 2);
-                                        $rendimiento = round($rendimiento, 2);
-                                        ?>
-                                        <td style="text-align: center"><?=$problemas?> %</td>
-                                        <td style="text-align: center"><?=$altura?> %</td>
-                                        <td style="text-align: center"><?=$humedad?> %</td>
-                                        <td style="text-align: center"><?=$rendimiento?> %</td>
-                                        <?php
-                                        $plaga_suelo_aux = $planificacionfumigacion['preventivo_plagas'] / 10;
-                                        $maleza_preparacion_aux = $planificacionfumigacion['control_malezas'] / 10;
-                                        ?>
+                                        <?php $ls_numero_simulacion = $planificacionfumigacion['simulador']['numero_simulacion'];?>
+                                        @foreach ($simulador as $simulacion)
+                                            @if ($simulacion['numero_simulacion'] == ($ls_numero_simulacion - 1))
+                                                <td style="text-align: center"><?=round($simulacion['problemas'], 2)?> %</td>
+                                                <td style="text-align: center"><?=round($simulacion['altura'], 2)?> %</td>
+                                                <td style="text-align: center"><?=round($simulacion['humedad'], 2)?> %</td>
+                                                <td style="text-align: center"><?=round($simulacion['rendimiento'], 2)?> %</td>
+                                            @endif
+                                        @endforeach
                                     </tr>
+                                    <?php
+                                    if($planificacionfumigacion['estado'] == 'Registrado'){
+                                        $acum_control_enfermedades += $planificacionfumigacion['control_enfermedades'];
+                                        $acum_preventivo_plagas += $planificacionfumigacion['preventivo_plagas'];
+                                        $acum_control_malezas += $planificacionfumigacion['control_malezas'];
+                                        $cont_fumigacions += 1;
+                                    }
+                                    $cont_fumigacions_total += 1;
+                                    ?>
                                 @endforeach
                                 </tbody>
                             </table>
                             @if (!isset($planificacionfumigacion_done))
                             <center>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @if($planificacionfumigacions->count() >= 3) disabled @endif>
                                     <i class="fa fa-btn fa-user"></i> Añadir Planificacion
                                 </button>
                             </center>
@@ -111,63 +131,16 @@
                                         </div>
     
                                         <div class="form-group">
-                                            <label for="control_rutinario" class="col-md-4 control-label">control_rutinario</label>
-                                            <div class="col-md-6">
-                                                <select id="control_rutinario" name="control_rutinario" class="form-control">
-                                                    <option value="1" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '1') selected @endif >1</option>
-                                                    <option value="2" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '2') selected @endif >2</option>
-                                                    <option value="3" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '3') selected @endif >3</option>
-                                                    <option value="4" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '4') selected @endif >4</option>
-                                                    <option value="5" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '5') selected @endif >5</option>
-                                                    <option value="6" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '6') selected @endif >6</option>
-                                                    <option value="7" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '7') selected @endif >7</option>
-                                                    <option value="8" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '8') selected @endif >8</option>
-                                                    <option value="9" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '9') selected @endif >9</option>
-                                                    <option value="10" @if (isset($planificacionfumigacion_done['control_rutinario']) and $planificacionfumigacion_done['control_rutinario'] == '10') selected @endif >10</option>
-                                                </select>
-                                            </div>
-                                        </div>
-    
-                                        <div class="form-group">
                                             <label for="control_malezas" class="col-md-4 control-label">control_malezas</label>
                                             <div class="col-md-6">
                                                 <input type="number" min="1" max="100" id="control_malezas" name="control_malezas" class="form-control" @if (isset($planificacionfumigacion_done['control_malezas'])) value="{{ $planificacionfumigacion_done['control_malezas'] }}" @endif onchange="updateBarchar()"/>
                                             </div>
                                         </div>
-    
-                                        <div class="form-group">
-                                            <label for="control_insectos" class="col-md-4 control-label">control_insectos</label>
-                                            <div class="col-md-6">
-                                                <select id="control_insectos" name="control_insectos" class="form-control">
-                                                    <option value="1" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '1') selected @endif >1</option>
-                                                    <option value="2" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '2') selected @endif >2</option>
-                                                    <option value="3" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '3') selected @endif >3</option>
-                                                    <option value="4" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '4') selected @endif >4</option>
-                                                    <option value="5" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '5') selected @endif >5</option>
-                                                    <option value="6" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '6') selected @endif >6</option>
-                                                    <option value="7" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '7') selected @endif >7</option>
-                                                    <option value="8" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '8') selected @endif >8</option>
-                                                    <option value="9" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '9') selected @endif >9</option>
-                                                    <option value="10" @if (isset($planificacionfumigacion_done['control_insectos']) and $planificacionfumigacion_done['control_insectos'] == '10') selected @endif >10</option>
-                                                </select>
-                                            </div>
-                                        </div>
-    
+
                                         <div class="form-group">
                                             <label for="control_enfermedades" class="col-md-4 control-label">control_enfermedades</label>
                                             <div class="col-md-6">
-                                                <select id="control_enfermedades" name="control_enfermedades" class="form-control">
-                                                    <option value="1" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '1') selected @endif >1</option>
-                                                    <option value="2" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '2') selected @endif >2</option>
-                                                    <option value="3" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '3') selected @endif >3</option>
-                                                    <option value="4" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '4') selected @endif >4</option>
-                                                    <option value="5" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '5') selected @endif >5</option>
-                                                    <option value="6" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '6') selected @endif >6</option>
-                                                    <option value="7" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '7') selected @endif >7</option>
-                                                    <option value="8" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '8') selected @endif >8</option>
-                                                    <option value="9" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '9') selected @endif >9</option>
-                                                    <option value="10" @if (isset($planificacionfumigacion_done['control_enfermedades']) and $planificacionfumigacion_done['control_enfermedades'] == '10') selected @endif >10</option>
-                                                </select>
+                                                <input type="number" min="1" max="100" id="control_enfermedades" name="control_enfermedades" class="form-control" @if (isset($planificacionfumigacion_done['control_enfermedades'])) value="{{ $planificacionfumigacion_done['control_enfermedades'] }}" @endif onchange="updateBarchar()"/>
                                             </div>
                                         </div>
     
@@ -187,7 +160,13 @@
     
                                         <input type="hidden" name="planificacionfumigacion_id" value="{{ $planificacionfumigacion_done['id'] }}" >
                                         <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
-    
+                                        <input type="hidden" name="preparacionterreno_id" value="{{ $siembra['preparacionterreno']['id'] }}" >
+
+                                        <input type="hidden" name="simulador_problemas" id="simulador_problemas" value="">
+                                        <input type="hidden" name="simulador_altura" id="simulador_altura" value="">
+                                        <input type="hidden" name="simulador_humedad" id="simulador_humedad" value="">
+                                        <input type="hidden" name="simulador_rendimiento" id="simulador_rendimiento" value="">
+
                                         <div class="form-group">
                                             <div class="col-md-6 col-md-offset-4">
                                                 <button type="submit" class="btn btn-primary">
@@ -217,14 +196,6 @@
                                             font-weight: bold;
                                         }
                                     </style>
-                                    <table width="80%" border="1px grey" style="margin-left: auto;margin-right: auto;">
-                                        <tr>
-                                            <td class="preterreno" style="background: rgb(31, 119, 180);"><?=$problemas?></td>
-                                            <td class="preterreno" style="background: rgb(174, 199, 232);"><?=$altura?></td>
-                                            <td class="preterreno" style="background: rgb(255, 127, 14);"><?=$humedad?></td>
-                                            <td class="preterreno" style="background: rgb(255, 187, 120);"><?=$rendimiento?></td>
-                                        </tr>
-                                    </table>
                                     <div id="chart1" style="height: 350px; width: 500px">
                                         <svg></svg>
                                     </div>
@@ -258,18 +229,60 @@
                                         ];
 
                                         function updateBarchar(){
-                                            var ph = <?=$ph_aux?>;
-                                            var plaga_suelo = document.getElementById("preventivo_plagas").value /10;
-                                            var drenage = <?=$drenage_aux?>;
-                                            var maleza_preparacion = document.getElementById("control_malezas").value / 10;
-                                            var semilla = <?=$semilla_aux?>;
-                                            var fertilizacion = <?=$fertilizacion_aux?>;
-                                            var densidad_siembra = <?=$densidad_siembra_aux?>;
+                                            var ph_ini = <?=$ph?>;
+                                            var fertilizacion = <?=$fertilizacion?>;
+                                            var ph_aux = ((7 - ph_ini) * fertilizacion) + ph_ini
+                                            var ph = 10 - (Math.abs(ph_aux - 7) / 0.7);
 
-                                            historicalBarChart[0].values[0].value = (100/330) * (((100/10)*ph)+((50/10)*drenage)+((95/10)*plaga_suelo)+((60/10)*maleza_preparacion)+((25/10)*densidad_siembra));
-                                            historicalBarChart[0].values[1].value = (100/365) * (((90/10)*ph)+((60/10)*drenage)+((55/10)*fertilizacion)+((50/10)*maleza_preparacion)+((90/10)*semilla)+((20/10)*densidad_siembra));
-                                            historicalBarChart[0].values[2].value = (100/200) * (((95/10)*drenage)+((45/10)*maleza_preparacion)+((60/10)*densidad_siembra));
-                                            historicalBarChart[0].values[3].value = (100/495) * (((90/10)*ph)+((75/10)*drenage)+((65/10)*fertilizacion)+((50/10)*plaga_suelo)+((40/10)*maleza_preparacion)+((100/10)*semilla)+((75/10)*densidad_siembra));
+                                            var plaga_suelo = <?=$plaga_suelo?> / 10;
+                                            var drenage = <?=$drenage?> / 10;
+                                            var maleza_preparacion = <?=$maleza_preparacion?> / 10;
+                                            var preventivo_plagas = document.getElementById("preventivo_plagas").value / 10;
+                                            var control_malezas = document.getElementById("control_malezas").value / 10;
+                                            var control_enfermedades = document.getElementById("control_enfermedades").value / 10;
+
+                                            var acum_control_enfermedades = <?=$acum_control_enfermedades?> / 10;
+                                            var acum_control_malezas = <?=$acum_control_malezas?> / 10;
+                                            var acum_preventivo_plagas = <?=$acum_preventivo_plagas?> / 10;
+                                            var cont_fumigacions = <?=$cont_fumigacions?>;
+                                            var cont_fumigacions_total = <?=$planificacionfumigacions->count()?>;
+                                            var enfermedades = 7.5;
+
+                                            if(cont_fumigacions != cont_fumigacions_total){
+                                                plaga_suelo = (plaga_suelo + acum_preventivo_plagas + preventivo_plagas) / (cont_fumigacions + 2);
+                                                maleza_preparacion = (maleza_preparacion + acum_control_malezas + control_malezas) / (cont_fumigacions + 2);
+                                                enfermedades = (acum_control_enfermedades + control_enfermedades)/ (cont_fumigacions + 1);
+                                            }else{
+                                                plaga_suelo = (plaga_suelo + acum_preventivo_plagas) / (cont_fumigacions + 1);
+                                                maleza_preparacion = (maleza_preparacion + acum_control_malezas) / (cont_fumigacions + 1);
+                                                if(cont_fumigacions_total != 0)
+                                                {
+                                                    enfermedades = acum_control_enfermedades / cont_fumigacions;
+                                                }
+                                            }
+
+                                            var erocion = <?=$erocion?> / 10;
+                                            var semilla = <?=$semilla?> * 2.5;
+
+                                            var simulador_problemas = 100 - (100/475) * (((100/10)*ph)+((50/10)*drenage)+((100/10)*plaga_suelo)+((65/10)*maleza_preparacion)+((100/10)*enfermedades)+((60/10)*erocion));
+                                            var simulador_altura = (100/290) * (((90/10)*ph)+((60/10)*drenage)+((20/10)*enfermedades)+((30/10)*erocion)+((90/10)*semilla));
+                                            var simulador_humedad = (100/145) * (((100/10)*drenage)+((45/10)*maleza_preparacion));
+                                            var simulador_rendimiento = (100/535) * (((100/10)*ph)+((75/10)*drenage)+((100/10)*enfermedades)+((100/10)*plaga_suelo)+((30/10)*maleza_preparacion)+((50/10)*semilla)+((80/10)*erocion));
+                                            if (simulador_2 == 1){
+                                                simulador_problemas = simulador_problemas_2;
+                                                simulador_altura = simulador_altura_2;
+                                                simulador_humedad = simulador_humedad_2;
+                                                simulador_rendimiento = simulador_rendimiento_2;
+                                            }
+                                            document.getElementById("simulador_problemas").value = simulador_problemas;
+                                            document.getElementById("simulador_altura").value = simulador_altura;
+                                            document.getElementById("simulador_humedad").value = simulador_humedad;
+                                            document.getElementById("simulador_rendimiento").value = simulador_rendimiento;
+
+                                            historicalBarChart[0].values[0].value = simulador_problemas;
+                                            historicalBarChart[0].values[1].value = simulador_altura;
+                                            historicalBarChart[0].values[2].value = simulador_humedad;
+                                            historicalBarChart[0].values[3].value = simulador_rendimiento;
 
                                             chartBar.update();
                                         }

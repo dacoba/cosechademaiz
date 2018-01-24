@@ -13,4 +13,8 @@ class Planificacionfumigacion extends Model
     function fumigacion(){
         return $this->belongsTo('App\Fumigacion');
     }
+    function simulador()
+    {
+        return $this->hasOne('App\Simulador');
+    }
 }
