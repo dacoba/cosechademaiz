@@ -90,8 +90,10 @@ class CosechasController extends Controller
     protected function getSiembrasEstate()
     {
         if (Auth::user()->tipo == 'Administrador') {
-            return Siembra::with(['preparacionterreno'])->whereHas('preparacionterreno', function ($query) {
-                $query->where('estado', "Planificaciones");
+            return Siembra::with(['preparacionterreno'])->get();
+        }elseif (Auth::user()->tipo == 'Productor'){
+            return Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->whereHas('preparacionterreno.terreno', function ($query) {
+                $query->where('productor_id', Auth::user()->id);
             })->get();
         }else{
             return Siembra::with(['preparacionterreno'])->whereHas('preparacionterreno', function ($query) {
@@ -106,7 +108,7 @@ class CosechasController extends Controller
     }
     public function getreporteSiembra()
     {
-        $siembras = Siembra::all();
+        $siembras = $this->getSiembrasEstate();
         return view('reporte.siembras',['siembras' => $siembras]);
     }
     public function postreporteSiembra(Request $request)
