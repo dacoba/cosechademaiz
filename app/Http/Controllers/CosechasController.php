@@ -257,7 +257,8 @@ class CosechasController extends Controller
                 'comentario_cosecha' => $request['comentario_cosecha'],
                 'siembra_id' => $request['siembra_id'],
             ]);
-            Preparacionterreno::where('id', $request['preparacionterreno_id'])
+            $siembra = Siembra::with('preparacionterreno')->where('id', $request['siembra_id'])->first();
+            Preparacionterreno::where('id', $siembra['preparacionterreno']['id'])
                 ->update([
                     'estado' => "Cerrado"
                 ]);
