@@ -151,7 +151,7 @@ class CosechasController extends Controller
             $fumigacion_lista = Planificacionfumigacion::where('fumigacion_id', $fumigacion_id)->get();
             $planificacionfumigacionsend = Planificacionfumigacion::where([
                 ['fumigacion_id', '=', $fumigacion_id],
-                ['estado', '=', 'ejecutado'],
+                ['estado', '=', 'Registrado'],
             ])->count();
             $fumigacion = 100 / $planificacionfumigacions * $planificacionfumigacionsend;
             if(is_float($fumigacion))
@@ -209,7 +209,7 @@ class CosechasController extends Controller
             $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $fumigacion_id)->count();
             $planificacionfumigacionsend = Planificacionfumigacion::where([
                 ['fumigacion_id', '=', $fumigacion_id],
-                ['estado', '=', 'ejecutado'],
+                ['estado', '=', 'Registrado'],
             ])->count();
             if ($planificacionfumigacions != $planificacionfumigacionsend)
             {
