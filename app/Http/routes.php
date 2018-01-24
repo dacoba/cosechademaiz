@@ -41,6 +41,7 @@ Route::resource('/preparacionterrenos', 'PreparacionterrenosController', ['excep
 Route::get('/preparacionterrenos/{terrenos}/create', 'PreparacionterrenosController@create');
 
 Route::resource('/siembras', 'SiembrasController');
+
 Route::get('/planificacionriegos/siembras', 'PlanificacionriegosController@getSiembras');
 Route::post('/planificacionriegos/siembras', 'PlanificacionriegosController@postSiembras');
 Route::post('/planificacionriegos/addriego', 'PlanificacionriegosController@addRiego');

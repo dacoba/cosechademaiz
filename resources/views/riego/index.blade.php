@@ -81,10 +81,15 @@
                                                 </button>
                                             </form>
                                         </td>
-                                        <td style="text-align: center"><?=round($planificacionriego['simulador']['problemas'], 2)?> %</td>
-                                        <td style="text-align: center"><?=round($planificacionriego['simulador']['altura'], 2)?> %</td>
-                                        <td style="text-align: center"><?=round($planificacionriego['simulador']['humedad'], 2)?> %</td>
-                                        <td style="text-align: center"><?=round($planificacionriego['simulador']['rendimiento'], 2)?> %</td>
+                                        <?php $ls_numero_simulacion = $planificacionriego['simulador']['numero_simulacion'];?>
+                                        @foreach ($simulador as $simulacion)
+                                            @if ($simulacion['numero_simulacion'] == ($ls_numero_simulacion - 1))
+                                                <td style="text-align: center"><?=round($simulacion['problemas'], 2)?> %</td>
+                                                <td style="text-align: center"><?=round($simulacion['altura'], 2)?> %</td>
+                                                <td style="text-align: center"><?=round($simulacion['humedad'], 2)?> %</td>
+                                                <td style="text-align: center"><?=round($simulacion['rendimiento'], 2)?> %</td>
+                                            @endif
+                                        @endforeach
                                     </tr>
                                     <?php
                                         if($planificacionriego['estado'] == 'Registrado'){
@@ -99,7 +104,7 @@
                             </table>
                             @if (!isset($planificacionriego_done))
                             <center>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @if($planificacionriegos->count() >= 5) disabled @endif>
                                     <i class="fa fa-btn fa-user"></i> Añadir Planificacion
                                 </button>
                             </center>

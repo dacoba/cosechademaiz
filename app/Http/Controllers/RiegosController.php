@@ -81,7 +81,7 @@ class RiegosController extends Controller
      */
     public function store(Request $request)
     {
-        Planificacionriego::where('id', $request['planificacionriego_id'])
+        $planificacionriego = Planificacionriego::where('id', $request['planificacionriego_id'])
             ->update([
                 'metodos_riego' => $request['metodos_riego'],
                 'comportamiento_lluvia' => $request['comportamiento_lluvia'],
@@ -89,30 +89,31 @@ class RiegosController extends Controller
                 'comentario_riego' => $request['comentario_riego'],
                 'estado' => "Registrado",
             ]);
-        $existe_simulador = Simulador::where('planificacionriego_id', $request['planificacionriego_id'])->get()->count();
-        if($existe_simulador == 0){
+//        $existe_simulador = Simulador::where('planificacionriego_id', $request['planificacionriego_id'])->get()->count();
+//        if($existe_simulador == 0){
+        $planificacionriego2 = Planificacionriego::with(['simulador','riego','riego.siembra','riego.siembra.preparacionterreno'])->where('id', $request['planificacionriego_id'])->first();
             if (Auth::user()->tipo == 'Tecnico'){
-                $simulador = Simulador::where('preparacionterreno_id', $request['preparacionterreno_id'])->orderBy('numero_simulacion', 'desc')->limit(1)->get()[0];
-                $sig_num = $simulador['numero_simulacion'] + 1;
-                Simulador::create([
-                    'numero_simulacion' => $sig_num,
+//                $simulador = Simulador::where('preparacionterreno_id', $request['preparacionterreno_id'])->orderBy('numero_simulacion', 'desc')->limit(1)->get()[0];
+//                $sig_num = $simulador['numero_simulacion'] + 1;
+                Simulador::where('id', $planificacionriego2['simulador']['id'])
+                    ->update([
                     'problemas' => $request['simulador_problemas'],
                     'altura' => $request['simulador_altura'],
                     'humedad' => $request['simulador_humedad'],
                     'rendimiento' => $request['simulador_rendimiento'],
-                    'tipo' => "Riego",
-                    'planificacionriego_id' => $request['planificacionriego_id'],
-                    'preparacionterreno_id' => $request['preparacionterreno_id'],
                 ]);
             }
-        }
+//        }
+
+        $simulador = Simulador::orderBy('numero_simulacion', 'asc')->where('preparacionterreno_id', $planificacionriego2['riego']['siembra']['preparacionterreno']['id'])->get();
+
         $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];
         $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
         $siembras = Siembra::all();
 
         $mensaje = "Planificacion de riego registrado exitosamente";
         $planificacionriegos = Planificacionriego::where('riego_id', $planificacionriego_done['riego_id'])->get();
-        return view('riego.index',['siembras' => $siembras, 'riego_id' => $planificacionriego_done['riego_id'], 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'mensaje' => $mensaje, 'siembra' => $siembra]);
+        return view('riego.index',['siembras' => $siembras, 'riego_id' => $planificacionriego_done['riego_id'], 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'mensaje' => $mensaje, 'siembra' => $siembra, 'simulador' => $simulador]);
 
     }
 

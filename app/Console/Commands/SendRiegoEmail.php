@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Riego;
 use App\Planificacionriego;
 use App\Fumigacion;
+use App\Simulador;
 use App\Planificacionfumigacion;
 use Mail;
 use DateTime;
@@ -63,6 +64,17 @@ class SendRiegoEmail extends Command
                         ->from('noreply@toco.com', 'Toco')
                         ->subject('Alerta Planificacion de Riego!');
                 });
+
+//                Simulador::create([
+//                    'numero_simulacion' => 2,
+//                    'problemas' => $request['simulador_problemas'],
+//                    'altura' => $request['simulador_altura'],
+//                    'humedad' => $request['simulador_humedad'],
+//                    'rendimiento' => $request['simulador_rendimiento'],
+//                    'tipo' => "Siembra",
+//                    'siembra_id' => $siembra['id'],
+//                    'preparacionterreno_id' => $siembra['preparacionterreno_id'],
+//                ]);
                 $this->info('Send email riego, id='. $planificacionriego['id']);
             }
 
