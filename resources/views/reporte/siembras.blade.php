@@ -201,13 +201,15 @@
                                             <h2 class="h2-reports">Estimacion de Produccion de Maiz</h2>
                                         </center>
                                         <?php
-                                        $plantas_por_hectarea = (1/($siembra['distancia_surco'] * $siembra['distancia_planta']))*10000;
+                                        $plantas_por_hectarea = (10000/($siembra['distancia_surco'] * $siembra['distancia_surco']))*10000;
                                         $rendimiento_produccion = ceil($cosecha[0]['rendimiento_produccion']/25)-1;
                                         $produccion_maiz = $rendimiento_produccion * $plantas_por_hectarea * 0.375 * 0.001;
                                         ?>
+
                                         <center>
-                                            La estimacion de produccion de maiz en base al rendimiento de <?=$cosecha[0]['rendimiento_produccion']?> %
-                                            se estima la produccion de <?=round($produccion_maiz,1) * $siembra['preparacionterreno']['terreno']['area_parcela']?> Toneladas por hectarea aproximadamente.
+                                            <br>La estimacion de produccion de maiz en base al rendimiento de <?=$cosecha[0]['rendimiento_produccion']?> %
+                                            se estima la produccion de <?=round($produccion_maiz,1)?> Toneladas por hectarea aproximadamente, haciendo un total de:.
+                                            <br><br><h2 style="text-transform: lowercase"><?=number_format(round($produccion_maiz,1) * $siembra['preparacionterreno']['terreno']['area_parcela'], 0, '.', ','); ?> Toneladas.</h2>
                                         </center>
                                     </div>
                                 @endif
