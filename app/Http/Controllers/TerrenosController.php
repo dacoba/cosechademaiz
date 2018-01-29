@@ -6,6 +6,7 @@ use App\Simulador;
 use Illuminate\Http\Request;
 use App\User;
 use App\Terreno;
+use App\Siembra;
 use App\Preparacionterreno;
 use Validator;
 use Illuminate\Support\Facades\Auth;
@@ -98,9 +99,10 @@ class TerrenosController extends Controller
     {
         $terreno = Terreno::with('productor')->where('id', $id)->first();
         if (Auth::user()->tipo == 'Productor') {
-            $preterreno = Preparacionterreno::with('tecnico', 'siembra')->where('terreno_id', $terreno['id'])->orderBy('id', 'desc')->first();
+            $preterreno = Preparacionterreno::with('tecnico')->where('terreno_id', $terreno['id'])->where('estado','!=', 'Cerrado')->orderBy('id', 'desc')->first();
+            $siembra = Siembra::where('preparacionterreno_id', $preterreno['id'])->first();
             $simuladors = Simulador::where('preparacionterreno_id', $preterreno['id'])->get();
-            return view("terreno.terrenoshow",['terreno' => $terreno, 'preterreno' => $preterreno, 'simuladors' => $simuladors]);
+            return view("terreno.terrenoshow",['terreno' => $terreno, 'preterreno' => $preterreno, 'simuladors' => $simuladors, 'siembra' => $siembra]);
         }
         return view("terreno.terrenoshow",['terreno' => $terreno]);
     }
@@ -113,7 +115,8 @@ class TerrenosController extends Controller
      */
     public function edit($id)
     {
-        //
+        $terreno = Terreno::find($id);
+        return view("terreno.terrenoedit",['terreno' => $terreno]);
     }
 
     /**
@@ -125,7 +128,14 @@ class TerrenosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Terreno::where('id', $id)
+            ->update([
+                'tipo_suelo' => $request['tipo_suelo'],
+                'tipo_relieve' => $request['tipo_relieve'],
+            ]);
+
+        $terrenos = $this->getTerrenos();
+        return view('terreno.terrenolista',['terrenos' => $terrenos]);
     }
 
     /**
@@ -136,6 +146,20 @@ class TerrenosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            Terreno::destroy($id);
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+
+            if($e->getCode() == "23000"){ //23000 is sql code for integrity constraint violation
+                $terrenos = $this->getTerrenos();
+                $error = "No se puede eliminar este terreno!";
+                return view('terreno.terrenolista',['terrenos' => $terrenos, 'error' => $error]);
+            }
+        }
+        $terrenos = $this->getTerrenos();
+        $success = "Terreno eliminado exitosamente!";
+        return view('terreno.terrenolista',['terrenos' => $terrenos, 'success' => $success]);
+
     }
 }

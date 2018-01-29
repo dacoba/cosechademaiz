@@ -42,7 +42,7 @@ class PreparacionterrenosController extends Controller
         if (Auth::user()->tipo == 'Tecnico') {
             return Preparacionterreno::with(['terreno', 'terreno.productor'])->where('estado', "Preparacion")->where('tecnico_id', Auth::user()->id)->get();
         }elseif (Auth::user()->tipo == 'Administrador') {
-            return Preparacionterreno::with(['terreno', 'terreno.productor'])->where('estado', '!=', "Cerrado")->get();
+            return Preparacionterreno::with(['terreno', 'terreno.productor'])->where('estado', "!=", "Cerrado")->get();
         }else{
             return Terreno::where('estado', "Cerrado")->get();
         }

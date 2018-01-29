@@ -62,7 +62,7 @@
                             <label for="estado" class="col-md-4 control-label">Estado</label>
 
                             <div class="col-md-6 show-user">
-                                {{$preterreno['estado']}}
+                                {{$preterreno['estado'] or "Cerrado"}}
                             </div>
                         </div>
                         @if ( Auth::user()->tipo == 'Productor')
@@ -90,6 +90,30 @@
                                     <tr>
                                         <td><b>Maleza Preparacion</b></td>
                                         <td>{{$preterreno['maleza_preparacion']}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            @endif
+                            @if (isset($siembra))
+                                <center><h2>Siembra</h2></center>
+
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <td><b>Semilla</b></td>
+                                        <td>{{$siembra['semilla']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Fertilizacion</b></td>
+                                        <td>{{$siembra['fertilizacion']}} %</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Distancia surco</b></td>
+                                        <td>{{$siembra['distancia_surco']}} %</td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Distancia planta</b></td>
+                                        <td>{{$siembra['distancia_planta']}}</td>
                                     </tr>
                                     </tbody>
                                 </table>

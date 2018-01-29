@@ -13,7 +13,8 @@
                 <div class="panel-heading">Iniciar Sesion</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
-                        {{ csrf_field() }}
+{{--                        {{ csrf_field() }}--}}
+                        {!! csrf_field() !!}
 
                         <div class="form-group{{ $errors->has('login') ? ' has-error' : '' }}">
                             <label for="login" class="col-md-4 control-label">Login/CI</label>
@@ -42,7 +43,7 @@
                                 @endif
                             </div>
                         </div>
-
+                        {{--<input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
                         {{--<div class="form-group">--}}
                             {{--<div class="col-md-6 col-md-offset-4">--}}
                                 {{--<div class="checkbox">--}}

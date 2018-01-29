@@ -13,8 +13,8 @@
         <div class="col-md-10 col-md-offset-1">
             <div style="text-align: right;" class="hidden-sm-up">
 
-                <a href="{{ url('terrenos/create')}}" class="btn btn-primary hidden-xs"><i class="fa fa-plus fa-padding-right"></i>Nuevo Terreno</a>
-                <a href="{{ url('terrenos/create')}}" class="btn btn-primary hidden-sm hidden-md hidden-lg"><i class="fa fa-plus"></i></a>
+                <a href="{{ url('terrenos/create')}}" class="btn btn-primary hidden-xs" @if ( Auth::user()->tipo != 'Administrador') disabled @endif ><i class="fa fa-plus fa-padding-right"></i>Nuevo Terreno</a>
+                <a href="{{ url('terrenos/create')}}" class="btn btn-primary hidden-sm hidden-md hidden-lg" @if ( Auth::user()->tipo != 'Administrador') disabled @endif ><i class="fa fa-plus"></i></a>
                 <div class="input-group search-table">
                     <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Filtrar Terreno...">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
@@ -28,6 +28,16 @@
                     </div>
                 @endif
                 <div class="panel-body">
+                    @if (isset($error))
+                        <div class="alert alert-danger">
+                            <strong>¡Error! </strong>{{ $error }}
+                        </div>
+                    @endif
+                    @if (isset($success))
+                        <div class="alert alert-success">
+                            <strong>¡Exitoso! </strong>{{ $success }}
+                        </div>
+                    @endif
                     <table class="table table-bordered" id="myTable">
                         <thead>
                         <tr style="background-color: #f1f1f1;">
@@ -51,6 +61,13 @@
                                     <a href="{{ url('terrenos')}}/{{$terreno['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
                                     @if ( Auth::user()->tipo == 'Administrador')
                                         <a href="{{ url('terrenos')}}/{{$terreno['id']}}/edit" class="btn btn-warning btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                        <form action="{{ url('terrenos')}}/{{$terreno['id']}}" method="post">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <input type="hidden" name="_method" value="DELETE" >
+                                            <button class="btn btn-danger btn-xs" type="submit">
+                                                <i class="fa fa-btn fa-trash-o"></i>
+                                            </button>
+                                        </form>
                                     @endif
                                 </td>
                             </tr>

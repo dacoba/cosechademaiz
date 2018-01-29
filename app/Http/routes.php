@@ -25,6 +25,7 @@ Route::get('/users/tecnico/{users}', 'UsersController@showTecnico');
 Route::post('/users/tecnico', 'UsersController@storeTecnico');
 Route::put('/users/tecnico/{users}', 'UsersController@updateTecnico');
 Route::get('/users/tecnico/{users}/edit', 'UsersController@editTecnico');
+Route::delete('/users/tecnico/{users}', 'UsersController@destroyTecnico');
 
 Route::get('/users/productor', 'UsersController@indexProductor');
 Route::get('/users/productor/create', 'UsersController@createProductor');
@@ -32,6 +33,7 @@ Route::get('/users/productor/{users}', 'UsersController@showProductor');
 Route::post('/users/productor', 'UsersController@storeProductor');
 Route::put('/users/productor/{users}', 'UsersController@updateProductor');
 Route::get('/users/productor/{users}/edit', 'UsersController@editProductor');
+Route::delete('/users/productor/{users}', 'UsersController@destroyProductor');
 
 Route::resource('/users', 'UsersController');
 Route::resource('/terrenos', 'TerrenosController');

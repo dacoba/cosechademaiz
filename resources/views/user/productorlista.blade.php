@@ -26,6 +26,16 @@
                     </div>
                 @endif
                 <div class="panel-body">
+                    @if (isset($error))
+                        <div class="alert alert-danger">
+                            <strong>¡Error! </strong>{{ $error }}
+                        </div>
+                    @endif
+                    @if (isset($success))
+                        <div class="alert alert-success">
+                            <strong>¡Exitoso! </strong>{{ $success }}
+                        </div>
+                    @endif
                     <table class="table table-bordered" id="myTable">
                         <thead>
                         <tr style="background-color: #f1f1f1;">
@@ -50,6 +60,13 @@
                                 <td style="text-align: center">
                                     <a href="{{ url('users/productor')}}/{{$productor['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
                                     <a href="{{ url('users/productor')}}/{{$productor['id']}}/edit" class="btn btn-warning btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                    <form action="{{ url('users/productor')}}/{{$productor['id']}}" method="post">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="_method" value="DELETE" >
+                                        <button class="btn btn-danger btn-xs" type="submit">
+                                            <i class="fa fa-btn fa-trash-o"></i>
+                                        </button>
+                                    </form>
                                 </td>
                                 {{--<td style="text-align: center">--}}
                                     {{--<form class="form-horizontal" role="form" method="POST" action="{{ url('/fumigacions/create') }}">--}}

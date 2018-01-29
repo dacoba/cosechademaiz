@@ -11,6 +11,7 @@ use App\Fumigacion;
 use App\Planificacionfumigacion;
 use Illuminate\Support\Facades\Auth;
 use App\Preparacionterreno;
+use App\Terreno;
 
 use App\Http\Requests;
 
@@ -97,7 +98,7 @@ class CosechasController extends Controller
             })->get();
         }else{
             return Siembra::with(['preparacionterreno'])->whereHas('preparacionterreno', function ($query) {
-                $query->where('estado', "Planificaciones")->where('tecnico_id', Auth::user()->id);
+                $query->where('estado', "Cerrado")->where('tecnico_id', Auth::user()->id);
             })->get();
         }
     }
@@ -259,8 +260,12 @@ class CosechasController extends Controller
                 'comentario_cosecha' => $request['comentario_cosecha'],
                 'siembra_id' => $request['siembra_id'],
             ]);
-            $siembra = Siembra::with('preparacionterreno')->where('id', $request['siembra_id'])->first();
+            $siembra = Siembra::with('preparacionterreno', 'preparacionterreno.terreno')->where('id', $request['siembra_id'])->first();
             Preparacionterreno::where('id', $siembra['preparacionterreno']['id'])
+                ->update([
+                    'estado' => "Cerrado"
+                ]);
+            Terreno::where('id', $siembra['preparacionterreno']['terreno']['id'])
                 ->update([
                     'estado' => "Cerrado"
                 ]);

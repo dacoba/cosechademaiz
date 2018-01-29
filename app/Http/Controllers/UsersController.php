@@ -220,4 +220,39 @@ class UsersController extends Controller
     {
         //
     }
+
+    public function destroyProductor($id)
+    {
+        try {
+            User::destroy($id);
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+
+            if($e->getCode() == "23000"){ //23000 is sql code for integrity constraint violation
+                $productors = User::where('tipo', "Productor")->orderBy('apellido', 'asc')->get();
+                $error = "No se puede eliminar este productor!";
+                return view("user.productorlista",['productors' => $productors, 'error' => $error]);
+            }
+        }
+        $productors = User::where('tipo', "Productor")->orderBy('apellido', 'asc')->get();
+        $success = "Productor eliminado exitosamente!";
+        return view("user.productorlista",['productors' => $productors, 'success' => $success]);
+    }
+    public function destroyTecnico($id)
+    {
+        try {
+            User::destroy($id);
+        }
+        catch (\Illuminate\Database\QueryException $e) {
+
+            if($e->getCode() == "23000"){ //23000 is sql code for integrity constraint violation
+                $tecnicos = User::where('tipo', "Tecnico")->orderBy('apellido', 'asc')->get();
+                $error = "No se puede eliminar este tecnico!";
+                return view("user.tecnicolista",['tecnicos' => $tecnicos, 'error' => $error]);
+            }
+        }
+        $tecnicos = User::where('tipo', "Tecnico")->orderBy('apellido', 'asc')->get();
+        $success = "Tecnico eliminado exitosamente!";
+        return view("user.tecnicolista",['tecnicos' => $tecnicos, 'success' => $success]);
+    }
 }
