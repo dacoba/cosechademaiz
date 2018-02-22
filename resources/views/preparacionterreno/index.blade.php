@@ -88,7 +88,7 @@
                         <div class="col-lg-6 col-md-5">
                     @endif
                     <center>
-                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/preparacionterrenos') }}">
+                        <form class="form-horizontal" role="form" method="POST" id="form_preparacion" action="{{ url('/preparacionterrenos') }}">
                             {{ csrf_field() }}
                             @if (Auth::user()->tipo == 'Administrador')
                                 <div class="form-group{{ $errors->has('tecnico_id') ? ' has-error' : '' }}">
@@ -114,7 +114,7 @@
                                     <div class="form-group{{ $errors->has('ph') ? ' has-error' : '' }}">
                                         <label for="ph" class="col-md-4 control-label">PH <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de las caracteristicas del suelo, optima para la prduccion del maiz de 6 a 7 de pPH."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" id="ph" name="ph" step="0.01" min="4.00" max="10.00" class="form-control" value="{{ $ph or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            <input type="number" id="ph" name="ph" step="0.01" min="4.00" max="10.00" class="form-control" value="{{ $preterreno['ph'] or '4.00' }}" style="text-align:right" onchange="updateBarchar()"/>
                                             @if ($errors->has('ph'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('ph') }}</strong>
@@ -126,7 +126,7 @@
                                     <div class="form-group{{ $errors->has('plaga_suelo') ? ' has-error' : '' }}">
                                         <label for="plaga_suelo" class="col-md-4 control-label">Plaga Suelo (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencia de plagas en el terreno, evaluada en porcentage segun la existencia de plagas (Gusano Cogollero, Gusano Tierrero, Chicharrita, Gusano de la Mazorca)."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="50" step="0.01" id="plaga_suelo" name="plaga_suelo" class="form-control" value="{{ $plaga_suelo or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="50" step="0.01" id="plaga_suelo" name="plaga_suelo" class="form-control" value="{{ $preterreno['plaga_suelo'] or '1' }}" style="text-align:right" onchange="updateBarchar()"/>
                                             @if ($errors->has('plaga_suelo'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('plaga_suelo') }}</strong>
@@ -138,7 +138,7 @@
                                     <div class="form-group{{ $errors->has('drenage') ? ' has-error' : '' }}">
                                         <label for="drenage" class="col-md-4 control-label">Drenage (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la permeabilidad (El maiz no soporta el encharcamiento y rapida de secacion)."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="100" step="0.01" id="drenage" name="drenage" class="form-control" value="{{ $drenage or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="100" step="0.01" id="drenage" name="drenage" class="form-control" value="{{ $preterreno['drenage'] or '1' }}" style="text-align:right" onchange="updateBarchar()"/>
                                             @if ($errors->has('drenage'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('drenage') }}</strong>
@@ -150,7 +150,7 @@
                                     <div class="form-group{{ $errors->has('erocion') ? ' has-error' : '' }}">
                                         <label for="erocion" class="col-md-4 control-label">Erocion (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Degradacion del suelo (Reduce la fertilidad por que proboca la perdida de minerales y materia organica), evaluacion 10 optima para la produccion, 1 muy mala (Elaborar estrategias de recuperacion del terreno)"></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="100" step="0.01" id="erocion" name="erocion" class="form-control" value="{{ $erocion or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="100" step="0.01" id="erocion" name="erocion" class="form-control" value="{{ $preterreno['erocion'] or '1' }}" style="text-align:right" onchange="updateBarchar()"/>
                                             @if ($errors->has('erocion'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('erocion') }}</strong>
@@ -162,7 +162,7 @@
                                     <div class="form-group{{ $errors->has('maleza_preparacion') ? ' has-error' : '' }}">
                                         <label for="maleza_preparacion" class="col-md-4 control-label">Maleza Preparacion (%) <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencias de malezas malignaas en el terreno, evaluado en porcentage segun la existencia de maleza."></i></label>
                                         <div class="col-md-6">
-                                            <input type="number" min="1" max="75" step="0.01" id="maleza_preparacion" name="maleza_preparacion" class="form-control" value="{{ $maleza_preparacion or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                            <input type="number" min="1" max="75" step="0.01" id="maleza_preparacion" name="maleza_preparacion" class="form-control" value="{{ $preterreno['maleza_preparacion'] or '1' }}" style="text-align:right" onchange="updateBarchar()"/>
                                             @if ($errors->has('maleza_preparacion'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('maleza_preparacion') }}</strong>
@@ -175,7 +175,7 @@
                                         <label for="comentario_preparacion" class="col-md-4 control-label">Observaciones</label>
 
                                         <div class="col-md-6">
-                                            <input id="comentario_preparacion" type="text" class="form-control" name="comentario_preparacion" value="{{ $maleza_preparacion or old('comentario_preparacion') }}">
+                                            <input id="comentario_preparacion" type="text" class="form-control" name="comentario_preparacion" value="{{ $preterreno['comentario_preparacion'] or old('comentario_preparacion') }}">
 
                                             @if ($errors->has('comentario_preparacion'))
                                                 <span class="help-block">
@@ -189,12 +189,13 @@
                                     <input type="hidden" name="simulador_altura" id="simulador_altura" value="">
                                     <input type="hidden" name="simulador_humedad" id="simulador_humedad" value="">
                                     <input type="hidden" name="simulador_rendimiento" id="simulador_rendimiento" value="">
+                                    <input type="hidden" name="confirm" id="confirm" value="false">
 
                                 @endif
                             @endif
                             <input type="hidden" name="terreno_id" value="{{ $terreno_id }}" >
                             <div class="form-group">
-                                <div class="col-md-6 col-md-offset-4">
+                                <div class="col-md-10" style="text-align:right">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fa fa-btn fa-user"></i>
                                         @if ( Auth::user()->tipo == 'Administrador')
@@ -204,12 +205,77 @@
                                                 Asignar Tecnico
                                             @endif
                                         @else
-                                            Registrar Datos
+                                            Guardar
                                         @endif
                                     </button>
+                                    @if ( Auth::user()->tipo == 'Tecnico')
+                                        <input type="button" name="btn" value="Guardar y Confirmar" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-success" />
+                                    @endif
                                 </div>
                             </div>
                         </form>
+                        <style>
+                            #confirm_data tr td{
+                                text-align:right;
+                            }
+                        </style>
+                        <div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        Confirmar datos
+                                    </div>
+                                    <div class="modal-body">
+                                        Los siguientes datos seran almacenados para la siguiente etapa.
+                                        <table class="table" id="confirm_data">
+                                            <tr>
+                                                <th>Ph</th>
+                                                <td id="m_ph"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Plaga Suelo</th>
+                                                <td id="m_plaga_suelo"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Drenage</th>
+                                                <td id="m_drenage"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Erocion</th>
+                                                <td id="m_erocion"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Maleza Preparacion</th>
+                                                <td id="m_maleza_preparacion"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Observaciones</th>
+                                                <td id="m_comentario_preparacion"></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                        <a href="#" id="submit" class="btn btn-success success">Confirmar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $('#submitBtn').click(function() {
+                                $('#m_ph').text($('#ph').val());
+                                $('#m_plaga_suelo').text($('#plaga_suelo').val() + " %");
+                                $('#m_drenage').text($('#drenage').val() + " %");
+                                $('#m_erocion').text($('#erocion').val() + " %");
+                                $('#m_maleza_preparacion').text($('#maleza_preparacion').val() + " %");
+                                $('#m_comentario_preparacion').text($('#comentario_preparacion').val());
+                            });
+
+                            $('#submit').click(function(){
+                                $('#confirm').val(true);
+                                $('#form_preparacion').submit();
+                            });
+                        </script>
                     </center>
                     @if ( Auth::user()->tipo == 'Tecnico')
                         </div>
@@ -314,7 +380,7 @@
                                     historicalBarChart[0].values[3].value = simulador_rendimiento;
 
                                     chartBar.update();
-                                }r
+                                }
                             </script>
                         </div>
                     </div>
