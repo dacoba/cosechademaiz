@@ -64,7 +64,17 @@ class SiembrasController extends Controller
      */
     public function store(Request $request)
     {
-        if(isset($request['preparacionterreno_id'])) {
+        if(isset($request['siembra_id'])) {
+            $siembra = Siembra::where('id', $request['siembra_id'])
+                ->update([
+                    'semilla' => $request['semilla'],
+                    'fertilizacion' => $request['fertilizacion'],
+                    'distancia_surco' => $request['distancia_surco'],
+                    'distancia_planta' => $request['distancia_planta'],
+                    'comentario_siembra' => $request['comentario_siembra'],
+                ]);
+            $siembra_ID = $request['siembra_id'];
+        }else{
             $validator = $this->validator($request->all());
             if ($validator->fails()) {
                 $this->throwValidationException(
@@ -79,6 +89,10 @@ class SiembrasController extends Controller
                 'comentario_siembra' => $request['comentario_siembra'],
                 'preparacionterreno_id' => $request['preparacionterreno_id'],
             ]);
+            $siembra_ID = $siembra['id'];
+
+        }
+        if (isset($request['confirm']) && $request['confirm'] == "true") {
             Preparacionterreno::where('id', $request['preparacionterreno_id'])
                 ->update([
                     'estado' => "Planificaciones",
@@ -91,19 +105,10 @@ class SiembrasController extends Controller
                     'humedad' => $request['simulador_humedad'],
                     'rendimiento' => $request['simulador_rendimiento'],
                     'tipo' => "Siembra",
-                    'siembra_id' => $siembra['id'],
-                    'preparacionterreno_id' => $siembra['preparacionterreno_id'],
+                    'siembra_id' => $siembra_ID,
+                    'preparacionterreno_id' => $request['preparacionterreno_id'],
                 ]);
             }
-        }else{
-            Siembra::where('id', $request['siembra_id'])
-                ->update([
-                    'semilla' => $request['semilla'],
-                    'fertilizacion' => $request['fertilizacion'],
-                    'distancia_surco' => $request['distancia_surco'],
-                    'distancia_planta' => $request['distancia_planta'],
-                    'comentario_siembra' => $request['comentario_siembra'],
-                ]);
         }
         $mensaje = "Siembra registrada exitosamente";
         $preterrenos = $this->getTerrenos();
@@ -131,14 +136,13 @@ class SiembrasController extends Controller
     {
         $terrenos = $this->getTerrenos();
         $tecnicos = User::where('tipo', "Tecnico")->get();
+        $preterreno = Preparacionterreno::with(['tecnico', 'terreno', 'terreno.productor'])->where('id', $id)->first();
+        $simulador = Simulador::where('preparacionterreno_id', $id)->where('tipo', "Preparacion")->first();
         $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.tecnico', 'preparacionterreno.terreno', 'preparacionterreno.terreno.productor'])->where('preparacionterreno_id', $id)->get();
         if(count($siembra) <= 0){
-            $preterreno = Preparacionterreno::with(['tecnico', 'terreno', 'terreno.productor'])->where('id', $id)->get()[0];
-            $simulador = Simulador::where('preparacionterreno_id', $id)->where('tipo', "Preparacion")->get()[0];
             return view('siembra.index',['terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos, 'simulador' => $simulador]);
-
         }
-        return view('siembra.index',['terrenos' => $terrenos, 'siembra' => $siembra[0], 'tecnicos' => $tecnicos]);
+        return view('siembra.index',['terrenos' => $terrenos, 'preterreno' => $preterreno, 'tecnicos' => $tecnicos, 'simulador' => $simulador, 'siembra' => $siembra[0]]);
     }
 
     /**
