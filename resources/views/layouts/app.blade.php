@@ -61,38 +61,40 @@
                                 </ul>
                             </li>
                         @endif
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Terreno</a>
-                        <ul class="dropdown-menu">
-                            @if ( Auth::user()->tipo == 'Administrador')
-                                <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
-                                <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
-                            @elseif ( Auth::user()->tipo == 'Productor')
-                                <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
-                            @elseif ( Auth::user()->tipo == 'Tecnico')
-                                <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
-                            @endif
-                            <li><a href="{{ url('/simuladors') }}">Simulador</a></li>
-                        </ul>
-                    </li>
-                    @if ( Auth::user()->tipo != 'Productor')
-                        <li><a href="{{ url('/siembras') }}">Siembra</a></li>
-                    @endif
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Planificaciones</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ url('/riegos') }}">Planificacion de Riego</a></li>
-                            <li><a href="{{ url('/fumigacions') }}">Planificacion de Fumigacion</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="{{ url('/cosechas') }}">Cosecha</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reportes</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="{{ url('/reportes/siembras') }}">Reporte de Siembras</a></li>
-                            <li><a href="{{ url('/simuladors2') }}">Reporte General</a></li>
-                        </ul>
-                    </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Terreno</a>
+                            <ul class="dropdown-menu">
+                                @if ( Auth::user()->tipo == 'Administrador')
+                                    <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
+                                    <li><a href="{{ url('/preparacionterrenos') }}">Asignacion Tecnico-Terreno</a></li>
+                                @elseif ( Auth::user()->tipo == 'Productor')
+                                    <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
+                                @elseif ( Auth::user()->tipo == 'Tecnico')
+                                    <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
+                                @endif
+                                {{--<li><a href="{{ url('/simuladors') }}">Simulador</a></li>--}}
+                            </ul>
+                        </li>
+                        @if ( Auth::user()->tipo == 'Tecnico')
+                            <li><a href="{{ url('/siembras') }}">Siembra</a></li>
+                        @endif
+                        @if ( Auth::user()->tipo != 'Administrador')
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Planificaciones</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ url('/riegos') }}">Planificacion de Riego</a></li>
+                                    <li><a href="{{ url('/fumigacions') }}">Planificacion de Fumigacion</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{{ url('/cosechas') }}">Cosecha</a></li>
+                        @endif
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reportes</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url('/reportes/siembras') }}">Reporte de Siembras</a></li>
+                                <li><a href="{{ url('/simuladors2') }}">Reporte General</a></li>
+                            </ul>
+                        </li>
                     @endif
                     @if (Auth::guest())
                         <li><a href="{{ url('/login') }}">Iniciar Sesion</a></li>
