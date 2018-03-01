@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Fumigacion;
+use App\Planificacionfumigacion;
 use Illuminate\Http\Request;
 use App\Siembra;
 use App\Riego;
@@ -49,6 +51,9 @@ class RiegosController extends Controller
     {
         //
     }
+
+
+
     public function postCreate(Request $request)
     {
         $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
@@ -66,7 +71,10 @@ class RiegosController extends Controller
             $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.terreno', 'riego.siembra.preparacionterreno.tecnico'])->where('riego_id', $riego_id)->get();
             if(isset($request['planificacionriego_id'])){
                 $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
-                return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'planificacionriego_done' => $planificacionriego_done, 'siembra' => $siembra, 'simulador' => $simulador]);
+                echo $planificacionriego_done['fecha_planificacion'];
+                $not_confirm = Planificacionriego::where('fecha_planificacion', '<', $planificacionriego_done['fecha_planificacion'])->where('riego_id', $riego_id)->whereIn('estado', array('Ejecutado', 'Planificado'))->count();
+//                $not_confirm = $this->get_confirm($request['siembra_id'], $planificacionriego_done['fecha_planificacion']);
+                return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'planificacionriego_done' => $planificacionriego_done, 'siembra' => $siembra, 'simulador' => $simulador, 'not_confirm' => $not_confirm]);
             }
             return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'siembra' => $siembra, 'simulador' => $simulador]);
         };
@@ -81,20 +89,21 @@ class RiegosController extends Controller
      */
     public function store(Request $request)
     {
-        $planificacionriego = Planificacionriego::where('id', $request['planificacionriego_id'])
+        Planificacionriego::where('id', $request['planificacionriego_id'])
             ->update([
                 'metodos_riego' => $request['metodos_riego'],
                 'comportamiento_lluvia' => $request['comportamiento_lluvia'],
                 'problemas_drenaje' => $request['problemas_drenaje'],
                 'comentario_riego' => $request['comentario_riego'],
-                'estado' => "Registrado",
             ]);
-//        $existe_simulador = Simulador::where('planificacionriego_id', $request['planificacionriego_id'])->get()->count();
-//        if($existe_simulador == 0){
+        if (isset($request['confirm']) && $request['confirm'] == "true") {
+            Planificacionriego::where('id', $request['planificacionriego_id'])
+                ->update([
+                    'estado' => "Registrado",
+                ]);
+        }
         $planificacionriego2 = Planificacionriego::with(['simulador','riego','riego.siembra','riego.siembra.preparacionterreno'])->where('id', $request['planificacionriego_id'])->first();
             if (Auth::user()->tipo == 'Tecnico'){
-//                $simulador = Simulador::where('preparacionterreno_id', $request['preparacionterreno_id'])->orderBy('numero_simulacion', 'desc')->limit(1)->get()[0];
-//                $sig_num = $simulador['numero_simulacion'] + 1;
                 Simulador::where('id', $planificacionriego2['simulador']['id'])
                     ->update([
                     'problemas' => $request['simulador_problemas'],
@@ -103,7 +112,6 @@ class RiegosController extends Controller
                     'rendimiento' => $request['simulador_rendimiento'],
                 ]);
             }
-//        }
 
         $simulador = Simulador::orderBy('numero_simulacion', 'asc')->where('preparacionterreno_id', $planificacionriego2['riego']['siembra']['preparacionterreno']['id'])->get();
 
