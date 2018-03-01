@@ -71,7 +71,7 @@ class RiegosController extends Controller
             $planificacionriegos = Planificacionriego::with(['riego', 'riego.siembra', 'riego.siembra.preparacionterreno', 'riego.siembra.preparacionterreno.terreno', 'riego.siembra.preparacionterreno.tecnico'])->where('riego_id', $riego_id)->get();
             if(isset($request['planificacionriego_id'])){
                 $planificacionriego_done = Planificacionriego::find($request['planificacionriego_id']);
-                echo $planificacionriego_done['fecha_planificacion'];
+//                echo $planificacionriego_done['fecha_planificacion'];
                 $not_confirm = Planificacionriego::where('fecha_planificacion', '<', $planificacionriego_done['fecha_planificacion'])->where('riego_id', $riego_id)->whereIn('estado', array('Ejecutado', 'Planificado'))->count();
 //                $not_confirm = $this->get_confirm($request['siembra_id'], $planificacionriego_done['fecha_planificacion']);
                 return view('riego.index',['siembras' => $siembras, 'riego_id' => $riego_id, 'planificacionriegos' => $planificacionriegos, 'siembra_id' => $request['siembra_id'], 'riego' => $riego, 'planificacionriego_done' => $planificacionriego_done, 'siembra' => $siembra, 'simulador' => $simulador, 'not_confirm' => $not_confirm]);
