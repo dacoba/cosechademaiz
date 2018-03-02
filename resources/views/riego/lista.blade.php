@@ -45,21 +45,23 @@
                         </thead>
                         <tbody>
                         @foreach ($preterrenos as $preterreno)
-                            <tr>
-                                <td style="text-align: right">{{$preterreno['terreno']['area_parcela']}} Hec.</td>
-                                <td>{{$preterreno['terreno']['productor']['nombre']}} {{$preterreno['terreno']['productor']['apellido']}}</td>
-                                <td style="text-align: center">{{$preterreno['estado']}}</td>
-                                <td style="text-align: center">
-                                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/riegos/create') }}">
-                                        {{ csrf_field() }}
-                                        <input type="hidden" name="siembra_id" value="{{$preterreno['siembra']['id']}}" >
-                                        <button type="submit" class="btn btn-primary btn-xs">
-                                            <i class="fa fa-btn fa-pencil"></i>
-                                        </button>
-                                    </form>
-{{--                                    <a href="{{ url('siembras')}}/{{$preterreno['id']}}/edit" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>--}}
-                                </td>
-                            </tr>
+                            @if(!isset($preterreno['siembra']['riego']['estado']) or ($preterreno['siembra']['riego']['estado'] == "Abierto"))
+                                <tr>
+                                    <td style="text-align: right">{{$preterreno['terreno']['area_parcela']}} Hec.</td>
+                                    <td>{{$preterreno['terreno']['productor']['nombre']}} {{$preterreno['terreno']['productor']['apellido']}}</td>
+                                    <td style="text-align: center">{{$preterreno['estado']}}</td>
+                                    <td style="text-align: center">
+                                        <form class="form-horizontal" role="form" method="POST" action="{{ url('/riegos/create') }}">
+                                            {{ csrf_field() }}
+                                            <input type="hidden" name="siembra_id" value="{{$preterreno['siembra']['id']}}" >
+                                            <button type="submit" class="btn btn-primary btn-xs">
+                                                <i class="fa fa-btn fa-pencil"></i>
+                                            </button>
+                                        </form>
+    {{--                                    <a href="{{ url('siembras')}}/{{$preterreno['id']}}/edit" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>--}}
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                         @if ( Auth::user()->tipo == 'Administrador' and isset($terrenos))
                             @foreach ($terrenos as $terreno)
