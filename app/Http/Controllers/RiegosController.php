@@ -29,7 +29,12 @@ class RiegosController extends Controller
     protected function getTerrenos()
     {
         if (Auth::user()->tipo == 'Tecnico') {
-            return Preparacionterreno::with(['siembra', 'terreno', 'terreno.productor'])->where('estado', "Planificaciones")->where('tecnico_id', Auth::user()->id)->get();
+            return Preparacionterreno::with(['siembra', 'siembra.riego', 'terreno', 'terreno.productor'])
+                ->where('estado', "Planificaciones")
+                ->where('tecnico_id', Auth::user()->id)
+                ->where('siembra.riego', function($query){
+                    $query->where('estado', "Abierto");
+                })->get();
         }elseif (Auth::user()->tipo == 'Administrador') {
             return Preparacionterreno::with(['siembra', 'terreno', 'terreno.productor'])->where('estado', "Planificaciones")->get();
         }else{
