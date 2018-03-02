@@ -162,7 +162,29 @@ class FumigacionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $conut_fumigacion = Planificacionfumigacion::where('fumigacion_id', $id)->whereIn('estado', array('Ejecutado', 'Planificado'))->count();
+        if($conut_fumigacion){
+            $preterrenos = $this->getTerrenos();
+            $error = "No se puede finalizar la fumigacion ".$id." por que aun no ha registrado sus planificaciones";
+            return view('fumigacion.lista',['preterrenos' => $preterrenos, 'error' => $error]);
+        }else{
+            Fumigacion::where('id', $id)
+                ->update([
+                    'estado' => "Finalizado",
+                ]);
+            if(Riego::where('siembra_id', $request['siembra_id'])->count()){
+                if(Riego::where('siembra_id', $request['siembra_id'])->first()['estado'] == 'Finalizado'){
+                    $preparacionterreno_id = Siembra::where('id', $request['siembra_id'])->first()['preparacionterreno_id'];
+                    Preparacionterreno::where('id', $preparacionterreno_id)
+                        ->update([
+                            'estado' => "Cosecha",
+                        ]);
+                }
+            }
+            $preterrenos = $this->getTerrenos();
+            $success  = "El proceso de planificacion de fumigacion '". $id ."' a terminado";
+            return view('fumigacion.lista',['preterrenos' => $preterrenos, 'success' => $success]);
+        }
     }
 
     /**

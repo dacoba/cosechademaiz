@@ -111,9 +111,24 @@
                             </table>
                             @if (!isset($planificacionfumigacion_done))
                             <center>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @if($planificacionfumigacions->count() >= 3) disabled @endif>
+                                <style>
+                                    .button-planification{
+                                        float:right;
+                                    }
+                                </style>
+                                <button type="button" class="btn btn-primary button-planification" data-toggle="modal" data-target="#myModal" @if($planificacionfumigacions->count() >= 3) disabled @endif>
                                     <i class="fa fa-btn fa-user"></i> Añadir Planificacion
                                 </button>
+                                @if (isset($fumigacion_id))
+                                    <form action="{{ url('fumigacions')}}/{{$fumigacion_id}}" method="post" class="button-planification">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="_method" value="PUT" >
+                                        <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
+                                        <button class="btn btn-danger" type="submit">
+                                            Finalizar PLanificacion
+                                        </button>
+                                    </form>
+                                @endif
                             </center>
                             @endif
                             @if (isset($planificacionfumigacion_done))
