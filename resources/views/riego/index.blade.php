@@ -116,7 +116,7 @@
                                             Finalizar PLanificacion
                                         </button>
                                     </form>
-                                @else
+                                @endif
                             </center>
                             @endif
                             @if (isset($planificacionriego_done))
