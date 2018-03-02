@@ -96,6 +96,7 @@ class PlanificacionriegosController extends Controller
         if(isset($request['newriego'])){
             $riego = Riego::create([
                 'siembra_id' => $request['siembra_id'],
+                'estado' => 'Abierto',
             ]);
             $request['riego_id'] = $riego['id'];
         }

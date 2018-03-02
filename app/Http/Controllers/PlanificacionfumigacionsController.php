@@ -118,6 +118,7 @@ class PlanificacionfumigacionsController extends Controller
         if(isset($request['newriego'])){
             $fumigacion = Fumigacion::create([
                 'siembra_id' => $request['siembra_id'],
+                'estado' => 'Abierto',
             ]);
             $request['fumigacion_id'] = $fumigacion['id'];
         }
