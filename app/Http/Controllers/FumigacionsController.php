@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Siembra;
 use App\Simulador;
 use App\Riego;
+use App\Planificacionriego;
 use App\Planificacionfumigacion;
 use App\Preparacionterreno;
 use App\Terreno;
