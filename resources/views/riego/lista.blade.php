@@ -23,6 +23,16 @@
                         <strong>¡Correcto! </strong>{{ $mensaje }}
                     </div>
                 @endif
+                @if (isset($success))
+                    <div class="alert alert-success">
+                        <strong>¡Correcto! </strong>{{ $success }}
+                    </div>
+                @endif
+                @if (isset($error))
+                    <div class="alert alert-danger">
+                        <strong>¡Error! </strong>{{ $error }}
+                    </div>
+                @endif
                 <div class="panel-body">
                     <table class="table table-bordered" id="myTable">
                         <thead>

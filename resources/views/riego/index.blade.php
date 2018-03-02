@@ -105,8 +105,18 @@
                             @if (!isset($planificacionriego_done))
                             <center>
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" @if($planificacionriegos->count() >= 5) disabled @endif>
-                                    <i class="fa fa-btn fa-user"></i> Añadir Planificacion
+                                    <i class="fa fa-btn fa-plus"></i> Añadir Planificacion
                                 </button>
+                                @if (isset($riego_id))
+                                    <form action="{{ url('riegos')}}/{{$riego_id}}" method="post">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="_method" value="PUT" >
+                                        <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
+                                        <button class="btn btn-danger btn-xs" type="submit">
+                                            Finalizar PLanificacion
+                                        </button>
+                                    </form>
+                                @else
                             </center>
                             @endif
                             @if (isset($planificacionriego_done))

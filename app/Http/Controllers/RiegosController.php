@@ -163,7 +163,28 @@ class RiegosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $preterrenos = $this->getTerrenos();
+        $conut_riego = Planificacionriego::where('riego_id', $id)->whereIn('estado', array('Ejecutado', 'Planificado'))->count();
+        if($conut_riego){
+            $error = "No se puede finalizar el riego ".$id." por que aun no ha registrado sus planificaciones";
+            return view('riego.lista',['preterrenos' => $preterrenos, 'error' => $error]);
+        }else{
+            Riego::where('id', $id)
+                ->update([
+                    'estado' => "Finalizado",
+                ]);
+            if(Fumigacion::where('siembra_id', $request['siembra_id'])->count()){
+                if(Fumigacion::where('siembra_id', $request['siembra_id'])->first()['estado'] == 'Finalizado'){
+                    $preparacionterreno_id = Siembra::where('id', $request['siembra_id'])->first()['preparacionterreno_id'];
+                    Preparacionterreno::where('id', $preparacionterreno_id)
+                        ->update([
+                            'estado' => "Cosecha",
+                        ]);
+                }
+            }
+            $success  = "El proceso de planificacion de riego '". $id ."' a terminado";
+            return view('riego.lista',['preterrenos' => $preterrenos, 'success' => $success]);
+        }
     }
 
     /**
