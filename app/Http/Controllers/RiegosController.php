@@ -111,16 +111,15 @@ class RiegosController extends Controller
                 ]);
         }
         $planificacionriego2 = Planificacionriego::with(['simulador','riego','riego.siembra','riego.siembra.preparacionterreno'])->where('id', $request['planificacionriego_id'])->first();
-            if (Auth::user()->tipo == 'Tecnico'){
-                Simulador::where('id', $planificacionriego2['simulador']['id'])
-                    ->update([
-                    'problemas' => $request['simulador_problemas'],
-                    'altura' => $request['simulador_altura'],
-                    'humedad' => $request['simulador_humedad'],
-                    'rendimiento' => $request['simulador_rendimiento'],
-                ]);
-            }
-
+        if (Auth::user()->tipo == 'Tecnico'){
+            Simulador::where('id', $planificacionriego2['simulador']['id'])
+                ->update([
+                'problemas' => $request['simulador_problemas'],
+                'altura' => $request['simulador_altura'],
+                'humedad' => $request['simulador_humedad'],
+                'rendimiento' => $request['simulador_rendimiento'],
+            ]);
+        }
         $simulador = Simulador::orderBy('numero_simulacion', 'asc')->where('preparacionterreno_id', $planificacionriego2['riego']['siembra']['preparacionterreno']['id'])->get();
 
         $siembra = Siembra::with(['preparacionterreno', 'preparacionterreno.terreno'])->where('id', $request['siembra_id'])->get()[0];

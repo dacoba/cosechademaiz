@@ -207,14 +207,14 @@
                                                     @if($not_confirm)
                                                     <div class="has-error">
                                                         <span class="help-block">
-                                                            <strong>No puedes confirmar esta planificacion de riego mientras tengas planificacones anteriores sin confirmar.</strong>
+                                                            <strong>No puedes confirmar esta planificacion de riego mientras existan planificacones anteriores sin confirmar.</strong>
                                                         </span>
                                                     </div>
                                                     @endif
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                                    <a href="#" id="submit" class="btn btn-success success" @if($not_confirm) disabledf @endif>Confirmar</a>
+                                                    <a href="#" id="submit" class="btn btn-success success" @if($not_confirm) disabled @endif>Confirmar</a>
                                                 </div>
                                             </div>
                                         </div>

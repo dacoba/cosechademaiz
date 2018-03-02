@@ -120,27 +120,27 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-5">
                                     <center>
-                                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/fumigacions') }}">
+                                    <form class="form-horizontal" role="form" method="POST"  id="form_fumigacion" action="{{ url('/fumigacions') }}">
                                         {{ csrf_field() }}
     
                                         <div class="form-group">
-                                            <label for="preventivo_plagas" class="col-md-4 control-label">preventivo_plagas</label>
+                                            <label for="preventivo_plagas" class="col-md-4 control-label">Preventivo Plagas</label>
                                             <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="preventivo_plagas" name="preventivo_plagas" class="form-control" @if (isset($planificacionfumigacion_done['preventivo_plagas'])) value="{{ $planificacionfumigacion_done['preventivo_plagas'] }}" @endif onchange="updateBarchar()"/>
+                                                <input type="number" min="1" max="100" id="preventivo_plagas" name="preventivo_plagas" class="form-control" @if (isset($planificacionfumigacion_done['preventivo_plagas'])) value="{{ $planificacionfumigacion_done['preventivo_plagas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
                                             </div>
                                         </div>
     
                                         <div class="form-group">
-                                            <label for="control_malezas" class="col-md-4 control-label">control_malezas</label>
+                                            <label for="control_malezas" class="col-md-4 control-label">Control de Malezas</label>
                                             <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="control_malezas" name="control_malezas" class="form-control" @if (isset($planificacionfumigacion_done['control_malezas'])) value="{{ $planificacionfumigacion_done['control_malezas'] }}" @endif onchange="updateBarchar()"/>
+                                                <input type="number" min="1" max="100" id="control_malezas" name="control_malezas" class="form-control" @if (isset($planificacionfumigacion_done['control_malezas'])) value="{{ $planificacionfumigacion_done['control_malezas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="control_enfermedades" class="col-md-4 control-label">control_enfermedades</label>
+                                            <label for="control_enfermedades" class="col-md-4 control-label">Control de Enfermedades</label>
                                             <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="control_enfermedades" name="control_enfermedades" class="form-control" @if (isset($planificacionfumigacion_done['control_enfermedades'])) value="{{ $planificacionfumigacion_done['control_enfermedades'] }}" @endif onchange="updateBarchar()"/>
+                                                <input type="number" min="1" max="100" id="control_enfermedades" name="control_enfermedades" class="form-control" @if (isset($planificacionfumigacion_done['control_enfermedades'])) value="{{ $planificacionfumigacion_done['control_enfermedades'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
                                             </div>
                                         </div>
     
@@ -148,7 +148,7 @@
                                             <label for="comentario_fumigacion" class="col-md-4 control-label">Comentario</label>
     
                                             <div class="col-md-6">
-                                                <input id="comentario_fumigacion" type="text" class="form-control" name="comentario_fumigacion" value="{{ $planificacionfumigacion_done['comentario_fumigacion'] or old('comentario_fumigacion') }}">
+                                                <input id="comentario_fumigacion" type="text" class="form-control" name="comentario_fumigacion" value="{{ $planificacionfumigacion_done['comentario_fumigacion'] or old('comentario_fumigacion') }}" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif>
     
                                                 @if ($errors->has('comentario_fumigacion'))
                                                     <span class="help-block">
@@ -166,15 +166,78 @@
                                         <input type="hidden" name="simulador_altura" id="simulador_altura" value="">
                                         <input type="hidden" name="simulador_humedad" id="simulador_humedad" value="">
                                         <input type="hidden" name="simulador_rendimiento" id="simulador_rendimiento" value="">
+                                        <input type="hidden" name="confirm" id="confirm" value="false">
 
                                         <div class="form-group">
-                                            <div class="col-md-6 col-md-offset-4">
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i class="fa fa-btn fa-user"></i> Registrar
+                                            <div class="col-md-10" style="text-align:right">
+                                                <button type="submit" class="btn btn-primary" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") disabled @endif>
+                                                    <i class="fa fa-btn fa-user"></i> Guardar
                                                 </button>
+                                                @if ( Auth::user()->tipo == 'Tecnico')
+                                                    <input type="button" name="btn" value="Guardar y Confirmar" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-success" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") disabled @endif/>
+                                                @endif
                                             </div>
                                         </div>
                                     </form>
+                                    <style>
+                                        #confirm_data tr td{
+                                            text-align:right;
+                                        }
+                                    </style>
+                                    <div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    Confirmar datos
+                                                </div>
+                                                <div class="modal-body">
+                                                    Los siguientes datos seran almacenados para la siguiente etapa.
+                                                    <table class="table" id="confirm_data">
+                                                        <tr>
+                                                            <th>Preventivo Plagas</th>
+                                                            <td id="m_preventivo_plagas"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Control de Malezas</th>
+                                                            <td id="m_control_malezas"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Control de Enfermedades</th>
+                                                            <td id="m_control_enfermedades"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Observaciones</th>
+                                                            <td id="m_comentario_fumigacion"></td>
+                                                        </tr>
+                                                    </table>
+                                                    @if($not_confirm)
+                                                        <div class="has-error">
+                                                    <span class="help-block">
+                                                        <strong>No puedes confirmar esta planificacion de fumigacion mientras existan planificacones anteriores sin confirmar.</strong>
+                                                    </span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                                    <a href="#" id="submit" class="btn btn-success success" @if($not_confirm) disabled @endif>Confirmar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        $('#submitBtn').click(function() {
+                                            $('#m_preventivo_plagas').text($('#preventivo_plagas').val() + " %");
+                                            $('#m_control_malezas').text($('#control_malezas').val() + " %");
+                                            $('#m_control_enfermedades').text($('#control_enfermedades').val() + " %");
+                                            $('#m_comentario_fumigacion').text($('#comentario_fumigacion').val());
+                                        });
+
+                                        $('#submit').click(function(){
+                                            $('#confirm').val(true);
+                                            $('#form_fumigacion').submit();
+                                        });
+                                    </script>
                                 </center>
                                 </div>
                                 <div class="col-md-7 col-lg-6">
