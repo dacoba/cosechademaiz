@@ -101,7 +101,7 @@ class FumigacionsController extends Controller
                 'preventivo_plagas' => $request['preventivo_plagas'],
                 'control_malezas' => $request['control_malezas'],
                 'control_enfermedades' => $request['control_enfermedades'],
-                'comentario_fumigacion' => $request['comentario_fumigacion'],º
+                'comentario_fumigacion' => $request['comentario_fumigacion']
             ]);
         if (isset($request['confirm']) && $request['confirm'] == "true") {
             Planificacionfumigacion::where('id', $request['planificacionfumigacion_id'])
