@@ -14,7 +14,7 @@
             <div style="text-align: right;">
                 <a href="{{ url('users/productor/create')}}" class="btn btn-primary"><i class="fa fa-plus fa-padding-right"></i>Nuevo Productor</a>
                 <div class="input-group search-table">
-                    <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search...">
+                    <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Buscar">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
             </div>
