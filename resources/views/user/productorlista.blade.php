@@ -36,6 +36,15 @@
                             <strong>¡Exitoso! </strong>{{ $success }}
                         </div>
                     @endif
+                    <style>
+                        .btn-mini-xs{
+                            padding: 5px 10px;
+                        }
+                        .btn-mini-xs-form{
+                            float: right;
+                            padding-left: 4px;
+                        }
+                    </style>
                     <table class="table table-bordered" id="myTable">
                         <thead>
                         <tr style="background-color: #f1f1f1;">
@@ -45,7 +54,7 @@
                             <th>Email</th>
                             <th style="text-align: center">Telefono</th>
                             <th>Direccion</th>
-                            <th style="text-align: center">Opcion</th>
+                            <th style="text-align: center; width: 113px;">Opcion</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -58,9 +67,9 @@
                                 <td style="text-align: center">{{$productor['telefono']}}</td>
                                 <td>{{$productor['direccion']}}</td>
                                 <td style="text-align: center">
-                                    <a href="{{ url('users/productor')}}/{{$productor['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
-                                    <a href="{{ url('users/productor')}}/{{$productor['id']}}/edit" class="btn btn-warning btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
-                                    <form action="{{ url('users/productor')}}/{{$productor['id']}}" method="post">
+                                    <a href="{{ url('users/productor')}}/{{$productor['id']}}" class="btn btn-primary btn-xs btn-mini-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
+                                    <a href="{{ url('users/productor')}}/{{$productor['id']}}/edit" class="btn btn-warning btn-xs btn-mini-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                    <form action="{{ url('users/productor')}}/{{$productor['id']}}" method="post" class="btn-mini-xs-form">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="hidden" name="_method" value="DELETE" >
                                         <button class="btn btn-danger btn-xs" type="submit">
