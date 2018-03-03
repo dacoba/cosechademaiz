@@ -17,4 +17,12 @@ class Siembra extends Model
     {
         return $this->hasOne('App\Riego');
     }
+    function fumigacion()
+    {
+        return $this->hasOne('App\Fumigacion');
+    }
+    function cosecha()
+    {
+        return $this->hasOne('App\Cosecha');
+    }
 }

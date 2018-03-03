@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Fumigacion;
 use Illuminate\Http\Request;
 use App\Siembra;
+use App\Cosecha;
 use App\Simulador;
 use App\Riego;
 use App\Planificacionriego;
@@ -179,6 +180,14 @@ class FumigacionsController extends Controller
                         ->update([
                             'estado' => "Cosecha",
                         ]);
+                    Cosecha::create([
+                        'problemas_produccion' => 0,
+                        'altura_tallo' => 0,
+                        'humedad_terreno' => 0,
+                        'rendimiento_produccion' => 0,
+                        'comentario_cosecha' => "",
+                        'siembra_id' => $request['siembra_id'],
+                    ]);
                 }
             }
             $preterrenos = $this->getTerrenos();

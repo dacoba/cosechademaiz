@@ -26,6 +26,16 @@ class CosechasController extends Controller
     {
         $this->middleware('auth');
     }
+    protected function getTerrenos()
+    {
+        if (Auth::user()->tipo == 'Tecnico') {
+            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->where('estado', "Cosecha")->where('tecnico_id', Auth::user()->id)->get();
+        }elseif (Auth::user()->tipo == 'Administrador') {
+            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->where('estado', "Cosecha")->get();
+        }else{
+            return Terreno::where('estado', "Cerrado")->get();
+        }
+    }
     public function indexSimulador()
     {
         $siembras = Siembra::all();
@@ -104,8 +114,11 @@ class CosechasController extends Controller
     }
     public function index()
     {
-        $siembras =  $this->getSiembrasEstate();
-        return view('cosecha.index',['siembras' => $siembras]);
+//        $siembras =  $this->getSiembrasEstate();
+//        return view('cosecha.index',['siembras' => $siembras]);
+        $preterrenos = $this->getTerrenos();
+        return view('cosecha.lista',['preterrenos' => $preterrenos]);
+
     }
     public function getreporteSiembra()
     {
@@ -239,41 +252,7 @@ class CosechasController extends Controller
      */
     public function store(Request $request)
     {
-        $cosecha_count = Cosecha::where('siembra_id', $request['siembra_id'])->count();
-        if($cosecha_count){
-
-            Cosecha::where('siembra_id', $request['siembra_id'])
-                ->update([
-                    'problemas_produccion' => $request['problemas_produccion'],
-                    'altura_tallo' => $request['altura_tallo'],
-                    'humedad_terreno' => $request['humedad_terreno'],
-                    'rendimiento_produccion' => $request['rendimiento_produccion'],
-                    'comentario_cosecha' => $request['comentario_cosecha'],
-                ]);
-            $cosecha = Cosecha::where('siembra_id', $request['siembra_id'])->get();
-        }else{
-            $cosecha = Cosecha::create([
-                'problemas_produccion' => $request['problemas_produccion'],
-                'altura_tallo' => $request['altura_tallo'],
-                'humedad_terreno' => $request['humedad_terreno'],
-                'rendimiento_produccion' => $request['rendimiento_produccion'],
-                'comentario_cosecha' => $request['comentario_cosecha'],
-                'siembra_id' => $request['siembra_id'],
-            ]);
-            $siembra = Siembra::with('preparacionterreno', 'preparacionterreno.terreno')->where('id', $request['siembra_id'])->first();
-            Preparacionterreno::where('id', $siembra['preparacionterreno']['id'])
-                ->update([
-                    'estado' => "Cerrado"
-                ]);
-            Terreno::where('id', $siembra['preparacionterreno']['terreno']['id'])
-                ->update([
-                    'estado' => "Cerrado"
-                ]);
-        }
-        $mensaje = "Cosecha registrado exitosamente";
-        $siembras = $this->getSiembrasEstate();
-        $band = True;
-        return view('cosecha.index',['siembras' => $siembras, 'siembra_id' => $request['siembra_id'], 'band' => $band, 'cosecha' => $cosecha]);
+        //
     }
 
     /**
@@ -295,7 +274,8 @@ class CosechasController extends Controller
      */
     public function edit($id)
     {
-        //
+        $cosecha = Cosecha::find($id);
+        return view("cosecha.index",['cosecha' => $cosecha]);
     }
 
     /**
@@ -307,7 +287,31 @@ class CosechasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $success = "Datos de la cosecha registrados exitosamente";
+        Cosecha::where('id', $id)
+            ->update([
+                'problemas_produccion' => $request['problemas_produccion'],
+                'altura_tallo' => $request['altura_tallo'],
+                'humedad_terreno' => $request['humedad_terreno'],
+                'rendimiento_produccion' => $request['rendimiento_produccion'],
+                'comentario_cosecha' => $request['comentario_cosecha'],
+            ]);
+        if (isset($request['confirm']) && $request['confirm'] == "true") {
+            $siembra = Siembra::with('preparacionterreno', 'preparacionterreno.terreno')->where('id', $request['siembra_id'])->first();
+            $reparacionterreno_id = $siembra['preparacionterreno']['id'];
+            $terreno_id = $siembra['preparacionterreno']['terreno']['id'];
+            Preparacionterreno::where('id', $reparacionterreno_id)
+                ->update([
+                    'estado' => "Cerrado",
+                ]);
+            Terreno::where('id', $terreno_id)
+                ->update([
+                    'estado' => "Cerrado"
+                ]);
+            $success = "Datos de la cosecha registrados exitosamente, el proceso ha terminado";
+        }
+        $preterrenos = $this->getTerrenos();
+        return view('cosecha.lista',['preterrenos' => $preterrenos, 'success' => $success]);
     }
 
     /**

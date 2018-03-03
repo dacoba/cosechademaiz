@@ -9,37 +9,6 @@
                 <h2 class="pfblock-title">Administrar Cosecha</h2>
             </div>
         </div>
-        <form class="form-horizontal" role="form" method="POST" action="{{ url('/cosechas/create') }}">
-            {{ csrf_field() }}
-            <div class="row">
-                <div class="col-md-6 col-md-offset-1">
-                    <div class="form-group{{ $errors->has('siembra_id') ? ' has-error' : '' }}">
-                        <label for="siembra_id" class="col-md-5 control-label">Siembra</label>
-                        <div class="col-md-7">
-                            <select name="siembra_id" class="form-control">
-                                @foreach ( $siembras as $siembra )
-                                    <option value="{{$siembra['id']}}" @if (isset($siembra_id) and $siembra_id == $siembra['id']) selected @endif >{{$siembra['preparacionterreno']['terreno']['productor']['nombre']}} {{$siembra['preparacionterreno']['terreno']['productor']['apellido']}} - {{$siembra['preparacionterreno']['terreno']['area_parcela']}} Hec.</option>
-                                @endforeach
-                            </select>
-                            @if ($errors->has('siembra_id'))
-                                <span class="help-block">
-                            <strong>{{ $errors->first('siembra_id') }}</strong>
-                        </span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <div class="col-md-6">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-btn fa-user"></i> Cargar Siembra
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">Fumigaciones Planificadas</div>
@@ -49,82 +18,122 @@
                     </div>
                 @endif
                 <div class="panel-body">
-                    @if (isset($siembra_id))
-                        @if (isset($band))
-                            @if ($band)
-                                <center>
-                                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/cosechas') }}">
-                                        {{ csrf_field() }}
-                                        <div class="form-group">
-                                            <label for="problemas_produccion" class="col-md-4 control-label">Problemas de Produccion</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control" @if (isset($cosecha[0]['problemas_produccion'])) value="{{ $cosecha[0]['problemas_produccion'] }}" @endif onchange="updateBarchar()"/>
-                                            </div>
-                                        </div>
+                    <center>
+                        <form class="form-horizontal" role="form" method="POST" id="form_cosecha" action="{{ url('/cosechas') }}/{{ $cosecha['id'] }}">
+                            {{ csrf_field() }}
+                            <div class="form-group">
+                                <label for="problemas_produccion" class="col-md-4 control-label">Problemas de Produccion</label>
+                                <div class="col-md-6">
+                                    <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control" value="{{ $cosecha['problemas_produccion'] }}"/>
+                                </div>
+                            </div>
 
-                                        <div class="form-group">
-                                            <label for="altura_tallo" class="col-md-4 control-label">Altura del Tallo</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="altura_tallo" name="altura_tallo" class="form-control" @if (isset($cosecha[0]['altura_tallo'])) value="{{ $cosecha[0]['altura_tallo'] }}" @endif onchange="updateBarchar()"/>
-                                            </div>
-                                        </div>
+                            <div class="form-group">
+                                <label for="altura_tallo" class="col-md-4 control-label">Altura del Tallo</label>
+                                <div class="col-md-6">
+                                    <input type="number" min="1" max="100" id="altura_tallo" name="altura_tallo" class="form-control" value="{{ $cosecha['altura_tallo'] }}"/>
+                                </div>
+                            </div>
 
-                                        <div class="form-group">
-                                            <label for="humedad_terreno" class="col-md-4 control-label">Humedad del Terreno</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="humedad_terreno" name="humedad_terreno" class="form-control" @if (isset($cosecha[0]['humedad_terreno'])) value="{{ $cosecha[0]['humedad_terreno'] }}" @endif onchange="updateBarchar()"/>
-                                            </div>
-                                        </div>
+                            <div class="form-group">
+                                <label for="humedad_terreno" class="col-md-4 control-label">Humedad del Terreno</label>
+                                <div class="col-md-6">
+                                    <input type="number" min="1" max="100" id="humedad_terreno" name="humedad_terreno" class="form-control" value="{{ $cosecha['humedad_terreno'] }}"/>
+                                </div>
+                            </div>
 
-                                        <div class="form-group">
-                                            <label for="rendimiento_produccion" class="col-md-4 control-label">Rendimiento de la Produccion</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="rendimiento_produccion" name="rendimiento_produccion" class="form-control" @if (isset($cosecha[0]['rendimiento_produccion'])) value="{{ $cosecha[0]['rendimiento_produccion'] }}" @endif onchange="updateBarchar()"/>
-                                            </div>
-                                        </div>
+                            <div class="form-group">
+                                <label for="rendimiento_produccion" class="col-md-4 control-label">Rendimiento de la Produccion</label>
+                                <div class="col-md-6">
+                                    <input type="number" min="1" max="100" id="rendimiento_produccion" name="rendimiento_produccion" class="form-control" value="{{ $cosecha['rendimiento_produccion'] }}"/>
+                                </div>
+                            </div>
 
-                                        <div class="form-group{{ $errors->has('comentario_cosecha') ? ' has-error' : '' }}">
-                                            <label for="comentario_cosecha" class="col-md-4 control-label">Observaciones</label>
+                            <div class="form-group{{ $errors->has('comentario_cosecha') ? ' has-error' : '' }}">
+                                <label for="comentario_cosecha" class="col-md-4 control-label">Observaciones</label>
 
-                                            <div class="col-md-6">
-                                                <input id="comentario_cosecha" type="text" class="form-control" name="comentario_cosecha" value="{{ $cosecha[0]['comentario_cosecha'] or old('comentario_cosecha') }}">
-
-                                                @if ($errors->has('comentario_cosecha'))
-                                                    <span class="help-block">
+                                <div class="col-md-6">
+                                    <input id="comentario_cosecha" type="text" class="form-control" name="comentario_cosecha" value="{{ $cosecha['comentario_cosecha'] or old('comentario_cosecha') }}">
+                                    @if ($errors->has('comentario_cosecha'))
+                                        <span class="help-block">
                                             <strong>{{ $errors->first('comentario_cosecha') }}</strong>
                                         </span>
-                                                @endif
-                                            </div>
-                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="_method" value="PUT" >
+                            <input type="hidden" name="siembra_id" value="{{$cosecha['siembra_id']}}" >
+                            <input type="hidden" name="confirm" id="confirm" value="false">
+                            <div class="form-group">
+                                <div class="col-md-11" style="text-align:right">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa fa-btn fa-user"></i> Guardar
+                                    </button>
+                                    @if ( Auth::user()->tipo == 'Tecnico')
+                                        <input type="button" name="btn" value="Guardar y Confirmar" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-success" />
+                                    @endif
+                                </div>
+                            </div>
+                        </form>
+                        <style>
+                            #confirm_data tr td{
+                                text-align:right;
+                            }
+                        </style>
+                        <div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        Confirmar datos
+                                    </div>
+                                    <div class="modal-body">
+                                        Los siguientes datos seran almacenados para la siguiente etapa.
+                                        <table class="table" id="confirm_data">
+                                            <tr>
+                                                <th>Problemas de Produccion</th>
+                                                <td id="m_problemas_produccion"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Altura del Tallo</th>
+                                                <td id="m_altura_tallo"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Humedad del Terreno</th>
+                                                <td id="m_humedad_terreno"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Rendimiento de la Produccion</th>
+                                                <td id="m_rendimiento_produccion"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Observaciones</th>
+                                                <td id="m_comentario_cosecha"></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                        <a href="#" id="submit" class="btn btn-success success">Confirmar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            $('#submitBtn').click(function() {
+                                $('#m_problemas_produccion').text($('#problemas_produccion').val() + " %");
+                                $('#m_altura_tallo').text($('#altura_tallo').val() + " %");
+                                $('#m_humedad_terreno').text($('#humedad_terreno').val() + " %");
+                                $('#m_rendimiento_produccion').text($('#rendimiento_produccion').val() + " %");
+                                $('#m_comentario_siembra').text($('#comentario_siembra').val());
+                            });
 
-                                        <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
-                                        @if(isset($siembra))
-                                            <input type="hidden" name="preparacionterreno_id" value="{{ $siembra['preparacionterreno_id'] }}" >
-                                        @endif
-                                        <div class="form-group">
-                                            <div class="col-md-6 col-md-offset-4">
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i class="fa fa-btn fa-user"></i> Register
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </center>
-                            @else
-                                <center>
-                                    Esta siembra aun no ha concluido con sus planificaciones
-                                </center>
-                            @endif
-                        @else
-                            <center>
-                                Esta siembra aun no cuenta con una planificacion de riego o fumigacion
-                            </center>
-                        @endif
-                    @else
-                        <center>
-                            Seleccione una siembra
-                        </center>
-                    @endif
+                            $('#submit').click(function(){
+                                $('#confirm').val(true);
+                                $('#form_cosecha').submit();
+                            });
+                        </script>
+                    </center>
                 </div>
             </div>
         </div>
