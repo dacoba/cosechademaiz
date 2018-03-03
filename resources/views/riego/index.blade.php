@@ -69,7 +69,6 @@
                                         <?php $numero_simulacion = $planificacionriego['simulador']['numero_simulacion'];?>
                                     @endif
                                     <tr @if (isset($planificacionriego_done['metodos_riego']) and $planificacionriego_done['id'] == $planificacionriego['id']) style="background: rgba(202, 202, 224, 0.58);" @endif>
-{{--                                        <td style="text-align: center">{{$planificacionriego['fecha_planificacion']}}</td>--}}
                                         <td style="text-align: center">{{ date('d/m/Y \a \l\a\s H:i', strtotime($planificacionriego['fecha_planificacion'])) }}</td>
                                         <td style="text-align: center">{{$planificacionriego['estado']}}</td>
                                         <td style="text-align: center">
