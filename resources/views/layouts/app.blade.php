@@ -7,6 +7,7 @@
     <meta name="author" content="">
 
     <title>Cosecha</title>
+    <link rel="icon" href="{{URL::asset('assets/images/corn.ico')}}"/>
 
     <!-- CSS -->
     <link href="{{URL::asset('assets/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" media="screen">

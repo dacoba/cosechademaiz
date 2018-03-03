@@ -28,11 +28,11 @@ class PreparacionterrenosController extends Controller
     protected function validatorUpdate(array $data)
     {
         return Validator::make($data, [
-            'ph' => 'required',
-            'plaga_suelo' => 'required',
-            'drenage' => 'required',
-            'erocion' => 'required',
-            'maleza_preparacion' => 'required',
+            'ph' => 'required|numeric|min:4|max:10',
+            'plaga_suelo' => 'required|numeric|min:1|max:50',
+            'drenage' => 'required|numeric|min:1|max:100',
+            'erocion' => 'required|numeric|min:1|max:100',
+            'maleza_preparacion' => 'required|numeric|min:1|max:75',
             'terreno_id' => 'required',
             'tecnico_id' => 'required',
         ]);
