@@ -25,7 +25,7 @@
                                 <label for="problemas_produccion" class="col-md-5 control-label">Problemas de Produccion</label>
                                 <div class="col-md-6">
                                     <div class="input-group">
-                                        <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control text-right" value="75">
+                                        <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control text-right" value="{{ $cosecha['problemas_produccion'] }}">
                                         <span class="input-group-addon">%</span>
                                     </div>
                                 </div>
