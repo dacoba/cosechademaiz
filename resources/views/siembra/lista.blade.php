@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="panel panel-default">
-                <div class="panel-heading">En Etapa de Siembra</div>
+                <div class="panel-heading">Procesos en Etapa de Siembra</div>
                 @if (isset($mensaje))
                     <div class="alert alert-success">
                         <strong>¡Correcto! </strong>{{ $mensaje }}

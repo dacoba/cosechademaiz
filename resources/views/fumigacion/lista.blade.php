@@ -12,12 +12,12 @@
             <div class="hidden-sm-up" align="right">
 
                 <div class="input-group search-table" style="float: none;">
-                    <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Filtrar Terreno...">
+                    <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Buscar">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
             </div>
             <div class="panel panel-default">
-                <div class="panel-heading">Siembras registradas</div>
+                <div class="panel-heading">Procesos en Etapa de Planificacion</div>
                 @if (isset($mensaje))
                     <div class="alert alert-success">
                         <strong>¡Correcto! </strong>{{ $mensaje }}

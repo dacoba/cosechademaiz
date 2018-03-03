@@ -25,7 +25,7 @@
                                 <tr>
                                     <th style="text-align: center">Fecha</th>
                                     <th style="text-align: center">Estado</th>
-                                    <th style="text-align: center">Opcion</th>
+                                    <th style="text-align: center">Detalle</th>
                                     <th style="text-align: center">Problemas</th>
                                     <th style="text-align: center">Altura</th>
                                     <th style="text-align: center">Humedad</th>
@@ -117,7 +117,7 @@
                                     }
                                 </style>
                                 <button type="button" class="btn btn-primary button-planification" data-toggle="modal" data-target="#myModal" @if($planificacionfumigacions->count() >= 3) disabled @endif>
-                                    <i class="fa fa-btn fa-user"></i> Añadir Planificacion
+                                    Añadir Planificacion
                                 </button>
                                 @if (isset($fumigacion_id))
                                     <form action="{{ url('fumigacions')}}/{{$fumigacion_id}}" method="post" class="button-planification">
@@ -125,7 +125,7 @@
                                         <input type="hidden" name="_method" value="PUT" >
                                         <input type="hidden" name="siembra_id" value="{{ $siembra_id }}" >
                                         <button class="btn btn-danger" type="submit">
-                                            Finalizar PLanificacion
+                                            Finalizar Planificacion
                                         </button>
                                     </form>
                                 @endif
@@ -193,7 +193,7 @@
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align:right">
                                                 <button type="submit" class="btn btn-primary" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") disabled @endif>
-                                                    <i class="fa fa-btn fa-user"></i> Guardar
+                                                    Guardar
                                                 </button>
                                                 @if ( Auth::user()->tipo == 'Tecnico')
                                                     <input type="button" name="btn" value="Guardar y Confirmar" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-success" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") disabled @endif/>

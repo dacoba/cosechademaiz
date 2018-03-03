@@ -25,7 +25,7 @@
                                 <tr>
                                     <th style="text-align: center">Fecha</th>
                                     <th style="text-align: center">Estado</th>
-                                    <th style="text-align: center">Opcion</th>
+                                    <th style="text-align: center">Detalle</th>
                                     <th style="text-align: center">Problemas</th>
                                     <th style="text-align: center">Altura</th>
                                     <th style="text-align: center">Humedad</th>
@@ -110,7 +110,7 @@
                                     }
                                 </style>
                                 <button type="button" class="btn btn-primary button-planification" data-toggle="modal" data-target="#myModal" @if($planificacionriegos->count() >= 5) disabled @endif>
-                                    <i class="fa fa-btn fa-plus"></i> Añadir Planificacion
+                                    Añadir Planificacion
                                 </button>
                                 @if (isset($riego_id))
                                     <form action="{{ url('riegos')}}/{{$riego_id}}" method="post" class="button-planification">
@@ -186,7 +186,7 @@
                                         <div class="form-group">
                                             <div class="col-md-12" style="text-align:right">
                                                 <button type="submit" class="btn btn-primary" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") disabled @endif>
-                                                    <i class="fa fa-btn fa-save"></i> Guardar
+                                                    Guardar
                                                 </button>
                                                 @if ( Auth::user()->tipo == 'Tecnico')
                                                     <input type="button" name="btn" value="Guardar y Confirmar" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-success" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") disabled @endif/>

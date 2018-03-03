@@ -53,7 +53,7 @@
             <div class="col-md-8 col-md-offset-2">
         @endif
             <div class="panel panel-default">
-                <div class="panel-heading">Registrar Preparacion del Terreno</div>
+                <div class="panel-heading">Datos de la Preparacion del Terreno</div>
 
                 @if (isset($mensaje))
                     <div class="alert alert-success">
