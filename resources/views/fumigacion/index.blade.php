@@ -75,7 +75,7 @@
                                         <?php $numero_simulacion = $planificacionfumigacion['simulador']['numero_simulacion'];?>
                                     @endif
                                     <tr @if (isset($planificacionfumigacion_done['id']) and $planificacionfumigacion_done['id'] == $planificacionfumigacion['id']) style="background: rgba(202, 202, 224, 0.58);" @endif>
-                                        <td style="text-align: center">{{$planificacionfumigacion['fecha_planificacion']}}</td>
+                                        <td style="text-align: center">{{ date('d/m/Y \a \l\a\s H:i', strtotime($planificacionfumigacion['fecha_planificacion'])) }}</td>
                                         <td style="text-align: center">{{$planificacionfumigacion['estado']}}</td>
                                         <td style="text-align: center">
                                             <form class="form-horizontal" role="form" method="POST" action="{{ url('/fumigacions/create') }}">
@@ -139,36 +139,43 @@
                                         {{ csrf_field() }}
     
                                         <div class="form-group">
-                                            <label for="preventivo_plagas" class="col-md-4 control-label">Preventivo Plagas</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="preventivo_plagas" name="preventivo_plagas" class="form-control" @if (isset($planificacionfumigacion_done['preventivo_plagas'])) value="{{ $planificacionfumigacion_done['preventivo_plagas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                            <label for="preventivo_plagas" class="col-md-5 control-label">Preventivo Plagas</label>
+                                            <div class="col-md-7">
+                                                <div class="input-group">
+                                                    <input type="number" min="1" max="100" id="preventivo_plagas" name="preventivo_plagas" class="form-control" @if (isset($planificacionfumigacion_done['preventivo_plagas'])) value="{{ $planificacionfumigacion_done['preventivo_plagas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
                                             </div>
                                         </div>
     
                                         <div class="form-group">
-                                            <label for="control_malezas" class="col-md-4 control-label">Control de Malezas</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="control_malezas" name="control_malezas" class="form-control" @if (isset($planificacionfumigacion_done['control_malezas'])) value="{{ $planificacionfumigacion_done['control_malezas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                            <label for="control_malezas" class="col-md-5 control-label">Control de Malezas</label>
+                                            <div class="col-md-7">
+                                                <div class="input-group">
+                                                    <input type="number" min="1" max="100" id="control_malezas" name="control_malezas" class="form-control" @if (isset($planificacionfumigacion_done['control_malezas'])) value="{{ $planificacionfumigacion_done['control_malezas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="control_enfermedades" class="col-md-4 control-label">Control de Enfermedades</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" id="control_enfermedades" name="control_enfermedades" class="form-control" @if (isset($planificacionfumigacion_done['control_enfermedades'])) value="{{ $planificacionfumigacion_done['control_enfermedades'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                            <label for="control_enfermedades" class="col-md-5 control-label">Control de Enfermedades</label>
+                                            <div class="col-md-7">
+                                                <div class="input-group">
+                                                    <input type="number" min="1" max="100" id="control_enfermedades" name="control_enfermedades" class="form-control" @if (isset($planificacionfumigacion_done['control_enfermedades'])) value="{{ $planificacionfumigacion_done['control_enfermedades'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
                                             </div>
                                         </div>
     
                                         <div class="form-group{{ $errors->has('comentario_fumigacion') ? ' has-error' : '' }}">
-                                            <label for="comentario_fumigacion" class="col-md-4 control-label">Comentario</label>
-    
-                                            <div class="col-md-6">
-                                                <input id="comentario_fumigacion" type="text" class="form-control" name="comentario_fumigacion" value="{{ $planificacionfumigacion_done['comentario_fumigacion'] or old('comentario_fumigacion') }}" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif>
-    
+                                            <label for="comentario_fumigacion" class="col-md-5 control-label">Comentario</label>
+                                            <div class="col-md-7">
+                                                <textarea id="comentario_fumigacion" name="comentario_fumigacion" class="form-control" rows="3" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif>{{ $planificacionfumigacion_done['comentario_fumigacion'] or old('comentario_fumigacion') }}</textarea>
                                                 @if ($errors->has('comentario_fumigacion'))
                                                     <span class="help-block">
-                                            <strong>{{ $errors->first('comentario_fumigacion') }}</strong>
-                                        </span>
+                                                        <strong>{{ $errors->first('comentario_fumigacion') }}</strong>
+                                                    </span>
                                                 @endif
                                             </div>
                                         </div>
@@ -184,7 +191,7 @@
                                         <input type="hidden" name="confirm" id="confirm" value="false">
 
                                         <div class="form-group">
-                                            <div class="col-md-10" style="text-align:right">
+                                            <div class="col-md-12" style="text-align:right">
                                                 <button type="submit" class="btn btn-primary" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") disabled @endif>
                                                     <i class="fa fa-btn fa-user"></i> Guardar
                                                 </button>

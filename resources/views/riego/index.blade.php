@@ -134,7 +134,7 @@
                                         <div class="form-group">
                                             <label for="metodos_riego" class="col-md-5 control-label">Metodos de riego</label>
                                             <div class="col-md-7">
-                                                <select id="metodos_riego" name="metodos_riego" class="form-control" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif>
+                                                <select id="metodos_riego" name="metodos_riego" class="form-control" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") disabled @endif>
                                                     <option value="1" @if (isset($planificacionriego_done['metodos_riego']) and $planificacionriego_done['metodos_riego'] == '1') selected @endif >Lluvia</option>
                                                     <option value="2" @if (isset($planificacionriego_done['metodos_riego']) and $planificacionriego_done['metodos_riego'] == '2') selected @endif >Pozo de riego</option>
                                                 </select>
