@@ -56,7 +56,7 @@
                                     @endif
                                         <div class="form-group">
                                         <label for="semilla" class="col-md-5 control-label">Semilla  <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Semilla utilizada para la siembra."></i></label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-7">
                                             <select id="semilla" name="semilla" class="form-control" onchange="updateBarchar()">
                                                 <option value="1" @if (isset($siembra['semilla']) and $siembra['semilla'] == '1') selected @endif >No Certificada</option>
                                                 <option value="2" @if (isset($siembra['semilla']) and $siembra['semilla'] == '2') selected @endif >Certificada</option>
@@ -78,7 +78,7 @@
                                             @endif
                                             <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la utilizacion de diferentes quimicos o estrategias para fortalecer el crecimiento del maiz (10 es la correcta utilizacion de fertilizantes, 1 muy mala)"></i>
                                         </label>
-                                        <div class="col-md-6">
+                                        <div class="col-md-7">
                                             <select id="fertilizacion" name="fertilizacion" class="form-control" onchange="updateBarchar()">
                                                 <option value="0" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '0') selected @endif >Fertiliacion no Correcta</option>
                                                 <option value="1" @if (isset($siembra['fertilizacion']) and $siembra['fertilizacion'] == '1') selected @endif >Fertilizacion Correcta</option>
@@ -87,20 +87,26 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="distancia_surco" class="col-md-5 control-label">Distancia entre surcos <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la distancia de surco a surco (optimo 80cm) y de planta a planta (50cm optimo), 10 correcta distribucion, 1 muy mala"></i></label>
-                                        <div class="col-md-6">
-                                            <input type="number" id="distancia_surco" name="distancia_surco" step="0.01" class="form-control" value="{{ $siembra['distancia_surco'] or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="number" id="distancia_surco" name="distancia_surco" step="0.01" class="form-control" value="{{ $siembra['distancia_surco'] or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                                <span class="input-group-addon">cm</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="distancia_planta" class="col-md-5 control-label">Distancia entre plantas <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la distancia de surco a surco (optimo 80cm) y de planta a planta (50cm optimo), 10 correcta distribucion, 1 muy mala"></i></label>
-                                        <div class="col-md-6">
-                                            <input type="number" id="distancia_planta" name="distancia_planta" step="0.01" class="form-control" value="{{ $siembra['distancia_planta'] or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                        <div class="col-md-7">
+                                            <div class="input-group">
+                                                <input type="number" id="distancia_planta" name="distancia_planta" step="0.01" class="form-control" value="{{ $siembra['distancia_planta'] or '0.00' }}" style="text-align:right" onchange="updateBarchar()"/>
+                                                <span class="input-group-addon">cm</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group{{ $errors->has('comentario_siembra') ? ' has-error' : '' }}">
                                         <label for="comentario_siembra" class="col-md-5 control-label">Observacion</label>
-                                        <div class="col-md-6">
-                                            <input id="comentario_siembra" type="text" class="form-control" name="comentario_siembra" value="{{ $siembra['comentario_siembra'] or old('comentario_siembra') }}">
+                                        <div class="col-md-7">
+                                            <textarea id="comentario_siembra" name="comentario_siembra" class="form-control" rows="3">{{ $siembra['comentario_siembra'] or old('comentario_siembra') }}</textarea>
                                             @if ($errors->has('comentario_siembra'))
                                                 <span class="help-block">
                                                     <strong>{{ $errors->first('comentario_siembra') }}</strong>
@@ -116,7 +122,7 @@
                                     <input type="hidden" name="confirm" id="confirm" value="false">
 
                                     <div class="form-group">
-                                        <div class="col-md-11" style="text-align:right">
+                                        <div class="col-md-12" style="text-align:right">
                                             <button type="submit" class="btn btn-primary">
                                                 <i class="fa fa-btn fa-save"></i> Guardar
                                             </button>
