@@ -15,7 +15,7 @@
             <div class="col-md-12">
         @endif
             <div class="panel panel-default">
-                <div class="panel-heading">Registrar Preparacion del Terreno</div>
+                <div class="panel-heading">Datos de la Siembra</div>
                 @if (isset($mensaje))
                     <div class="alert alert-success">
                         <strong>¡Correcto! </strong>{{ $mensaje }}
@@ -209,7 +209,7 @@
                                     text-align: center;
                                     font-weight: bold;
                                     padding: 8px 0;
-                                    color: #f1f1f1;
+                                    color: #333333;
                                 }
                             </style>
                             <table width="80%" border="1px grey" style="margin-left: auto;margin-right: auto;border: white;">
