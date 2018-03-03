@@ -131,13 +131,13 @@
 
             <div class="col-sm-12">
 
-                <ul class="social-links">
-                    <li><a href="" class="wow fadeInUp"><i class="fa fa-facebook"></i></a></li>
-                    <li><a href="" class="wow fadeInUp" data-wow-delay=".1s"><i class="fa fa-twitter"></i></a></li>
-                    <li><a href="" class="wow fadeInUp" data-wow-delay=".2s"><i class="fa fa-google-plus"></i></a></li>
-                    <li><a href="" class="wow fadeInUp" data-wow-delay=".4s"><i class="fa fa-pinterest"></i></a></li>
-                    <li><a href="" class="wow fadeInUp" data-wow-delay=".5s"><i class="fa fa-envelope"></i></a></li>
-                </ul>
+                {{--<ul class="social-links">--}}
+                    {{--<li><a href="" class="wow fadeInUp"><i class="fa fa-facebook"></i></a></li>--}}
+                    {{--<li><a href="" class="wow fadeInUp" data-wow-delay=".1s"><i class="fa fa-twitter"></i></a></li>--}}
+                    {{--<li><a href="" class="wow fadeInUp" data-wow-delay=".2s"><i class="fa fa-google-plus"></i></a></li>--}}
+                    {{--<li><a href="" class="wow fadeInUp" data-wow-delay=".4s"><i class="fa fa-pinterest"></i></a></li>--}}
+                    {{--<li><a href="" class="wow fadeInUp" data-wow-delay=".5s"><i class="fa fa-envelope"></i></a></li>--}}
+                {{--</ul>--}}
 
                 <p class="copyright">
                     © 2017 Proyecto de tesis

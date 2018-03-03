@@ -469,7 +469,7 @@ textarea.form-control {
 	text-align: center;
 	padding: 15px 0;
 	color: #FFF;
-	position: absolute;
+	position: fixed;
 	right: 0;
 	bottom: 0;
 	left: 0;
