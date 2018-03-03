@@ -72,7 +72,7 @@
                                     <form action="{{ url('users/productor')}}/{{$productor['id']}}" method="post" class="btn-mini-xs-form">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="hidden" name="_method" value="DELETE" >
-                                        <button class="btn btn-danger btn-xs" type="submit">
+                                        <button class="btn btn-danger btn-xs btn-mini-xs" type="submit">
                                             <i class="fa fa-btn fa-trash-o"></i>
                                         </button>
                                     </form>
