@@ -70,7 +70,7 @@
                                     @endif
                                     <tr @if (isset($planificacionriego_done['metodos_riego']) and $planificacionriego_done['id'] == $planificacionriego['id']) style="background: rgba(202, 202, 224, 0.58);" @endif>
 {{--                                        <td style="text-align: center">{{$planificacionriego['fecha_planificacion']}}</td>--}}
-                                        <td style="text-align: center">{{ date('F d, Y', strtotime($planificacionriego['fecha_planificacion'])) }}</td>
+                                        <td style="text-align: center">{{ date('H:i d de m del Y', strtotime($planificacionriego['fecha_planificacion'])) }}</td>
                                         <td style="text-align: center">{{$planificacionriego['estado']}}</td>
                                         <td style="text-align: center">
                                             <form class="form-horizontal" role="form" method="POST" action="{{ url('/riegos/create') }}">
