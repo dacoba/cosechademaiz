@@ -24,28 +24,40 @@
                             <div class="form-group">
                                 <label for="problemas_produccion" class="col-md-5 control-label">Problemas de Produccion</label>
                                 <div class="col-md-6">
-                                    <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control text-right" value="{{ $cosecha['problemas_produccion'] }}"/>
+                                    <div class="input-group">
+                                        <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control text-right" value="75">
+                                        <span class="input-group-addon">%</span>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="altura_tallo" class="col-md-5 control-label">Altura del Tallo</label>
                                 <div class="col-md-6">
-                                    <input type="number" min="1" max="100" id="altura_tallo" name="altura_tallo" class="form-control text-right" value="{{ $cosecha['altura_tallo'] }}"/>
+                                    <div class="input-group">
+                                        <input type="number" min="1" max="100" id="altura_tallo" name="altura_tallo" class="form-control text-right" value="{{ $cosecha['altura_tallo'] }}"/>
+                                        <span class="input-group-addon">%</span>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="humedad_terreno" class="col-md-5 control-label">Humedad del Terreno</label>
                                 <div class="col-md-6">
-                                    <input type="number" min="1" max="100" id="humedad_terreno" name="humedad_terreno" class="form-control text-right" value="{{ $cosecha['humedad_terreno'] }}"/>
+                                    <div class="input-group">
+                                        <input type="number" min="1" max="100" id="humedad_terreno" name="humedad_terreno" class="form-control text-right" value="{{ $cosecha['humedad_terreno'] }}"/>
+                                        <span class="input-group-addon">%</span>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="rendimiento_produccion" class="col-md-5 control-label">Rendimiento de la Produccion</label>
                                 <div class="col-md-6">
-                                    <input type="number" min="1" max="100" id="rendimiento_produccion" name="rendimiento_produccion" class="form-control text-right" value="{{ $cosecha['rendimiento_produccion'] }}"/>
+                                    <div class="input-group">
+                                        <input type="number" min="1" max="100" id="rendimiento_produccion" name="rendimiento_produccion" class="form-control text-right" value="{{ $cosecha['rendimiento_produccion'] }}"/>
+                                        <span class="input-group-addon">%</span>
+                                    </div>
                                 </div>
                             </div>
 
