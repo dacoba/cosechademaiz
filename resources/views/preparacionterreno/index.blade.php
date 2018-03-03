@@ -242,7 +242,7 @@
                                         Los siguientes datos seran almacenados para la siguiente etapa.
                                         <table class="table" id="confirm_data">
                                             <tr>
-                                                <th>Ph</th>
+                                                <th>Acidez / Alcalinidad</th>
                                                 <td id="m_ph"></td>
                                             </tr>
                                             <tr>
@@ -276,7 +276,7 @@
                         </div>
                         <script>
                             $('#submitBtn').click(function() {
-                                $('#m_ph').text($('#ph').val());
+                                $('#m_ph').text($('#ph').val() + " pH");
                                 $('#m_plaga_suelo').text($('#plaga_suelo').val() + " %");
                                 $('#m_drenage').text($('#drenage').val() + " %");
                                 $('#m_erocion').text($('#erocion').val() + " %");
