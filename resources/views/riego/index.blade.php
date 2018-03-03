@@ -145,7 +145,7 @@
                                             <label for="comportamiento_lluvia" class="col-md-5 control-label">Comportamiento de lluvia</label>
                                             <div class="col-md-7">
                                                 <div class="input-group">
-                                                    <input type="number" min="1" max="100" step="0.01" id="comportamiento_lluvia" name="comportamiento_lluvia" class="form-control" @if (isset($planificacionriego_done['comportamiento_lluvia'])) value="{{ $planificacionriego_done['comportamiento_lluvia'] or '0.00' }}" @endif style="text-align:right" onchange="updateBarchar()" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif/>
+                                                    <input type="number" min="1" max="100" step="0.01" id="comportamiento_lluvia" name="comportamiento_lluvia" class="form-control text-right" @if (isset($planificacionriego_done['comportamiento_lluvia'])) value="{{ $planificacionriego_done['comportamiento_lluvia'] or '0.00' }}" @endif onchange="updateBarchar()" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif/>
                                                     <span class="input-group-addon">%</span>
                                                 </div>
                                             </div>
@@ -155,7 +155,7 @@
                                             <label for="problemas_drenaje" class="col-md-5 control-label">Drenaje</label>
                                             <div class="col-md-7">
                                                 <div class="input-group">
-                                                    <input type="number" min="1" max="100" step="0.01" id="problemas_drenaje" name="problemas_drenaje" class="form-control" @if (isset($planificacionriego_done['problemas_drenaje'])) value="{{ $planificacionriego_done['problemas_drenaje'] or '0.00' }}" @endif style="text-align:right" onchange="updateBarchar()" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif/>
+                                                    <input type="number" min="1" max="100" step="0.01" id="problemas_drenaje" name="problemas_drenaje" class="form-control text-right" @if (isset($planificacionriego_done['problemas_drenaje'])) value="{{ $planificacionriego_done['problemas_drenaje'] or '0.00' }}" @endif onchange="updateBarchar()" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif/>
                                                     <span class="input-group-addon">%</span>
                                                 </div>
                                             </div>

@@ -142,7 +142,7 @@
                                             <label for="preventivo_plagas" class="col-md-5 control-label">Preventivo Plagas</label>
                                             <div class="col-md-7">
                                                 <div class="input-group">
-                                                    <input type="number" min="1" max="100" id="preventivo_plagas" name="preventivo_plagas" class="form-control" @if (isset($planificacionfumigacion_done['preventivo_plagas'])) value="{{ $planificacionfumigacion_done['preventivo_plagas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                                    <input type="number" min="1" max="100" id="preventivo_plagas" name="preventivo_plagas" class="form-control text-right" @if (isset($planificacionfumigacion_done['preventivo_plagas'])) value="{{ $planificacionfumigacion_done['preventivo_plagas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
                                                     <span class="input-group-addon">%</span>
                                                 </div>
                                             </div>
@@ -152,7 +152,7 @@
                                             <label for="control_malezas" class="col-md-5 control-label">Control de Malezas</label>
                                             <div class="col-md-7">
                                                 <div class="input-group">
-                                                    <input type="number" min="1" max="100" id="control_malezas" name="control_malezas" class="form-control" @if (isset($planificacionfumigacion_done['control_malezas'])) value="{{ $planificacionfumigacion_done['control_malezas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                                    <input type="number" min="1" max="100" id="control_malezas" name="control_malezas" class="form-control text-right" @if (isset($planificacionfumigacion_done['control_malezas'])) value="{{ $planificacionfumigacion_done['control_malezas'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
                                                     <span class="input-group-addon">%</span>
                                                 </div>
                                             </div>
@@ -162,7 +162,7 @@
                                             <label for="control_enfermedades" class="col-md-5 control-label">Control de Enfermedades</label>
                                             <div class="col-md-7">
                                                 <div class="input-group">
-                                                    <input type="number" min="1" max="100" id="control_enfermedades" name="control_enfermedades" class="form-control" @if (isset($planificacionfumigacion_done['control_enfermedades'])) value="{{ $planificacionfumigacion_done['control_enfermedades'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
+                                                    <input type="number" min="1" max="100" id="control_enfermedades" name="control_enfermedades" class="form-control text-right" @if (isset($planificacionfumigacion_done['control_enfermedades'])) value="{{ $planificacionfumigacion_done['control_enfermedades'] }}" @endif onchange="updateBarchar()" @if (isset($planificacionfumigacion_done['estado']) and $planificacionfumigacion_done['estado'] == "Registrado") readonly @endif/>
                                                     <span class="input-group-addon">%</span>
                                                 </div>
                                             </div>
