@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Fumigaciones Planificadas</div>
+                <div class="panel-heading">Datos de la Cosecha</div>
                 @if (isset($mensaje))
                     <div class="alert alert-success">
                         <strong>¡Correcto! </strong>{{ $mensaje }}

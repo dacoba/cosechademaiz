@@ -132,8 +132,8 @@
                                         {{ csrf_field() }}
     
                                         <div class="form-group">
-                                            <label for="metodos_riego" class="col-md-4 control-label">Metodos de riego</label>
-                                            <div class="col-md-6">
+                                            <label for="metodos_riego" class="col-md-5 control-label">Metodos de riego</label>
+                                            <div class="col-md-7">
                                                 <select id="metodos_riego" name="metodos_riego" class="form-control" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif>
                                                     <option value="1" @if (isset($planificacionriego_done['metodos_riego']) and $planificacionriego_done['metodos_riego'] == '1') selected @endif >Lluvia</option>
                                                     <option value="2" @if (isset($planificacionriego_done['metodos_riego']) and $planificacionriego_done['metodos_riego'] == '2') selected @endif >Pozo de riego</option>
@@ -142,23 +142,29 @@
                                         </div>
     
                                         <div class="form-group">
-                                            <label for="comportamiento_lluvia" class="col-md-4 control-label">Comportamiento de lluvia (%)</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" step="0.01" id="comportamiento_lluvia" name="comportamiento_lluvia" class="form-control" @if (isset($planificacionriego_done['comportamiento_lluvia'])) value="{{ $planificacionriego_done['comportamiento_lluvia'] or '0.00' }}" @endif style="text-align:right" onchange="updateBarchar()" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif/>
+                                            <label for="comportamiento_lluvia" class="col-md-5 control-label">Comportamiento de lluvia</label>
+                                            <div class="col-md-7">
+                                                <div class="input-group">
+                                                    <input type="number" min="1" max="100" step="0.01" id="comportamiento_lluvia" name="comportamiento_lluvia" class="form-control" @if (isset($planificacionriego_done['comportamiento_lluvia'])) value="{{ $planificacionriego_done['comportamiento_lluvia'] or '0.00' }}" @endif style="text-align:right" onchange="updateBarchar()" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif/>
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
                                             </div>
                                         </div>
     
                                         <div class="form-group">
-                                            <label for="problemas_drenaje" class="col-md-4 control-label">Drenaje (%)</label>
-                                            <div class="col-md-6">
-                                                <input type="number" min="1" max="100" step="0.01" id="problemas_drenaje" name="problemas_drenaje" class="form-control" @if (isset($planificacionriego_done['problemas_drenaje'])) value="{{ $planificacionriego_done['problemas_drenaje'] or '0.00' }}" @endif style="text-align:right" onchange="updateBarchar()" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif/>
+                                            <label for="problemas_drenaje" class="col-md-5 control-label">Drenaje</label>
+                                            <div class="col-md-7">
+                                                <div class="input-group">
+                                                    <input type="number" min="1" max="100" step="0.01" id="problemas_drenaje" name="problemas_drenaje" class="form-control" @if (isset($planificacionriego_done['problemas_drenaje'])) value="{{ $planificacionriego_done['problemas_drenaje'] or '0.00' }}" @endif style="text-align:right" onchange="updateBarchar()" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif/>
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
                                             </div>
                                         </div>
     
                                         <div class="form-group{{ $errors->has('comentario_riego') ? ' has-error' : '' }}">
-                                            <label for="comentario_riego" class="col-md-4 control-label">Observacion</label>
-                                            <div class="col-md-6">
-                                                <input id="comentario_riego" type="text" class="form-control" name="comentario_riego" value="{{ $planificacionriego_done['comentario_riego'] or old('comentario_riego') }}" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif>
+                                            <label for="comentario_riego" class="col-md-5 control-label">Observacion</label>
+                                            <div class="col-md-7">
+                                                <textarea id="comentario_riego" name="comentario_riego" class="form-control" rows="3" @if (isset($planificacionriego_done['estado']) and $planificacionriego_done['estado'] == "Registrado") readonly @endif>{{ $planificacionriego_done['comentario_riego'] or old('comentario_riego') }}</textarea>
                                                 @if ($errors->has('comentario_riego'))
                                                     <span class="help-block">
                                                         <strong>{{ $errors->first('comentario_riego') }}</strong>
