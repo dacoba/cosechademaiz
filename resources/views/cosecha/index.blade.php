@@ -53,8 +53,9 @@
                                 <label for="comentario_cosecha" class="col-md-5 control-label">Observaciones</label>
 
                                 <div class="col-md-6">
-                                    <textarea id="comentario_cosecha" name="comentario_cosecha" class="form-control" rows="5"  value="{{ $cosecha['comentario_cosecha'] or old('comentario_cosecha') }}"></textarea>
-                                    {{--<input id="comentario_cosecha" type="text" class="form-control" name="comentario_cosecha" value="{{ $cosecha['comentario_cosecha'] or old('comentario_cosecha') }}">--}}
+                                    <textarea id="comentario_cosecha" name="comentario_cosecha" class="form-control" rows="3">
+                                        {{ $cosecha['comentario_cosecha'] or old('comentario_cosecha') }}
+                                    </textarea>
                                     @if ($errors->has('comentario_cosecha'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('comentario_cosecha') }}</strong>
