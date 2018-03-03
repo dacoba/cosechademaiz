@@ -208,9 +208,11 @@
                                 .preterreno{
                                     text-align: center;
                                     font-weight: bold;
+                                    padding: 8px 0;
+                                    color: #f1f1f1;
                                 }
                             </style>
-                            <table width="80%" border="1px grey" style="margin-left: auto;margin-right: auto;">
+                            <table width="80%" border="1px grey" style="margin-left: auto;margin-right: auto;border: white;">
                                 <tr>
                                     <td class="preterreno" style="background: rgb(31, 119, 180);"><?=round($simulador['problemas'], 2);?> %</td>
                                     <td class="preterreno" style="background: rgb(174, 199, 232);"><?=round($simulador['altura'], 2);?> %</td>
