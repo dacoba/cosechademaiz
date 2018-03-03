@@ -112,7 +112,7 @@
                                 @if ( Auth::user()->tipo != 'Administrador')
                                     <input type="hidden" name="tecnico_id" value="{{ $preterreno['tecnico_id']  }}" >
                                     <div class="form-group{{ $errors->has('ph') ? ' has-error' : '' }}">
-                                        <label for="ph" class="col-md-5 control-label">PH <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de las caracteristicas del suelo, optima para la prduccion del maiz de 6 a 7 de pPH."></i></label>
+                                        <label for="ph" class="col-md-5 control-label">Acidez/Alquilinidad <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de las caracteristicas del suelo, optima para la prduccion del maiz de 6 a 7 de pPH."></i></label>
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <input type="number" id="ph" name="ph" step="0.01" min="4.00" max="10.00" class="form-control" value="{{ $preterreno['ph'] or '4.00' }}" style="text-align:right" onchange="updateBarchar()"/>
@@ -127,7 +127,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('plaga_suelo') ? ' has-error' : '' }}">
-                                        <label for="plaga_suelo" class="col-md-5 control-label">Plaga Suelo<i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencia de plagas en el terreno, evaluada en porcentage segun la existencia de plagas (Gusano Cogollero, Gusano Tierrero, Chicharrita, Gusano de la Mazorca)."></i></label>
+                                        <label for="plaga_suelo" class="col-md-5 control-label">Plaga Suelo <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencia de plagas en el terreno, evaluada en porcentage segun la existencia de plagas (Gusano Cogollero, Gusano Tierrero, Chicharrita, Gusano de la Mazorca)."></i></label>
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <input type="number" min="1" max="50" step="0.01" id="plaga_suelo" name="plaga_suelo" class="form-control" value="{{ $preterreno['plaga_suelo'] or '1' }}" style="text-align:right" onchange="updateBarchar()"/>
@@ -142,7 +142,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('drenage') ? ' has-error' : '' }}">
-                                        <label for="drenage" class="col-md-5 control-label">Drenage<i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la permeabilidad (El maiz no soporta el encharcamiento y rapida de secacion)."></i></label>
+                                        <label for="drenage" class="col-md-5 control-label">Drenage <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de la permeabilidad (El maiz no soporta el encharcamiento y rapida de secacion)."></i></label>
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <input type="number" min="1" max="100" step="0.01" id="drenage" name="drenage" class="form-control" value="{{ $preterreno['drenage'] or '1' }}" style="text-align:right" onchange="updateBarchar()"/>
@@ -157,7 +157,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('erocion') ? ' has-error' : '' }}">
-                                        <label for="erocion" class="col-md-5 control-label">Erocion<i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Degradacion del suelo (Reduce la fertilidad por que proboca la perdida de minerales y materia organica), evaluacion 10 optima para la produccion, 1 muy mala (Elaborar estrategias de recuperacion del terreno)"></i></label>
+                                        <label for="erocion" class="col-md-5 control-label">Erocion <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Degradacion del suelo (Reduce la fertilidad por que proboca la perdida de minerales y materia organica), evaluacion 10 optima para la produccion, 1 muy mala (Elaborar estrategias de recuperacion del terreno)"></i></label>
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <input type="number" min="1" max="100" step="0.01" id="erocion" name="erocion" class="form-control" value="{{ $preterreno['erocion'] or '1' }}" style="text-align:right" onchange="updateBarchar()"/>
@@ -172,7 +172,7 @@
                                     </div>
 
                                     <div class="form-group{{ $errors->has('maleza_preparacion') ? ' has-error' : '' }}">
-                                        <label for="maleza_preparacion" class="col-md-5 control-label">Maleza Preparacion<i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencias de malezas malignaas en el terreno, evaluado en porcentage segun la existencia de maleza."></i></label>
+                                        <label for="maleza_preparacion" class="col-md-5 control-label">Maleza Preparacion <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de existencias de malezas malignaas en el terreno, evaluado en porcentage segun la existencia de maleza."></i></label>
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <input type="number" min="1" max="75" step="0.01" id="maleza_preparacion" name="maleza_preparacion" class="form-control" value="{{ $preterreno['maleza_preparacion'] or '1' }}" style="text-align:right" onchange="updateBarchar()"/>
