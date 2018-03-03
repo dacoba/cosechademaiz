@@ -50,7 +50,7 @@
                                 <td>{{$preterreno['terreno']['productor']['nombre']}} {{$preterreno['terreno']['productor']['apellido']}}</td>
                                 <td style="text-align: center">{{$preterreno['estado']}}</td>
                                 <td style="text-align: center">
-                                    <a href="{{ url('cosechas')}}/{{$preterreno['siembra']['cosecha']}}/edit" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                    <a href="{{ url('cosechas')}}/{{$preterreno['siembra']['cosecha']['id']}}/edit" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
                                 </td>
                             </tr>
                         @endforeach
