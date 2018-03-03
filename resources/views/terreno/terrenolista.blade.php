@@ -16,7 +16,7 @@
                 <a href="{{ url('terrenos/create')}}" class="btn btn-primary hidden-xs" @if ( Auth::user()->tipo != 'Administrador') disabled @endif ><i class="fa fa-plus fa-padding-right"></i>Nuevo Terreno</a>
                 <a href="{{ url('terrenos/create')}}" class="btn btn-primary hidden-sm hidden-md hidden-lg" @if ( Auth::user()->tipo != 'Administrador') disabled @endif ><i class="fa fa-plus"></i></a>
                 <div class="input-group search-table">
-                    <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Filtrar Terreno...">
+                    <input class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Buscar">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
                 </div>
             </div>
@@ -38,6 +38,15 @@
                             <strong>¡Exitoso! </strong>{{ $success }}
                         </div>
                     @endif
+                    <style>
+                        .btn-mini-xs{
+                            padding: 5px 10px;
+                        }
+                        .btn-mini-xs-form{
+                            float: right;
+                            padding-left: 4px;
+                        }
+                    </style>
                     <table class="table table-bordered" id="myTable">
                         <thead>
                         <tr style="background-color: #f1f1f1;">
@@ -46,7 +55,7 @@
                             <th>Tipo de suelo</th>
                             <th>Tipo de relieve</th>
                             <th>Estado</th>
-                            <th style="text-align: center">Opcion</th>
+                            <th style="text-align: center; width: 115px;">Opcion</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -58,13 +67,13 @@
                                 <td>{{$terreno['tipo_relieve']}}</td>
                                 <td style="text-align: center">{{$terreno['estado']}}</td>
                                 <td style="text-align: center">
-                                    <a href="{{ url('terrenos')}}/{{$terreno['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
+                                    <a href="{{ url('terrenos')}}/{{$terreno['id']}}" class="btn btn-primary btn-xs btn-mini-xs"><i class="fa fa-btn fa-file-text-o"></i></a>
                                     @if ( Auth::user()->tipo == 'Administrador')
-                                        <a href="{{ url('terrenos')}}/{{$terreno['id']}}/edit" class="btn btn-warning btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
-                                        <form action="{{ url('terrenos')}}/{{$terreno['id']}}" method="post">
+                                        <a href="{{ url('terrenos')}}/{{$terreno['id']}}/edit" class="btn btn-warning btn-xs btn-mini-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                        <form action="{{ url('terrenos')}}/{{$terreno['id']}}" method="post" class="btn-mini-xs-form">
                                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                             <input type="hidden" name="_method" value="DELETE" >
-                                            <button class="btn btn-danger btn-xs" type="submit">
+                                            <button class="btn btn-danger btn-xs btn-mini-xs" type="submit">
                                                 <i class="fa fa-btn fa-trash-o"></i>
                                             </button>
                                         </form>

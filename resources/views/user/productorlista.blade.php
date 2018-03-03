@@ -54,7 +54,7 @@
                             <th>Email</th>
                             <th style="text-align: center">Telefono</th>
                             <th>Direccion</th>
-                            <th style="text-align: center; width: 113px;">Opcion</th>
+                            <th style="text-align: center; width: 115px;">Opcion</th>
                         </tr>
                         </thead>
                         <tbody>
