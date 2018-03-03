@@ -112,7 +112,7 @@
                                 @if ( Auth::user()->tipo != 'Administrador')
                                     <input type="hidden" name="tecnico_id" value="{{ $preterreno['tecnico_id']  }}" >
                                     <div class="form-group{{ $errors->has('ph') ? ' has-error' : '' }}">
-                                        <label for="ph" class="col-md-5 control-label">Acidez/Alquilinidad <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de las caracteristicas del suelo, optima para la prduccion del maiz de 6 a 7 de pPH."></i></label>
+                                        <label for="ph" class="col-md-5 control-label">Acidez / Alcalinidad <i class="fa fa-question-circle" aria-hidden="true" style="color:#428bca;cursor: pointer;" title="Evaluacion de las caracteristicas del suelo, optima para la prduccion del maiz de 6 a 7 de pPH."></i></label>
                                         <div class="col-md-7">
                                             <div class="input-group">
                                                 <input type="number" id="ph" name="ph" step="0.01" min="4.00" max="10.00" class="form-control" value="{{ $preterreno['ph'] or '4.00' }}" style="text-align:right" onchange="updateBarchar()"/>
