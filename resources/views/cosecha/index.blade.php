@@ -22,35 +22,35 @@
                         <form class="form-horizontal" role="form" method="POST" id="form_cosecha" action="{{ url('/cosechas') }}/{{ $cosecha['id'] }}">
                             {{ csrf_field() }}
                             <div class="form-group">
-                                <label for="problemas_produccion" class="col-md-4 control-label">Problemas de Produccion</label>
+                                <label for="problemas_produccion" class="col-md-5 control-label">Problemas de Produccion</label>
                                 <div class="col-md-6">
                                     <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control" value="{{ $cosecha['problemas_produccion'] }}"/>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="altura_tallo" class="col-md-4 control-label">Altura del Tallo</label>
+                                <label for="altura_tallo" class="col-md-5 control-label">Altura del Tallo</label>
                                 <div class="col-md-6">
                                     <input type="number" min="1" max="100" id="altura_tallo" name="altura_tallo" class="form-control" value="{{ $cosecha['altura_tallo'] }}"/>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="humedad_terreno" class="col-md-4 control-label">Humedad del Terreno</label>
+                                <label for="humedad_terreno" class="col-md-5 control-label">Humedad del Terreno</label>
                                 <div class="col-md-6">
                                     <input type="number" min="1" max="100" id="humedad_terreno" name="humedad_terreno" class="form-control" value="{{ $cosecha['humedad_terreno'] }}"/>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="rendimiento_produccion" class="col-md-4 control-label">Rendimiento de la Produccion</label>
+                                <label for="rendimiento_produccion" class="col-md-5 control-label">Rendimiento de la Produccion</label>
                                 <div class="col-md-6">
                                     <input type="number" min="1" max="100" id="rendimiento_produccion" name="rendimiento_produccion" class="form-control" value="{{ $cosecha['rendimiento_produccion'] }}"/>
                                 </div>
                             </div>
 
                             <div class="form-group{{ $errors->has('comentario_cosecha') ? ' has-error' : '' }}">
-                                <label for="comentario_cosecha" class="col-md-4 control-label">Observaciones</label>
+                                <label for="comentario_cosecha" class="col-md-5 control-label">Observaciones</label>
 
                                 <div class="col-md-6">
                                     <input id="comentario_cosecha" type="text" class="form-control" name="comentario_cosecha" value="{{ $cosecha['comentario_cosecha'] or old('comentario_cosecha') }}">
@@ -125,7 +125,7 @@
                                 $('#m_altura_tallo').text($('#altura_tallo').val() + " %");
                                 $('#m_humedad_terreno').text($('#humedad_terreno').val() + " %");
                                 $('#m_rendimiento_produccion').text($('#rendimiento_produccion').val() + " %");
-                                $('#m_comentario_siembra').text($('#comentario_siembra').val());
+                                $('#m_comentario_cosecha').text($('#comentario_cosecha').val());
                             });
 
                             $('#submit').click(function(){
