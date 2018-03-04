@@ -37,7 +37,7 @@
                                 <td>{{$preterreno['terreno']['productor']['nombre']}} {{$preterreno['terreno']['productor']['apellido']}}</td>
                                 <td style="text-align: center">{{$preterreno['estado']}}</td>
                                 <td style="text-align: center">
-                                    <a href="{{ url('reportes/general')}}/{{$preterreno['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                    <a href="{{ url('reportes/simulacion')}}/{{$preterreno['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
                                 </td>
                             </tr>
                         @endforeach

@@ -37,10 +37,10 @@ class ReportesController extends Controller
         $preterrenos = $this->getTerrenos();
         return view('reporte.estados.lista',['preterrenos' => $preterrenos]);
     }
-    public function indexGeneral()
+    public function indexSimulacion()
     {
         $preterrenos = $this->getTerrenos();
-        return view('reporte.general.lista',['preterrenos' => $preterrenos]);
+        return view('reporte.simulacion.lista',['preterrenos' => $preterrenos]);
     }
 
     /**
@@ -76,11 +76,11 @@ class ReportesController extends Controller
         $simuladors = Simulador::with(['preparacionterreno', 'siembra', 'planificacionriego', 'planificacionfumigacion'])->where('preparacionterreno_id', $id)->get();
         return view('reporte.estados.show',['preterreno' => $preterreno, 'simuladors' => $simuladors]);
     }
-    public function showGeneral($id)
+    public function showSimulacion($id)
     {
         $preterreno = Preparacionterreno::find($id);
         $simuladors = Simulador::with(['preparacionterreno', 'siembra', 'planificacionriego', 'planificacionfumigacion'])->where('preparacionterreno_id', $id)->get();
-        return view('reporte.general.show',['preterreno' => $preterreno, 'simuladors' => $simuladors]);
+        return view('reporte.simulacion.show',['preterreno' => $preterreno, 'simuladors' => $simuladors]);
     }
 
     /**
