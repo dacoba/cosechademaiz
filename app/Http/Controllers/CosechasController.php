@@ -37,68 +37,7 @@ class CosechasController extends Controller
             return Terreno::where('estado', "Cerrado")->get();
         }
     }
-    public function indexSimulador()
-    {
-        $siembras = Siembra::all();
-        $datos = [];
-        $datos = json_encode($datos);
-        return view('simulador.index2',['siembras' => $siembras, 'datos' => $datos]);
-    }
-    public function postSimulador(Request $request)
-    {
-        $siembras = Siembra::all();
-        $siembra = Siembra::with(['preparacionterreno'])->where('id', $request['siembra_id'])->get();
-        $riego = Riego::where('siembra_id', $request['siembra_id'])->get();
-        $fumigacion = Fumigacion::where('siembra_id', $request['siembra_id'])->get();
-        foreach ($riego as $rig){
-            $riego_id = $rig['id'];
-        }
-        foreach ($fumigacion as $fum){
-            $fumigacion_id = $fum['id'];
-        }
-        $planificacionriegos = Planificacionriego::where('riego_id', $riego_id)->count();
-        $planificacionfumigacions = Planificacionfumigacion::where('fumigacion_id', $fumigacion_id)->count();
 
-        $cosecha = Cosecha::where('siembra_id', $request['siembra_id'])->get();
-
-        $datos = [];
-
-//        var ph = document.getElementById("ph").value;
-//        var drenage = document.getElementById("drenage").value;
-//        var fertilizacion = document.getElementById("fertilizacion").value;
-//        var plaga_suelo = document.getElementById("plaga_suelo").value;
-//        var maleza_preparacion = document.getElementById("maleza_preparacion").value;
-//        var semilla = document.getElementById("semilla").value;
-//        var densidad_siembra = document.getElementById("densidad_siembra").value;
-
-        $datos[0][0] = $siembra[0]['preparacionterreno']['ph'];
-        $datos[0][1] = $siembra[0]['preparacionterreno']['drenage'];
-        $datos[0][2] = $siembra[0]['fertilizacion'];
-        $datos[0][3] = $siembra[0]['preparacionterreno']['plaga_suelo'];
-        $datos[0][4] = $siembra[0]['preparacionterreno']['maleza_preparacion'];
-        $datos[0][5] = $siembra[0]['semilla'];
-        $datos[0][6] = $siembra[0]['densidad_siembra'];
-
-        $datos[1][0] = rand(1,10);
-        $datos[1][1] = rand(1,10);
-        $datos[1][2] = rand(1,10);
-        $datos[1][3] = rand(1,10);
-        $datos[1][4] = rand(1,10);
-        $datos[1][5] = rand(1,10);
-        $datos[1][6] = rand(1,10);
-
-        $datos[2][0] = rand(1,10);
-        $datos[2][1] = rand(1,10);
-        $datos[2][2] = rand(1,10);
-        $datos[2][3] = rand(1,10);
-        $datos[2][4] = rand(1,10);
-        $datos[2][5] = rand(1,10);
-        $datos[2][6] = rand(1,10);
-
-        $datos = json_encode($datos);
-
-        return view('simulador.index2',['siembras' => $siembras, 'datos' => $datos]);
-    }
     protected function getSiembrasEstate()
     {
         if (Auth::user()->tipo == 'Administrador') {
@@ -115,11 +54,8 @@ class CosechasController extends Controller
     }
     public function index()
     {
-//        $siembras =  $this->getSiembrasEstate();
-//        return view('cosecha.index',['siembras' => $siembras]);
         $preterrenos = $this->getTerrenos();
         return view('cosecha.lista',['preterrenos' => $preterrenos]);
-
     }
     public function getreporteSiembra()
     {
