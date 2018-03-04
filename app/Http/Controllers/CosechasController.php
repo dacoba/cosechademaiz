@@ -12,6 +12,7 @@ use App\Planificacionfumigacion;
 use Illuminate\Support\Facades\Auth;
 use App\Preparacionterreno;
 use App\Terreno;
+use App\Simulador;
 
 use App\Http\Requests;
 
@@ -304,6 +305,19 @@ class CosechasController extends Controller
                 ->update([
                     'estado' => "Cerrado",
                 ]);
+            if (Auth::user()->tipo == 'Tecnico'){
+                $sig_num = Simulador::where('preparacionterreno_id',$reparacionterreno_id)->orderBy('id', 'desc')->first()['numero_simulacion'] + 1;
+                Simulador::create([
+                    'numero_simulacion' => $sig_num,
+                    'problemas' => $request['problemas_produccion'],
+                    'altura' => $request['altura_tallo'],
+                    'humedad' => $request['humedad_terreno'],
+                    'rendimiento' => $request['rendimiento_produccion'],
+                    'tipo' => "Cosecha",
+                    'siembra_id' => $request['siembra_id'],
+                    'preparacionterreno_id' => $reparacionterreno_id,
+                ]);
+            }
             Terreno::where('id', $terreno_id)
                 ->update([
                     'estado' => "Cerrado"

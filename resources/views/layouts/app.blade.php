@@ -94,6 +94,7 @@
                             <ul class="dropdown-menu">
                                 <li><a href="{{ url('/reportes/siembras') }}">Reporte de Siembras</a></li>
                                 <li><a href="{{ url('/simuladors2') }}">Reporte General</a></li>
+                                <li><a href="{{ url('/reportes') }}">Reporte de Estados</a></li>
                             </ul>
                         </li>
                     @endif

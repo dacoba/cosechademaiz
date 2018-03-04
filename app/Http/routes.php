@@ -72,3 +72,5 @@ Route::get('/simuladors', function () {
 
 Route::get('/simuladors2', 'CosechasController@indexSimulador');
 Route::post('/simuladors2', 'CosechasController@postSimulador');
+
+Route::resource('reportes', 'ReportesController');

@@ -14,14 +14,7 @@
 		 * Smooth scroll / Scroll To Top
 		/* ---------------------------------------------- */
 
-		$('a[href*=#]').bind("click", function(e){
-           
-			var anchor = $(this);
-			$('html, body').stop().animate({
-				scrollTop: $(anchor.attr('href')).offset().top
-			}, 1000);
-			e.preventDefault();
-		});
+
 
 		$(window).scroll(function() {
 			if ($(this).scrollTop() > 100) {
@@ -44,10 +37,10 @@
 			offset: 70
 		})
 
-        
+
         /* ---------------------------------------------- /*
 		 * Skills
-        /* ---------------------------------------------- */    
+        /* ---------------------------------------------- */
         //var color = $('#home').css('backgroundColor');
 
         $('.skills').waypoint(function(){
@@ -66,7 +59,7 @@
         /* ---------------------------------------------- /*
 		 * Quote Rotator
 		/* ---------------------------------------------- */
-       
+
 			$( function() {
 				/*
 				- how to call the plugin:
@@ -87,8 +80,8 @@
 				$( '#cbp-qtrotator' ).cbpQTRotator();
 
 			} );
-		
-        
+
+
 		/* ---------------------------------------------- /*
 		 * Home BG
 		/* ---------------------------------------------- */
@@ -137,7 +130,7 @@
 			var c_email = $('#c_email').val();
 			var c_message = $('#c_message ').val();
 			var response = $('#contact-form .ajax-response');
-			
+
 			var formData = {
 				'name'       : c_name,
 				'email'      : c_email,
@@ -161,7 +154,7 @@
 											response.html(ret.message).fadeIn(500);
 							}
 						});
-				}           
+				}
             	return false;
 			});
 
