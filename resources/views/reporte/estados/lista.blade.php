@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
             <div class="pfblock-header">
-                <h2 class="pfblock-title">Reporte de Simulacion</h2>
+                <h2 class="pfblock-title">Reporte de Estados</h2>
             </div>
         </div>
         <div class="col-md-10 col-md-offset-1">
@@ -37,7 +37,7 @@
                                 <td>{{$preterreno['terreno']['productor']['nombre']}} {{$preterreno['terreno']['productor']['apellido']}}</td>
                                 <td style="text-align: center">{{$preterreno['estado']}}</td>
                                 <td style="text-align: center">
-                                    <a href="{{ url('reportes/general')}}/{{$preterreno['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
+                                    <a href="{{ url('reportes/estados')}}/{{$preterreno['id']}}" class="btn btn-primary btn-xs"><i class="fa fa-btn fa-pencil"></i></a>
                                 </td>
                             </tr>
                         @endforeach

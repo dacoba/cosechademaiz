@@ -32,7 +32,12 @@ class ReportesController extends Controller
             return Terreno::where('estado', "Cerrado")->get();
         }
     }
-    public function index()
+    public function indexEstados()
+    {
+        $preterrenos = $this->getTerrenos();
+        return view('reporte.estados.lista',['preterrenos' => $preterrenos]);
+    }
+    public function indexGeneral()
     {
         $preterrenos = $this->getTerrenos();
         return view('reporte.general.lista',['preterrenos' => $preterrenos]);
@@ -65,7 +70,13 @@ class ReportesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showEstados($id)
+    {
+        $preterreno = Preparacionterreno::find($id);
+        $simuladors = Simulador::with(['preparacionterreno', 'siembra', 'planificacionriego', 'planificacionfumigacion'])->where('preparacionterreno_id', $id)->get();
+        return view('reporte.estados.show',['preterreno' => $preterreno, 'simuladors' => $simuladors]);
+    }
+    public function showGeneral($id)
     {
         $preterreno = Preparacionterreno::find($id);
         $simuladors = Simulador::with(['preparacionterreno', 'siembra', 'planificacionriego', 'planificacionfumigacion'])->where('preparacionterreno_id', $id)->get();
