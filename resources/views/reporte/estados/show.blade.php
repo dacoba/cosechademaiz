@@ -90,8 +90,8 @@
                         <?php
                             $count_riegos = 0;
                             $count_fumigaciones = 0;
-                            $text_riego = ['Primer', 'Segundo', 'Tercer', 'Cuarto', 'Quinto'];
-                            $text_fumigacion = ['Primera', 'Segunda', 'Tercera'];
+                            $text_riego = ['Primer', 'Segundo', 'Tercer', 'Cuarto', 'Quinto', 'Sexto', 'Septimo', 'Octavo'];
+                            $text_fumigacion = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta', 'Sexta', 'Septima', 'Octaba'];
                         ?>
                         @if($simuladors->count() % 2 == 1)
                             <script src="{{URL::asset('assets/bootstrap/js/bootstrap-collapse.js')}}"></script>

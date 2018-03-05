@@ -32,11 +32,15 @@ class ReportesController extends Controller
     protected function getTerrenos()
     {
         if (Auth::user()->tipo == 'Tecnico') {
-            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->where('estado', "Cerrado")->where('tecnico_id', Auth::user()->id)->get();
+            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->where('tecnico_id', Auth::user()->id)->orderBy('updated_at', 'asc')->get();
+        }elseif (Auth::user()->tipo == 'Productor') {
+            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->whereHas('terreno.productor', function ($query) {
+                $query->where('id', Auth::user()->id);
+            })->orderBy('updated_at', 'asc')->get();
         }elseif (Auth::user()->tipo == 'Administrador') {
-            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->where('estado', "Cerrado")->get();
+            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->orderBy('updated_at', 'asc')->get();
         }else{
-            return Terreno::where('estado', "Cerrado")->get();
+            return [];
         }
     }
     public function indexEstados()
@@ -108,7 +112,7 @@ class ReportesController extends Controller
                 $planificaciones['planificacionriegoEnd'] = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
                     ->whereIn('estado', array('Ejecutado', 'Registrado'))->get();
                 $planificaciones['planificacionriegoPla'] = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
-                    ->where('estado', 'Planificado')->orderBy('fecha_planificacion', 'desc')->get();
+                    ->where('estado', 'Planificado')->orderBy('fecha_planificacion', 'asc')->get();
             }
             if(Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->count()){
                 $planificaciones['exist'] = True;
@@ -116,7 +120,7 @@ class ReportesController extends Controller
                 $planificaciones['planificacionfumigacionEnd'] = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
                     ->whereIn('estado', array('Ejecutado', 'Registrado'))->get();
                 $planificaciones['planificacionfumigacionPla'] = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
-                    ->where('estado', 'Planificado')->orderBy('fecha_planificacion', 'desc')->get();
+                    ->where('estado', 'Planificado')->orderBy('fecha_planificacion', 'asc')->get();
             }
 
             $first = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])

@@ -203,13 +203,15 @@
                                     </center>
                                 </div>
                                 <div class="tab-pane" id="tabPlanificaciones">
+                                    <center>
+                                        <h2 class="h2-reports">Panificaciones</h2>
+                                    </center>
                                     @if($planificaciones['exist'])
                                         <?php
                                         $riego_percent = 100 / $planificaciones['planificacionriego']->count() * $planificaciones['planificacionriegoEnd']->count();
                                         $fumigacion_percent = 100 / $planificaciones['planificacionfumigacion']->count() * $planificaciones['planificacionfumigacionEnd']->count();
                                         ?>
                                         <center>
-                                            <h2 class="h2-reports">Panificaciones</h2>
                                             <div class="skills">
                                                 <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
                                             <span data-percent="{{ $riego_percent }}" class="chart easyPieChart" style="width: 140px; height: 140px; line-height: 140px;">
@@ -217,25 +219,28 @@
                                             </span>
                                                     <h3 class="text-center">Riego</h3>
                                                     @if ($riego_percent != 100)
-                                                        <p class="reports-skills-p"><strong>Fecha del siguiente riego</strong><br>{{ $planificaciones['planificacionriegoPla']->first()['fecha_planificacion'] }}</p>
+                                                        <p class="reports-skills-p"><strong>Fecha del siguiente riego</strong><br>{{ date('H:i a - d/m/Y', strtotime($planificaciones['planificacionriegoPla']->first()['fecha_planificacion'])) }}</p>
                                                     @endif
                                                 </div>
                                                 <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
                                             <span data-percent="{{ $fumigacion_percent }}" class="chart easyPieChart" style="barColor:black; width: 140px; height: 140px; line-height: 140px;">
-                                                <span class="percent">{{ $fumigacion_percent }}</span>
+                                                <span class="percent">{{ round($fumigacion_percent, 1) }}</span>
                                             </span>
                                                     <h3 class="text-center">Fumigacion</h3>
                                                     @if ($fumigacion_percent != 100)
-                                                        <p class="reports-skills-p"><strong>Fecha de la siguiente fumigacion</strong><br>{{ $planificaciones['planificacionfumigacionPla']->first()['fecha_planificacion'] }}</p>
+                                                        <p class="reports-skills-p"><strong>Fecha de la siguiente fumigacion</strong><br>{{ date('H:i a - d/m/Y', strtotime($planificaciones['planificacionfumigacionPla']->first()['fecha_planificacion'])) }}</p>
                                                     @endif
                                                 </div>
                                             </div>
                                         </center>
                                     @else
-                                        <p>Nay planificaciones.</p>
+                                        <p>No hay planificaciones registradas.</p>
                                     @endif
                                 </div>
                                 <div class="tab-pane" id="tabCosecha">
+                                    <center>
+                                        <h2 class="h2-reports">Cosecha</h2>
+                                    </center>
                                     @if($cosecha['exist'])
                                         <style>
                                             text {
@@ -252,7 +257,6 @@
                                             }
                                         </style>
                                         <center>
-                                            <h2 class="h2-reports">Cosecha</h2>
                                             <div id="chartCosecha" style="height: 250px;">
                                                 <svg></svg>
                                             </div>
@@ -323,19 +327,19 @@
                                             }
                                         </script>
                                     @else
-                                        <p>Nay cosecha.</p>
+                                        <p>No hay una cosecha registrada.</p>
                                     @endif
                                 </div>
                                 <div class="tab-pane" id="tabRiegosyfumigaciones">
+                                    <center>
+                                        <h2 class="h2-reports">Riegos y Fumigaciones</h2>
+                                    </center>
                                     @if($planificaciones['exist'])
                                         <style>
                                             .btn-mini-xs {
                                                 padding: 5px 10px;
                                             }
                                         </style>
-                                        <center>
-                                            <h2 class="h2-reports">Riegos y Fumigaciones</h2>
-                                        </center>
                                         <table class="table table-bordered">
                                             <thead>
                                             <tr>
@@ -353,9 +357,11 @@
                                                     <td style="text-align: center">{{$planificacion['estado']}}</td>
                                                     <td style="text-align: center">
                                                         @if($planificacion['estado'] != "Registrado")
-                                                            <button class="btn btn-primary btn-xs btn-mini-xs" disabled>
-                                                                <i class="fa fa-btn fa-file-text-o"></i>
-                                                            </button>
+                                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aun no se han registrado datos para esta planificacion">
+                                                                <button class="btn btn-primary btn-xs btn-mini-xs" disabled>
+                                                                    <i class="fa fa-btn fa-file-text-o"></i>
+                                                                </button>
+                                                            </span>
                                                         @else
                                                             @if($planificacion['table_name'] == "Riego")
                                                                 <?php $metodos = ['None', 'Lluvia', 'Pozo de riego']?>
@@ -440,14 +446,14 @@
                                             }
                                         </script>
                                     @else
-                                        <p>Nay riegos y/o fumigaciones.</p>
+                                        <p>No hay planificaciones de riegos y fumigaciones.</p>
                                     @endif
                                 </div>
                                 <div class="tab-pane" id="tabEstimacion">
+                                    <center>
+                                        <h2 class="h2-reports">Estimacion de Produccion de Maiz</h2>
+                                    </center>
                                     @if($estimacion['exist'])
-                                        <center>
-                                            <h2 class="h2-reports">Estimacion de Produccion de Maiz</h2>
-                                        </center>
                                         <?php
                                         $plantas_por_hectarea = (10000/($estimacion['siembra']['distancia_surco'] * $estimacion['siembra']['distancia_surco']))*10000;
                                         $rendimiento_produccion = ceil($cosecha['cosecha']['rendimiento_produccion']/25)-1;
@@ -460,10 +466,13 @@
                                             <br><br><h2 style="text-transform: lowercase"><?=number_format(round($produccion_maiz,1) * $estimacion['siembra']['preparacionterreno']['terreno']['area_parcela'], 0, '.', ','); ?> Toneladas.</h2>
                                         </center>
                                     @else
-                                        <p>Nay siembra y/o cosecha.</p>
+                                        <p>No hay una siembra y/o cosecha registrada.</p>
                                     @endif
                                 </div>
                                 <div class="tab-pane" id="tabCalidad">
+                                    <center>
+                                        <h2 class="h2-reports">Control de Calidad</h2>
+                                    </center>
                                     @if($calidad['exist'])
                                         <style>
                                             text {
@@ -480,7 +489,6 @@
                                             }
                                         </style>
                                         <center>
-                                            <h2 class="h2-reports">Control de Calidad</h2>
                                             <div id="chart1" style="height: 250px;">
                                                 <svg></svg>
                                             </div>
@@ -545,7 +553,7 @@
                                             <strong>Desviación Estándar : </strong>{{ $calidad['estadistico']['desviacion_estandar'] }}<br>
                                         </center>
                                     @else
-                                        <p>Nay siembra y/o cosecha.</p>
+                                        <p>No hay una siembra y/o cosecha registrada.</p>
                                     @endif
                                 </div>
                             </div>

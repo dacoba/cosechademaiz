@@ -87,6 +87,8 @@
                                     <li><a href="{{ url('/fumigacions') }}">Planificacion de Fumigacion</a></li>
                                 </ul>
                             </li>
+                        @endif
+                        @if ( Auth::user()->tipo == 'Tecnico')
                             <li><a href="{{ url('/cosechas') }}">Cosecha</a></li>
                         @endif
                         <li class="dropdown">

@@ -49,8 +49,8 @@
                             if($numero_simulacion != 0){
                                 $count_riegos = 0;
                                 $count_fumigaciones = 0;
-                                $text_riego = ['Primer', 'Segundo', 'Tercer', 'Cuarto', 'Quinto'];
-                                $text_fumigacion = ['Primera', 'Segunda', 'Tercera'];
+                                $text_riego = ['Primer', 'Segundo', 'Tercer', 'Cuarto', 'Quinto', 'Sexto', 'Septimo', 'Octavo'];
+                                $text_fumigacion = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta', 'Sexta', 'Septima', 'Octaba'];
                                 for($i=0;$i<=$numero_simulacion-1;$i++){
                                     if($simuladors[$i]['tipo']=="Riego"){
                                         $datos[$i][0] = $text_riego[$count_riegos]." ".$simuladors[$i]['tipo'];
