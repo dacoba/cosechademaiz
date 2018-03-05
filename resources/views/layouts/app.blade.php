@@ -92,7 +92,8 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reportes</a>
                             <ul class="dropdown-menu">
-                                <li><a href="{{ url('/reportes/siembras') }}">Reporte de Siembras</a></li>
+                                {{--<li><a href="{{ url('/reportes/siembras') }}">Reporte de Siembras</a></li>--}}
+                                <li><a href="{{ url('/reportes/general') }}">Reporte General</a></li>
                                 <li><a href="{{ url('/reportes/estados') }}">Reporte de Estados</a></li>
                                 <li><a href="{{ url('/reportes/simulacion') }}">Reporte de Simulacion</a></li>
                             </ul>
