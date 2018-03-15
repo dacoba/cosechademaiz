@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use App\Terreno;
 use App\Preparacionterreno;
@@ -43,10 +44,50 @@ class ReportesController extends Controller
             return [];
         }
     }
+    protected function getTerrenosPost($request)
+    {
+        $preparacones = Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->orderBy('updated_at', 'asc');
+        if($request['tecnico_id'] != 0){
+            $preparacones->where('tecnico_id', $request['tecnico_id']);
+        }
+        if($request['productor_id'] != 0){
+            $preparacones->whereHas('terreno.productor', function ($query) use($request){
+                $query->where('id', $request['productor_id']);
+            });
+        }
+        if($request['terreno_id'] != 0){
+            $preparacones->where('terreno_id', $request['terreno_id']);
+        }
+        return $preparacones->get();
+    }
     public function indexEstados()
     {
         $preterrenos = $this->getTerrenos();
-        return view('reporte.estados.lista',['preterrenos' => $preterrenos]);
+        $productores = User::where('tipo', "Productor")->get();
+        $tecnicos = User::where('tipo', "Tecnico")->get();
+        $terrenos = Terreno::with('productor');
+        if(Auth::user()->tipo == 'Productor'){
+            $terrenos->where('productor_id', Auth::user()->id);
+        }
+        $terrenos = $terrenos->get();
+        return view('reporte.estados.lista',['preterrenos' => $preterrenos, 'productores' => $productores, 'tecnicos' => $tecnicos, 'terrenos' => $terrenos]);
+    }
+    public function indexEstadosPost(Request $request)
+    {
+        if (Auth::user()->tipo == 'Tecnico') {
+            $request['tecnico_id'] = Auth::user()->id;
+        }elseif (Auth::user()->tipo == 'Productor') {
+            $request['productor_id'] = Auth::user()->id;
+        }
+        $preterrenos = $this->getTerrenosPost($request);
+        $productores = User::where('tipo', "Productor")->get();
+        $tecnicos = User::where('tipo', "Tecnico")->get();
+        $terrenos = Terreno::with('productor');
+        if($request['productor_id'] != 0){
+            $terrenos->where('productor_id', $request['productor_id']);
+        }
+        $terrenos = $terrenos->get();
+        return view('reporte.estados.lista',['preterrenos' => $preterrenos, 'productores' => $productores, 'tecnicos' => $tecnicos, 'terrenos' => $terrenos, 'values' => $request]);
     }
     public function indexSimulacion()
     {

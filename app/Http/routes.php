@@ -71,6 +71,7 @@ Route::get('/simuladors', function () {
 });
 
 Route::get('reportes/estados', 'ReportesController@indexEstados');
+Route::post('reportes/estados', 'ReportesController@indexEstadosPost');
 Route::get('reportes/estados/{preparacionterrenos}', 'ReportesController@showEstados');
 Route::get('reportes/simulacion', 'ReportesController@indexSimulacion');
 Route::get('reportes/simulacion/{preparacionterrenos}', 'ReportesController@showSimulacion');
