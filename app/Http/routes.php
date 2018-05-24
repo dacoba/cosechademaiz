@@ -70,10 +70,10 @@ Route::get('/simuladors', function () {
     return view('simulador.index');
 });
 
-Route::get('reportes/estados', 'ReportesController@indexEstados');
-Route::post('reportes/estados', 'ReportesController@indexEstadosPost');
-Route::get('reportes/estados/{preparacionterrenos}', 'ReportesController@showEstados');
-Route::get('reportes/simulacion', 'ReportesController@indexSimulacion');
-Route::get('reportes/simulacion/{preparacionterrenos}', 'ReportesController@showSimulacion');
-Route::get('reportes/general', 'ReportesController@indexGeneral');
+Route::get('reportes', 'ReportesController@index');
+Route::post('reportes', 'ReportesController@index');
+Route::get('reportes/{preparacionterrenos}', 'ReportesController@show');
+
 Route::get('reportes/general/{preparacionterrenos}', 'ReportesController@showGeneral');
+Route::get('reportes/estados/{preparacionterrenos}', 'ReportesController@showEstados');
+Route::get('reportes/simulacion/{preparacionterrenos}', 'ReportesController@showSimulacion');

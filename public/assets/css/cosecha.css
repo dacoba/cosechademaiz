@@ -1,0 +1,13 @@
+.w-100{
+    width: 100% !important;
+}
+.po-0{
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+.p-2{
+    padding: 2px !important;
+}
+.float-r{
+    float: right !important;
+}

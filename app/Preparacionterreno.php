@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Jenssegers\Date\Date;
 use Illuminate\Database\Eloquent\Model;
 
 class Preparacionterreno extends Model
@@ -19,5 +20,9 @@ class Preparacionterreno extends Model
     function siembra()
     {
         return $this->hasOne('App\Siembra');
+    }
+    public function getCreatedAtAttribute($date)
+    {
+        return new Date($date);
     }
 }

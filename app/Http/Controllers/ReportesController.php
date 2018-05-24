@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Siembra;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Jenssegers\Date\Date;
 
 use App\Http\Requests;
 
@@ -21,15 +24,11 @@ use DB;
 
 class ReportesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
+
     protected function getTerrenos()
     {
         if (Auth::user()->tipo == 'Tecnico') {
@@ -39,94 +38,153 @@ class ReportesController extends Controller
                 $query->where('id', Auth::user()->id);
             })->orderBy('updated_at', 'asc')->get();
         }elseif (Auth::user()->tipo == 'Administrador') {
-            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->orderBy('updated_at', 'asc')->get();
+            return Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->orderBy('created_at', 'asc')->get();
         }else{
             return [];
         }
     }
-    protected function getTerrenosPost($request)
+
+    protected function getTerrenosDate(Request $request)
     {
-        $preparacones = Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])->orderBy('updated_at', 'asc');
-        if($request['tecnico_id'] != 0){
-            $preparacones->where('tecnico_id', $request['tecnico_id']);
+        $preparaciones = Preparacionterreno::with(['siembra', 'siembra.cosecha', 'terreno', 'terreno.productor'])
+            ->where('created_at','>=', $request->date_from)
+            ->where('created_at','<=',$request->date_to.' 23:59:59')
+            ->orderBy('created_at', 'asc');
+        if($request->tecnico != 0)
+        {
+            $preparaciones->where('tecnico_id', $request->tecnico);
         }
-        if($request['productor_id'] != 0){
-            $preparacones->whereHas('terreno.productor', function ($query) use($request){
-                $query->where('id', $request['productor_id']);
+        if($request->productor_id != 0)
+        {
+            $preparaciones->whereHas('terreno.productor', function ($query) use($request)
+            {
+                $query->where('id', $request->productor_id);
             });
         }
-        if($request['terreno_id'] != 0){
-            $preparacones->where('terreno_id', $request['terreno_id']);
+        if($request->terreno_id != 0)
+        {
+            $preparaciones->where('terreno_id', $request->terreno_id);
         }
-        return $preparacones->get();
-    }
-    public function indexEstados()
-    {
-        $preterrenos = $this->getTerrenos();
-        $productores = User::where('tipo', "Productor")->get();
-        $tecnicos = User::where('tipo', "Tecnico")->get();
-        $terrenos = Terreno::with('productor');
-        if(Auth::user()->tipo == 'Productor'){
-            $terrenos->where('productor_id', Auth::user()->id);
+        if($request->estado != '0')
+        {
+            $preparaciones->where('estado', $request->estado);
         }
-        $terrenos = $terrenos->get();
-        return view('reporte.estados.lista',['preterrenos' => $preterrenos, 'productores' => $productores, 'tecnicos' => $tecnicos, 'terrenos' => $terrenos]);
-    }
-    public function indexEstadosPost(Request $request)
-    {
-        if (Auth::user()->tipo == 'Tecnico') {
-            $request['tecnico_id'] = Auth::user()->id;
-        }elseif (Auth::user()->tipo == 'Productor') {
-            $request['productor_id'] = Auth::user()->id;
-        }
-        $preterrenos = $this->getTerrenosPost($request);
-        $productores = User::where('tipo', "Productor")->get();
-        $tecnicos = User::where('tipo', "Tecnico")->get();
-        $terrenos = Terreno::with('productor');
-        if($request['productor_id'] != 0){
-            $terrenos->where('productor_id', $request['productor_id']);
-        }
-        $terrenos = $terrenos->get();
-        return view('reporte.estados.lista',['preterrenos' => $preterrenos, 'productores' => $productores, 'tecnicos' => $tecnicos, 'terrenos' => $terrenos, 'values' => $request]);
-    }
-    public function indexSimulacion()
-    {
-        $preterrenos = $this->getTerrenos();
-        return view('reporte.simulacion.lista',['preterrenos' => $preterrenos]);
-    }
-    public function indexGeneral()
-    {
-        $preterrenos = $this->getTerrenos();
-        return view('reporte.general.lista',['preterrenos' => $preterrenos]);
+        return $preparaciones->get();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function index(Request $request)
+    {
+        $values = [];
+        if(!$request->has('date_from'))
+        {
+            $date_from = new Carbon('first day of this month');
+            $request->date_from = $date_from->format("Y-m-d");
+        }
+        if(!$request->has('date_to'))
+        {
+            $date_to = new Carbon('last day of this month');
+            $request->date_to = $date_to->format("Y-m-d");
+        }
+
+        // Tecnico
+
+        if($request->has('tecnico'))
+        {
+            $values['tecnico'] = $request->tecnico;
+        }
+        else
+        {
+            $request->tecnico = 0;
+        }
+
+        // Productor
+        $terrenos = [];
+        $terrenos_base = Terreno::with('productor');
+
+        if($request->has('productor_id'))
+        {
+            $values['productor'] = $request->productor_id;
+            $terrenos = $terrenos_base->where('productor_id', $request->productor_id)->get();
+        }
+        else
+        {
+            $request->productor_id = 0;
+        }
+
+        if(Auth::user()->tipo == 'Productor'){
+            $terrenos = $terrenos_base->where('productor_id', Auth::user()->id)->get();
+        }
+
+        // Terreno
+
+        if($request->has('terreno_id'))
+        {
+            $values['terreno'] = $request->terreno_id;
+        }
+        else
+        {
+            $request->terreno_id = 0;
+        }
+
+        // Estado
+
+        if($request->has('estado'))
+        {
+            $values['estado'] = $request->estado;
+            //dd($values);
+        }
+        else
+        {
+            $request->estado = 0;
+        }
+
+        if (Auth::user()->tipo == 'Tecnico')
+        {
+            $request->tecnico = Auth::user()->id;
+        }
+        elseif (Auth::user()->tipo == 'Productor')
+        {
+            $request->productor_id = Auth::user()->id;
+        }
+
+        $estados = [
+            'Preparacion',
+            'Planificaciones',
+            'Siembra',
+            'Cerrado',
+        ];
+        $preterrenos = $this->getTerrenosDate($request);
+        $productores = User::where('tipo', "Productor")->get();
+        $tecnicos = User::where('tipo', "Tecnico")->get();
+
+        return view('reporte.lista',[
+            'values' => $values,
+            'estados' => $estados,
+            'tecnicos' => $tecnicos,
+            'terrenos' => $terrenos,
+            'preterrenos' => $preterrenos,
+            'productores' => $productores,
+            'date_to' => $request->date_to,
+            'date_from' => $request->date_from,
+        ]);
+    }
+
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    public function show($id)
+    {
+        $preterreno = Preparacionterreno::find($id);
+        return view('reporte.show',['preterreno' => $preterreno]);
+    }
+
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function showEstados($id)
     {
         $preterreno = Preparacionterreno::find($id);
@@ -228,35 +286,16 @@ class ReportesController extends Controller
         return view('reporte.general.show',['preterreno' => $preterreno, 'planificaciones' => $planificaciones, 'cosecha' => $cosecha, 'estimacion' => $estimacion, 'calidad' => $calidad]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

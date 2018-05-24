@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
             <div class="pfblock-header">
-                <h2 class="pfblock-title">Reporte de Estados</h2>
+                <h2 class="pfblock-title"><a href="{{ url('reportes')}}/{{$preterreno['id']}}"><i class="fa fa-chevron-circle-left"></i></a>Reporte de Estados</h2>
             </div>
         </div>
         <div class="col-md-10 col-md-offset-1">
