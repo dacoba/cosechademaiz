@@ -58,6 +58,7 @@
                     }
                 </style>
                 <div class="panel-body">
+                    <a class="btn btn-dark hidden-print pull-right" target="_blank" href="{{ url('/pdf/estados') }}/{{$preterreno['id']}}"><i class="fa fa-file-pdf-o" style="color:red" aria-hidden="true"></i> PDF</a>
                     <table class="table table-bordered">
                         <thead>
                         <tr style="background-color: #f1f1f1;">

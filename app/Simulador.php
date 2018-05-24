@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Jenssegers\Date\Date;
 use Illuminate\Database\Eloquent\Model;
 
 class Simulador extends Model
@@ -21,5 +22,9 @@ class Simulador extends Model
     }
     function preparacionterreno(){
         return $this->belongsTo('App\Preparacionterreno');
+    }
+    public function getCreatedAtAttribute($date)
+    {
+        return new Date($date);
     }
 }

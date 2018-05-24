@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Jenssegers\Date\Date;
+use Barryvdh\DomPDF\Facade as PDF;
 
 use App\Http\Requests;
 
@@ -191,6 +192,28 @@ class ReportesController extends Controller
         $simuladors = Simulador::with(['preparacionterreno', 'siembra', 'planificacionriego', 'planificacionfumigacion'])->where('preparacionterreno_id', $id)->get();
         return view('reporte.estados.show',['preterreno' => $preterreno, 'simuladors' => $simuladors]);
     }
+
+    public function pdfEstados($id)
+    {
+        $preterreno = Preparacionterreno::find($id);
+        $simuladors = Simulador::with(['preparacionterreno', 'siembra', 'planificacionriego', 'planificacionfumigacion'])->where('preparacionterreno_id', $id)->get();
+        $pdf = PDF::loadView('reporte.pdf.estados', [
+            'preterreno' => $preterreno,
+            'simuladors' => $simuladors
+        ]);
+        return $pdf->stream('download');
+    }
+    public function pdfGeneral($id)
+    {
+//        $preterreno = Preparacionterreno::find($id);
+//        $simuladors = Simulador::with(['preparacionterreno', 'siembra', 'planificacionriego', 'planificacionfumigacion'])->where('preparacionterreno_id', $id)->get();
+//        $pdf = PDF::loadView('reporte.pdf.estados', [
+//            'preterreno' => $preterreno,
+//            'simuladors' => $simuladors
+//        ]);
+//        return $pdf->stream('download');
+    }
+
     public function showSimulacion($id)
     {
         $preterreno = Preparacionterreno::find($id);

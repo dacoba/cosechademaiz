@@ -77,3 +77,6 @@ Route::get('reportes/{preparacionterrenos}', 'ReportesController@show');
 Route::get('reportes/general/{preparacionterrenos}', 'ReportesController@showGeneral');
 Route::get('reportes/estados/{preparacionterrenos}', 'ReportesController@showEstados');
 Route::get('reportes/simulacion/{preparacionterrenos}', 'ReportesController@showSimulacion');
+
+Route::get('pdf/estados/{preparacionterrenos}', 'ReportesController@pdfEstados');
+Route::get('pdf/general/{preparacionterrenos}', 'ReportesController@pdfGeneral');
