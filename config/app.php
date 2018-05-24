@@ -152,6 +152,7 @@ return [
          * Application Service Providers...
          */
         Jenssegers\Date\DateServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
@@ -207,6 +208,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'Date' => Jenssegers\Date\Date::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];
