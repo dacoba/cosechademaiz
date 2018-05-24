@@ -151,6 +151,8 @@ return [
         /*
          * Application Service Providers...
          */
+        Jenssegers\Date\DateServiceProvider::class,
+
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
@@ -204,6 +206,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'Date' => Jenssegers\Date\Date::class,
     ],
 
 ];
