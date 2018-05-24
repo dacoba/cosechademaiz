@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Jenssegers\Date\Date;
 use Illuminate\Database\Eloquent\Model;
 
 class Planificacionfumigacion extends Model
@@ -16,5 +17,9 @@ class Planificacionfumigacion extends Model
     function simulador()
     {
         return $this->hasOne('App\Simulador');
+    }
+    public function getFechaPlanificacionAttribute($date)
+    {
+        return new Date($date);
     }
 }
