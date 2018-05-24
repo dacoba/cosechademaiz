@@ -1,1 +1,9 @@
 .env
+/node_modules
+/vendor
+/.idea
+/.vagrant
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
