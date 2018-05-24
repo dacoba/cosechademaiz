@@ -7,7 +7,6 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-        "snowfire/beautymail": "dev-master",
         "jenssegers/date": "^3.4",
         "barryvdh/laravel-dompdf": "^0.8.2"
     },
