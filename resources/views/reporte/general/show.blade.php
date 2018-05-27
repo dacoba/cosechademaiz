@@ -508,17 +508,17 @@
                                                 var datom = [
                                                     {
                                                         values: [{x:0, y:5}, {x:100, y:5}],
-                                                        key: 'Some value 5',
+                                                        key: 'No Certificado',
                                                         color: '#E74C3C'
                                                     },
                                                     {
                                                         values: [{x:0, y:7.5}, {x:100, y:7.5}],
-                                                        key: 'Some value 7.5',
+                                                        key: 'Registrado',
                                                         color: '#2980B9'
                                                     },
                                                     {
                                                         values: [{x:0, y:10}, {x:100, y:10}],
-                                                        key: 'Some value 10',
+                                                        key: 'Certificado',
                                                         color: '#27AE60'
                                                     }
                                                 ];
