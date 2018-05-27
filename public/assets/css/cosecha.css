@@ -1,6 +1,16 @@
 .w-100{
     width: 100% !important;
 }
+.float-r{
+    float: right !important;
+}
+
+/* Padding */
+
+.p-0{
+    padding: 0 !important;
+}
+
 .po-0{
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -8,6 +18,64 @@
 .p-2{
     padding: 2px !important;
 }
-.float-r{
-    float: right !important;
+.pr-0{
+    padding-right: 0px !important;
+}
+
+/* Margin */
+
+.mt-5{
+    margin-top: 5px !important;
+}
+
+.mb-0{
+    margin-bottom: 0 !important;
+}
+
+.mb-5{
+    margin-bottom: 5px !important;
+}
+
+.mb-30{
+    margin-bottom: 30px !important;
+}
+
+.font-s-15{
+    font-size: 15px !important;
+}
+
+/* Customs */
+
+.h2-reports {
+    font-size: 20px;
+}
+
+/* Bootstrap */
+
+.card {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #e0dfdf9e;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+.card-body {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1.25rem;
+}
+
+.card-selected {
+    background-color: rgba(33, 185, 33, 0.52);
+    border: 2px solid green;
 }

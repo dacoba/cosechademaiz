@@ -187,7 +187,6 @@
                                             <li class="active"><a href="#tab1" data-toggle="tab">Resumen</a></li>
                                             <li><a href="#tabPlanificaciones" data-toggle="tab">Planificaciones</a></li>
                                             <li><a href="#tabCosecha" data-toggle="tab" onClick="haEchoClick();">Cosecha</a></li>
-                                            <li><a href="#tabRiegosyfumigaciones" data-toggle="tab">Riegos y Fumigaciones</a></li>
                                             <li><a href="#tabEstimacion" data-toggle="tab">Estimacion de Produccion</a></li>
                                             <li><a href="#tabCalidad" data-toggle="tab" onClick="haEchoClickCalidad();">Control de Calidad</a></li>
                                         </ul>
@@ -203,21 +202,19 @@
                                     </center>
                                 </div>
                                 <div class="tab-pane" id="tabPlanificaciones">
-                                    <center>
-                                        <h2 class="h2-reports">Panificaciones</h2>
-                                    </center>
+                                    <h2 class="h2-reports text-center mb-0">Panificaciones</h2>
                                     @if($planificaciones['exist'])
                                         <?php
                                         $riego_percent = 100 / $planificaciones['planificacionriego']->count() * $planificaciones['planificacionriegoEnd']->count();
                                         $fumigacion_percent = 100 / $planificaciones['planificacionfumigacion']->count() * $planificaciones['planificacionfumigacionEnd']->count();
                                         ?>
-                                        <center>
+                                        <div class="row text-center mb-30">
                                             <div class="skills">
                                                 <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
                                             <span data-percent="{{ $riego_percent }}" class="chart easyPieChart" style="width: 140px; height: 140px; line-height: 140px;">
                                                 <span class="percent">{{ $riego_percent }}</span>
                                             </span>
-                                                    <h3 class="text-center">Riego</h3>
+                                                    <h3 class="text-center mt-5">Riego</h3>
                                                     @if ($riego_percent != 100)
                                                         <p class="reports-skills-p"><strong>Fecha del siguiente riego</strong><br>{{ date('H:i a - d/m/Y', strtotime($planificaciones['planificacionriegoPla']->first()['fecha_planificacion'])) }}</p>
                                                     @endif
@@ -226,15 +223,91 @@
                                             <span data-percent="{{ $fumigacion_percent }}" class="chart easyPieChart" style="barColor:black; width: 140px; height: 140px; line-height: 140px;">
                                                 <span class="percent">{{ round($fumigacion_percent, 1) }}</span>
                                             </span>
-                                                    <h3 class="text-center">Fumigacion</h3>
+                                                    <h3 class="text-center mt-5">Fumigacion</h3>
                                                     @if ($fumigacion_percent != 100)
                                                         <p class="reports-skills-p"><strong>Fecha de la siguiente fumigacion</strong><br>{{ date('H:i a - d/m/Y', strtotime($planificaciones['planificacionfumigacionPla']->first()['fecha_planificacion'])) }}</p>
                                                     @endif
                                                 </div>
                                             </div>
-                                        </center>
+                                        </div>
+                                        <h2 class="h2-reports text-center">Riegos y Fumigaciones</h2>
+                                        <style>
+                                            .btn-mini-xs {
+                                                padding: 5px 10px;
+                                            }
+                                        </style>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center">Planificacion</th>
+                                                <th class="text-center">Fecha de Planificacion</th>
+                                                <th class="text-center">Hora de Planificacion</th>
+                                                <th class="text-center">Estado</th>
+                                                <th class="text-center">Detalles</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach ($planificaciones['lista'] as $planificacion)
+                                                <tr>
+                                                    <td class="text-center">{{$planificacion['table_name']}}</td>
+                                                    <td class="text-center">{{ $planificacion['fecha_planificacion']->format('d F Y') }}</td>
+                                                    <td class="text-center">{{ $planificacion['fecha_planificacion']->format('H:i a') }}</td>
+                                                    <td class="text-center">{{$planificacion['estado']}}</td>
+                                                    <td class="text-center">
+                                                        @if($planificacion['estado'] != "Registrado")
+                                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aun no se han registrado datos para esta planificacion">
+                                                                <button class="btn btn-primary btn-xs btn-mini-xs" disabled>
+                                                                    <i class="fa fa-btn fa-file-text-o"></i>
+                                                                </button>
+                                                            </span>
+                                                        @else
+                                                            <button class="btn btn-primary btn-xs btn-mini-xs" data-toggle="collapse" data-target="#planificacion_{{$planificacion['id']}}{{$planificacion['fumigacion_id']}}">
+                                                                <i class="fa fa-btn fa-file-text-o"></i>
+                                                            </button>
+                                                            </td></tr>
+                                                            <tr id="planificacion_{{$planificacion['id']}}{{$planificacion['fumigacion_id']}}" class="collapse">
+                                                                <td colspan="5" >
+                                                                @if($planificacion['table_name'] == "Riego")
+                                                                    <?php $metodos = ['None', 'Lluvia', 'Pozo de riego']?>
+                                                                    <ul class="list-group col-sm-6 col-sm-offset-3 mb-0 pr-0">
+                                                                        <li class="list-group-item">
+                                                                            <strong>Metodos de Riego:</strong>
+                                                                            <span class="pull-right">{{$metodos[$planificacion['metodos_riego']]}}</span>
+                                                                        </li>
+                                                                        <li class="list-group-item">
+                                                                            <strong>Comportamineto de lluvia:</strong>
+                                                                            <span class="pull-right">{{$planificacion['comportamiento_lluvia']}} %</span>
+                                                                        </li>
+                                                                        <li class="list-group-item">
+                                                                            <strong>Problemas de Drenaje:</strong>
+                                                                            <span class="pull-right">{{$planificacion['problemas_drenaje']}} %</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                @else
+                                                                    <ul class="list-group col-sm-6 col-sm-offset-3 mb-0 pr-0">
+                                                                        <li class="list-group-item">
+                                                                            <strong>Preventivo Plagas:</strong>
+                                                                            <span class="pull-right">{{$planificacion['preventivo_plagas']}} %</span>
+                                                                        </li>
+                                                                        <li class="list-group-item">
+                                                                            <strong>Control Malezas:</strong>
+                                                                            <span class="pull-right">{{$planificacion['control_malezas']}} %</span>
+                                                                        </li>
+                                                                        <li class="list-group-item">
+                                                                            <strong>Control Enfermedades:</strong>
+                                                                            <span class="pull-right">{{$planificacion['control_enfermedades']}} %</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                @endif
+
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
                                     @else
-                                        <p>No hay planificaciones registradas.</p>
+                                        <p>No hay planificaciones de riegos y fumigaciones.</p>
                                     @endif
                                 </div>
                                 <div class="tab-pane" id="tabCosecha">
@@ -257,7 +330,7 @@
                                             }
                                         </style>
                                         <center>
-                                            <div id="chartCosecha" style="height: 250px;">
+                                            <div id="chartCosecha" style="height: 400px;">
                                                 <svg></svg>
                                             </div>
                                             <p><strong>Comentario: </strong>{{$cosecha['cosecha']['comentario_cosecha']}}</p>
@@ -330,149 +403,52 @@
                                         <p>No hay una cosecha registrada.</p>
                                     @endif
                                 </div>
-                                <div class="tab-pane" id="tabRiegosyfumigaciones">
-                                    <center>
-                                        <h2 class="h2-reports">Riegos y Fumigaciones</h2>
-                                    </center>
-                                    @if($planificaciones['exist'])
-                                        <style>
-                                            .btn-mini-xs {
-                                                padding: 5px 10px;
-                                            }
-                                        </style>
-                                        <table class="table table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th style="text-align: center">Planificacion</th>
-                                                <th style="text-align: center">Fecha de Planificacion</th>
-                                                <th style="text-align: center">Estado</th>
-                                                <th style="text-align: center">Detalles</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach ($planificaciones['lista'] as $planificacion)
-                                                <tr>
-                                                    <td style="text-align: center">{{$planificacion['table_name']}}</td>
-                                                    <td style="text-align: center">{{ date('H:i a - d/m/Y', strtotime($planificacion['fecha_planificacion'])) }}</td>
-                                                    <td style="text-align: center">{{$planificacion['estado']}}</td>
-                                                    <td style="text-align: center">
-                                                        @if($planificacion['estado'] != "Registrado")
-                                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aun no se han registrado datos para esta planificacion">
-                                                                <button class="btn btn-primary btn-xs btn-mini-xs" disabled>
-                                                                    <i class="fa fa-btn fa-file-text-o"></i>
-                                                                </button>
-                                                            </span>
-                                                        @else
-                                                            @if($planificacion['table_name'] == "Riego")
-                                                                <?php $metodos = ['None', 'Lluvia', 'Pozo de riego']?>
-                                                                <button class="btn btn-primary btn-xs btn-mini-xs" onClick="showDetails('{{$planificacion['table_name']}}','{{$metodos[$planificacion['metodos_riego']]}}','{{$planificacion['comportamiento_lluvia']}}','{{$planificacion['problemas_drenaje']}}');">
-                                                                    <i class="fa fa-btn fa-file-text-o"></i>
-                                                                </button>
-                                                            @else
-                                                                <button class="btn btn-primary btn-xs btn-mini-xs" onClick="showDetails('{{$planificacion['table_name']}}','{{$planificacion['preventivo_plagas']}}','{{$planificacion['control_malezas']}}','{{$planificacion['control_enfermedades']}}');">
-                                                                    <i class="fa fa-btn fa-file-text-o"></i>
-                                                                </button>
-                                                            @endif
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
-                                        <div class="row">
-                                            <div class="col-md-6 col-md-offset-3">
-                                                <table class="table table-sm" id="tableRiego" style="display: none">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Dato</th>
-                                                        <th class="text-right">Valor</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <th scope="row">Metodos de Riego</th>
-                                                        <td class="text-right" id="metodos_riego">-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Comportamineto de lluvia</th>
-                                                        <td class="text-right"><span id="comportamiento_lluvia">0</span><strong> %</strong></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Problemas de Drenaje</th>
-                                                        <td class="text-right"><span id="problemas_drenaje">0</span><strong> %</strong></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                                <table class="table table-sm" id="tableFumigacion" style="display: none">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Dato</th>
-                                                        <th class="text-right">Valor</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <th scope="row">Preventivo Plagas</th>
-                                                        <td class="text-right"><span id="preventivo_plagas">0</span><strong> %</strong></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Control Malezas</th>
-                                                        <td class="text-right"><span id="control_malezas">0</span><strong> %</strong></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th scope="row">Control Enfermedades</th>
-                                                        <td class="text-right"><span id="control_enfermedades">0</span><strong> %</strong></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <script>
-                                            function showDetails(value,value1,value2,value3) {
-                                                // alert(value);
-                                                if(value === "Riego"){
-                                                    $('#metodos_riego').text(value1);
-                                                    $('#comportamiento_lluvia').text(value2);
-                                                    $('#problemas_drenaje').text(value3);
-                                                    document.getElementById("tableRiego").style.display = "table";
-                                                    document.getElementById("tableFumigacion").style.display = "none";
-                                                }else {
-                                                    $('#preventivo_plagas').text(value1);
-                                                    $('#control_malezas').text(value2);
-                                                    $('#control_enfermedades').text(value3);
-                                                    document.getElementById("tableRiego").style.display = "none";
-                                                    document.getElementById("tableFumigacion").style.display = "table";
-                                                }
-                                            }
-                                        </script>
-                                    @else
-                                        <p>No hay planificaciones de riegos y fumigaciones.</p>
-                                    @endif
-                                </div>
                                 <div class="tab-pane" id="tabEstimacion">
-                                    <center>
-                                        <h2 class="h2-reports">Estimacion de Produccion de Maiz</h2>
-                                    </center>
+                                    <h2 class="h2-reports text-center">Estimacion de Produccion</h2>
                                     @if($estimacion['exist'])
                                         <?php
                                         $plantas_por_hectarea = (10000/($estimacion['siembra']['distancia_surco'] * $estimacion['siembra']['distancia_surco']))*10000;
                                         $rendimiento_produccion = ceil($cosecha['cosecha']['rendimiento_produccion']/25)-1;
                                         $produccion_maiz = $rendimiento_produccion * $plantas_por_hectarea * 0.375 * 0.001;
                                         ?>
-
-                                        <center>
-                                            <br>La estimacion de produccion de maiz en base al rendimiento de <?=$cosecha['cosecha']['rendimiento_produccion']?> %
-                                            se estima la produccion de <?=round($produccion_maiz,1)?> Toneladas por hectarea aproximadamente, haciendo un total de:.
-                                            <br><br><h2 style="text-transform: lowercase"><?=number_format(round($produccion_maiz,1) * $estimacion['siembra']['preparacionterreno']['terreno']['area_parcela'], 0, '.', ','); ?> Toneladas.</h2>
-                                        </center>
+                                        <div class="row mb-30 text-center">
+                                            @for($i=0;$i<4;$i++)
+                                                <div class="col-xs-3">
+                                                    <div class="card{{$rendimiento_produccion == $i ? ' card-selected' : '' }}" >
+                                                        <div class="card-body">
+                                                            @if($rendimiento_produccion == $i)
+                                                                <img src="{{URL::asset('img/corn'.$i.'.png')}}">
+                                                            @else
+                                                                <img src="{{URL::asset('img/corn'.$i.'_n.png')}}">
+                                                            @endif
+                                                            <h1 class="{{$rendimiento_produccion == $i ? 'text-success' : 'text-muted' }}">{{$i}}</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endfor
+                                        </div>
+                                        <div class="text-center">
+                                            La estimacion de produccion de maiz en base al rendimiento de
+                                            <h2 class="mb-0 font-s-15"><?=$cosecha['cosecha']['rendimiento_produccion']?> %</h2>
+                                            Se estima una produccion por hectaria de
+                                            <h2 class="font-s-15 text-lowercase"><?=round($produccion_maiz,1)?> Toneladas</h2>
+                                            Un total de
+                                            <h2 class="mb-0 text-lowercase"><?=number_format(round($produccion_maiz,1) * $estimacion['siembra']['preparacionterreno']['terreno']['area_parcela'], 0, '.', ','); ?> Toneladas</h2>
+                                        </div>
                                     @else
                                         <p>No hay una siembra y/o cosecha registrada.</p>
                                     @endif
                                 </div>
                                 <div class="tab-pane" id="tabCalidad">
-                                    <center>
-                                        <h2 class="h2-reports">Control de Calidad</h2>
-                                    </center>
+                                    <h2 class="h2-reports text-center">Control de Calidad</h2>
+                                    <div class="row text-ceter mb-30">
+                                        <strong class="col-xs-7 col-sm-6 text-right">Media : </strong>
+                                        <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['media'] }}</span>
+                                        <strong class="col-xs-7 col-sm-6 text-right">Varianza : </strong>
+                                        <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['varianza'] }}</span>
+                                        <strong class="col-xs-7 col-sm-6 text-right">Desviación Estándar : </strong>
+                                        <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['desviacion_estandar'] }}</span>
+                                    </div>
                                     @if($calidad['exist'])
                                         <style>
                                             text {
@@ -489,7 +465,7 @@
                                             }
                                         </style>
                                         <center>
-                                            <div id="chart1" style="height: 250px;">
+                                            <div id="chartCalidad" style="height: 400px;">
                                                 <svg></svg>
                                             </div>
                                         </center>
@@ -529,16 +505,47 @@
                                         </script>
                                         <script>
                                             function haEchoClickCalidad() {
+                                                var datom = [
+                                                    {
+                                                        values: [{x:0, y:5}, {x:100, y:5}],
+                                                        key: 'Some value 5',
+                                                        color: '#E74C3C'
+                                                    },
+                                                    {
+                                                        values: [{x:0, y:7.5}, {x:100, y:7.5}],
+                                                        key: 'Some value 7.5',
+                                                        color: '#2980B9'
+                                                    },
+                                                    {
+                                                        values: [{x:0, y:10}, {x:100, y:10}],
+                                                        key: 'Some value 10',
+                                                        color: '#27AE60'
+                                                    }
+                                                ];
+
                                                 nv.addGraph(function() {
-                                                    chartBar = nv.models.discreteBarChart()
+                                                    var chartBar = nv.models.lineChart();
+                                                    chartBar.legend.updateState(false)
+                                                    chartBar.showXAxis(false)
+                                                    chartBar.showYAxis(false)
+                                                    chartBar.yDomain([0,12])
+
+                                                    d3.select('#chartCalidad svg')
+                                                        .datum(datom)
+                                                        .transition().duration(500)
+                                                        .call(chartBar)
+                                                    ;
+
+                                                    var chartBar = nv.models.discreteBarChart()
                                                         .x(function(d) { return d.label })
                                                         .y(function(d) { return d.value })
+                                                        .yDomain([0,12])
                                                         .staggerLabels(true)
                                                         .showValues(true)
                                                         .duration(250)
                                                     ;
 
-                                                    d3.select('#chart1 svg')
+                                                    d3.select('#chartCalidad svg')
                                                         .datum(historicalBarChart)
                                                         .call(chartBar);
 
@@ -547,11 +554,6 @@
                                                 });
                                             }
                                         </script>
-                                        <center>
-                                            <strong>Media : </strong>{{ $calidad['estadistico']['media'] }}<br>
-                                            <strong>Varianza : </strong>{{ $calidad['estadistico']['varianza'] }}<br>
-                                            <strong>Desviación Estándar : </strong>{{ $calidad['estadistico']['desviacion_estandar'] }}<br>
-                                        </center>
                                     @else
                                         <p>No hay una siembra y/o cosecha registrada.</p>
                                     @endif

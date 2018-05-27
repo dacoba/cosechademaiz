@@ -150,8 +150,9 @@ class ReportesController extends Controller
 
         $estados = [
             'Preparacion',
-            'Planificaciones',
             'Siembra',
+            'Planificaciones',
+            'Cosecha',
             'Cerrado',
         ];
         $preterrenos = $this->getTerrenosDate($request);
@@ -248,6 +249,7 @@ class ReportesController extends Controller
             $first = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
                 ->select('fecha_planificacion',
                     'estado',
+                    'id',
                     'metodos_riego',
                     'comportamiento_lluvia',
                     'problemas_drenaje',
@@ -263,6 +265,7 @@ class ReportesController extends Controller
             $second = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
                 ->select('fecha_planificacion',
                     'estado',
+                    'id',
                     DB::raw("'NULL' as metodos_riego"),
                     DB::raw("'NULL' as comportamiento_lluvia"),
                     DB::raw("'NULL' as problemas_drenaje"),
@@ -298,13 +301,17 @@ class ReportesController extends Controller
             $calidad['calidad']['erocion'] = $estimacion['siembra']['preparacionterreno']['erocion'] / 10;
             $calidad['calidad']['malezas'] = 10 - ($aux_malezas / 10);
             $calidad['calidad']['enfermedades'] = $aux_enfermeades / 10;
-            $calidad['estadistico']['media'] = array_sum($calidad['calidad']) / count($calidad['calidad']);
+            $media = array_sum($calidad['calidad']) / count($calidad['calidad']);
             $aux_varianza = [];
             foreach ($calidad['calidad']as $valor){
-                $aux_varianza[] = pow(($valor - $calidad['estadistico']['media']), 2);
+                $aux_varianza[] = pow(($valor - $media), 2);
             }
-            $calidad['estadistico']['varianza'] = array_sum($aux_varianza) / count($aux_varianza);
-            $calidad['estadistico']['desviacion_estandar'] = sqrt($calidad['estadistico']['varianza']);
+            $varianza = array_sum($aux_varianza) / count($aux_varianza);
+            $desviacion_estandar = sqrt($varianza);
+
+            $calidad['estadistico']['media'] = round($media, 5);
+            $calidad['estadistico']['varianza'] = round($varianza, 5);
+            $calidad['estadistico']['desviacion_estandar'] = round($desviacion_estandar, 5);
         }
         return view('reporte.general.show',['preterreno' => $preterreno, 'planificaciones' => $planificaciones, 'cosecha' => $cosecha, 'estimacion' => $estimacion, 'calidad' => $calidad]);
     }
