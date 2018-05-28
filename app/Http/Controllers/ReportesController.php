@@ -235,14 +235,14 @@ class ReportesController extends Controller
 
         $request->setBodyStyles(['backgroundColor' => '#ffffff']);
 //        $file = storage_path('sample.jpg');
-        $file = 'testo.jpg';
+        $file = 'img/testo.jpg';
         $request->setOutputFile($file);
 
         $client->send($request, $response);
 
         if($response->getStatus() === 200) {
 //            echo $response->getContent();
-            echo '<img src="../../testo.jpg">';
+            echo '<img src="../../img/testo.jpg">';
         }
 //       $request = $client->getMessageFactory()->createCaptureRequest(url('/discreteBarChart.html'), 'GET');
     }
