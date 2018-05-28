@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Jenssegers\Date\Date;
 use Barryvdh\DomPDF\Facade as PDF;
+use JonnyW\PhantomJs\Client;
 
 use App\Http\Requests;
 
@@ -206,13 +207,43 @@ class ReportesController extends Controller
     }
     public function pdfGeneral($id)
     {
-//        $preterreno = Preparacionterreno::find($id);
-//        $simuladors = Simulador::with(['preparacionterreno', 'siembra', 'planificacionriego', 'planificacionfumigacion'])->where('preparacionterreno_id', $id)->get();
-//        $pdf = PDF::loadView('reporte.pdf.estados', [
-//            'preterreno' => $preterreno,
-//            'simuladors' => $simuladors
-//        ]);
-//        return $pdf->stream('download');
+
+        $data_base = [];
+        for($i = 0; $i < 10; $i++){
+            $datosfor['label'] = "Label: ".$i;
+            $datosfor['value'] = $i*10;
+            $data_base['values'][] = $datosfor;
+        }
+
+        $client = Client::getInstance();
+        $client->isLazy();
+        $client->getEngine()->setPath(base_path('bin\phantomjs.exe'));
+        $client->getEngine()->addOption('--load-images=true');
+        $client->getEngine()->addOption('--ignore-ssl-errors=true');
+
+        $request  = $client->getMessageFactory()->createCaptureRequest();
+        $response = $client->getMessageFactory()->createResponse();
+
+        $data = array(
+            'data' => serialize($data_base)
+        );
+
+        $request->setMethod('GET');
+        $request->setUrl('https://www.google.com');
+//        $request->setRequestData($data);
+
+        $request->setBodyStyles(['backgroundColor' => '#ffffff']);
+//        $file = storage_path('sample.jpg');
+        $file = 'diagram/testo.jpg';
+        $request->setOutputFile($file);
+
+        $client->send($request, $response);
+
+        if($response->getStatus() === 200) {
+//            echo $response->getContent();
+            echo '<img src="../../diagram/testo.jpg">';
+        }
+//       $request = $client->getMessageFactory()->createCaptureRequest(url('/discreteBarChart.html'), 'GET');
     }
 
     public function showSimulacion($id)
