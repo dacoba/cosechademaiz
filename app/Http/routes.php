@@ -80,3 +80,5 @@ Route::get('reportes/simulacion/{preparacionterrenos}', 'ReportesController@show
 
 Route::get('pdf/estados/{preparacionterrenos}', 'ReportesController@pdfEstados');
 Route::get('pdf/general/{preparacionterrenos}', 'ReportesController@pdfGeneral');
+
+Route::get('testo', 'ReportesController@showTesto');

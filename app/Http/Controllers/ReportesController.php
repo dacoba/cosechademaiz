@@ -247,6 +247,11 @@ class ReportesController extends Controller
 //       $request = $client->getMessageFactory()->createCaptureRequest(url('/discreteBarChart.html'), 'GET');
     }
 
+    public function showTesto()
+    {
+        echo base_path();
+    }
+
     public function showSimulacion($id)
     {
         $preterreno = Preparacionterreno::find($id);
