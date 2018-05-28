@@ -217,7 +217,11 @@ class ReportesController extends Controller
 
         $client = Client::getInstance();
         $client->isLazy();
-        $client->getEngine()->setPath(base_path('bin\phantomjs.exe'));
+        if(env('REDIRECT_HTTPS')) {
+            $client->getEngine()->setPath(base_path('..\bin\phantomjs.exe'));
+        }else{
+            $client->getEngine()->setPath(base_path('bin\phantomjs.exe'));
+        }
         $client->getEngine()->addOption('--load-images=true');
         $client->getEngine()->addOption('--ignore-ssl-errors=true');
 
