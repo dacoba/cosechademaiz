@@ -502,6 +502,8 @@ class ReportesController extends Controller
         $file = 'img/'.$tipo.'.jpg';
         $request->setOutputFile($file);
 
+        $request->setDelay(2);
+
         $client->send($request, $response);
 
         return $file;
