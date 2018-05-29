@@ -499,7 +499,7 @@ class ReportesController extends Controller
         $request->setRequestData($data);
 
         $request->setBodyStyles(['backgroundColor' => '#ffffff']);
-        $file = 'diagram/'.$tipo.'.jpg';
+        $file = 'img/'.$tipo.'.jpg';
         $request->setOutputFile($file);
 
         $client->send($request, $response);
