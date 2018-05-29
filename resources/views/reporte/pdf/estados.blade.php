@@ -72,7 +72,7 @@
         text-align: left !important;
     }
 </style>
-<h1 class="text-center">Reporte de Estados</h1>
+<h1 class="text-center">REPORTE DE ESTADOS</h1>
 <body>
 <table class="table table-bordered table-sm">
     <thead>

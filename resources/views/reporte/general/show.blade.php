@@ -3,16 +3,25 @@
 @section('content')
 <div class="container pfblock">
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2">
-            <div class="pfblock-header">
-                <h2 class="pfblock-title"><a href="{{ url('reportes')}}/{{$preterreno['id']}}"><i class="fa fa-chevron-circle-left"></i></a>Reporte General</h2>
-            </div>
+        <div class="pfblock-header">
+            <h2 class="pfblock-title">
+                <a href="{{ url('reportes')}}/{{$preterreno['id']}}">
+                    <i class="fa fa-chevron-circle-left"></i>
+                </a>Reporte General
+            </h2>
         </div>
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Datos del Proceso de Produccion</div>
+                <div class="panel-heading">
+                    Datos del Proceso de Produccion
+                </div>
 
                 <div class="panel-body">
+                    <a class="print hidden-print pull-right"
+                       target="_blank"
+                       href="{{ url('/pdf/general') }}/{{$preterreno['id']}}">
+                        <i class="fa fa-file-pdf-o"></i> Exportar PDF
+                    </a>
                     <style>
                         /* custom inclusion of right, left and below tabs */
 
@@ -184,8 +193,8 @@
                                     </div>
                                     <div class="navbar-collapse collapse sidebar-navbar-collapse">
                                         <ul class="nav navbar-nav">
-                                            <li class="active"><a href="#tab1" data-toggle="tab">Resumen</a></li>
-                                            <li><a href="#tabPlanificaciones" data-toggle="tab">Planificaciones</a></li>
+                                            <li class="active"><a href="#tab1" data-toggle="tab">Preparacion y Siembra</a></li>
+                                            <li><a href="#tabPlanificaciones" data-toggle="tab">Riegos y Fumigaciones</a></li>
                                             <li><a href="#tabCosecha" data-toggle="tab" onClick="haEchoClick();">Cosecha</a></li>
                                             <li><a href="#tabEstimacion" data-toggle="tab">Estimacion de Produccion</a></li>
                                             <li><a href="#tabCalidad" data-toggle="tab" onClick="haEchoClickCalidad();">Control de Calidad</a></li>
@@ -198,11 +207,11 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
                                     <center>
-                                        <h2 class="h2-reports">Reportes</h2>
+                                        <h2 class="h2-reports">Preparacion y Siembra</h2>
                                     </center>
                                 </div>
                                 <div class="tab-pane" id="tabPlanificaciones">
-                                    <h2 class="h2-reports text-center mb-0">Panificaciones</h2>
+                                    <h2 class="h2-reports text-center mb-0">Riegos y Fumigaciones</h2>
                                     @if($planificaciones['exist'])
                                         <?php
                                         $riego_percent = 100 / $planificaciones['planificacionriego']->count() * $planificaciones['planificacionriegoEnd']->count();
@@ -230,7 +239,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <h2 class="h2-reports text-center">Riegos y Fumigaciones</h2>
                                         <style>
                                             .btn-mini-xs {
                                                 padding: 5px 10px;
@@ -261,15 +269,19 @@
                                                                 </button>
                                                             </span>
                                                         @else
-                                                            <button class="btn btn-primary btn-xs btn-mini-xs" data-toggle="collapse" data-target="#planificacion_{{$planificacion['id']}}{{$planificacion['fumigacion_id']}}">
+                                                            <button class="btn btn-primary btn-xs btn-mini-xs" data-toggle="collapse" data-target="#planificacion_{{$planificacion['id']}}{{$planificacion['table_name']}}">
                                                                 <i class="fa fa-btn fa-file-text-o"></i>
                                                             </button>
-                                                            </td></tr>
-                                                            <tr id="planificacion_{{$planificacion['id']}}{{$planificacion['fumigacion_id']}}" class="collapse">
-                                                                <td colspan="5" >
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                                @if($planificacion['estado'] == "Registrado")
+                                                    <tr>
+                                                        <td colspan="5" class="p-0">
+                                                            <div id="planificacion_{{$planificacion['id']}}{{$planificacion['table_name']}}" class="collapse col-md-6 col-md-offset-3">
                                                                 @if($planificacion['table_name'] == "Riego")
                                                                     <?php $metodos = ['None', 'Lluvia', 'Pozo de riego']?>
-                                                                    <ul class="list-group col-sm-6 col-sm-offset-3 mb-0 pr-0">
+                                                                    <ul class="list-group mb-0 p-15">
                                                                         <li class="list-group-item">
                                                                             <strong>Metodos de Riego:</strong>
                                                                             <span class="pull-right">{{$metodos[$planificacion['metodos_riego']]}}</span>
@@ -284,7 +296,7 @@
                                                                         </li>
                                                                     </ul>
                                                                 @else
-                                                                    <ul class="list-group col-sm-6 col-sm-offset-3 mb-0 pr-0">
+                                                                    <ul class="list-group mb-0 p-15">
                                                                         <li class="list-group-item">
                                                                             <strong>Preventivo Plagas:</strong>
                                                                             <span class="pull-right">{{$planificacion['preventivo_plagas']}} %</span>
@@ -299,10 +311,10 @@
                                                                         </li>
                                                                     </ul>
                                                                 @endif
-
-                                                        @endif
-                                                    </td>
-                                                </tr>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -406,22 +418,17 @@
                                 <div class="tab-pane" id="tabEstimacion">
                                     <h2 class="h2-reports text-center">Estimacion de Produccion</h2>
                                     @if($estimacion['exist'])
-                                        <?php
-                                        $plantas_por_hectarea = (10000/($estimacion['siembra']['distancia_surco'] * $estimacion['siembra']['distancia_surco']))*10000;
-                                        $rendimiento_produccion = ceil($cosecha['cosecha']['rendimiento_produccion']/25)-1;
-                                        $produccion_maiz = $rendimiento_produccion * $plantas_por_hectarea * 0.375 * 0.001;
-                                        ?>
                                         <div class="row mb-30 text-center">
                                             @for($i=0;$i<4;$i++)
                                                 <div class="col-xs-3">
-                                                    <div class="card{{$rendimiento_produccion == $i ? ' card-selected' : '' }}" >
+                                                    <div class="card{{$estimacion['rendimiento_produccion'] == $i ? ' card-selected' : '' }}" >
                                                         <div class="card-body">
-                                                            @if($rendimiento_produccion == $i)
+                                                            @if($estimacion['rendimiento_produccion'] == $i)
                                                                 <img src="{{URL::asset('img/corn'.$i.'.png')}}">
                                                             @else
                                                                 <img src="{{URL::asset('img/corn'.$i.'_n.png')}}">
                                                             @endif
-                                                            <h1 class="{{$rendimiento_produccion == $i ? 'text-success' : 'text-muted' }}">{{$i}}</h1>
+                                                            <h1 class="{{$estimacion['rendimiento_produccion'] == $i ? 'text-success' : 'text-muted' }}">{{$i}}</h1>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -429,11 +436,11 @@
                                         </div>
                                         <div class="text-center">
                                             La estimacion de produccion de maiz en base al rendimiento de
-                                            <h2 class="mb-0 font-s-15"><?=$cosecha['cosecha']['rendimiento_produccion']?> %</h2>
+                                            <h2 class="mb-0 font-s-15"><?=$estimacion['rendimiento']?> %</h2>
                                             Se estima una produccion por hectaria de
-                                            <h2 class="font-s-15 text-lowercase"><?=round($produccion_maiz,1)?> Toneladas</h2>
+                                            <h2 class="font-s-15 text-lowercase"><?=$estimacion['produccion_por_hectaria']?> Toneladas</h2>
                                             Un total de
-                                            <h2 class="mb-0 text-lowercase"><?=number_format(round($produccion_maiz,1) * $estimacion['siembra']['preparacionterreno']['terreno']['area_parcela'], 0, '.', ','); ?> Toneladas</h2>
+                                            <h2 class="mb-0 text-lowercase"><?=$estimacion['produccion_total']; ?> Toneladas</h2>
                                         </div>
                                     @else
                                         <p>No hay una siembra y/o cosecha registrada.</p>

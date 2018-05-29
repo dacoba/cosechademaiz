@@ -3,10 +3,12 @@
 @section('content')
 <div class="container pfblock">
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2">
-            <div class="pfblock-header">
-                <h2 class="pfblock-title"><a href="{{ url('reportes')}}"><i class="fa fa-chevron-circle-left"></i></a>Reportes</h2>
-            </div>
+        <div class="pfblock-header">
+            <h2 class="pfblock-title">
+                <a href="{{ url('reportes')}}">
+                    <i class="fa fa-chevron-circle-left"></i>
+                </a>Reportes
+            </h2>
         </div>
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">

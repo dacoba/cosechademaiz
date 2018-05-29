@@ -205,7 +205,57 @@ class ReportesController extends Controller
         ]);
         return $pdf->stream('download');
     }
-    public function pdfGeneral($id)
+    public function pdfGeneral(Request $request, $id)
+    {
+        $preterreno = Preparacionterreno::find($id);
+
+        /* Riegos y Fumigaciones */
+
+        $tablas['planificaciones'] = $this->getPlanificaciones($id);
+
+        /* Cosecha */
+
+        $tablas['cosecha'] = Cosecha::where('siembra_id', $preterreno['siembra']['id'])->first();
+
+        $veccor_cosecha = [
+            "Problemas de produccion" => $tablas['cosecha']['problemas_produccion'],
+            "Altura de tallo" => $tablas['cosecha']['altura_tallo'],
+            "Humedad del terreno" => $tablas['cosecha']['humedad_terreno'],
+            "Remdimiento de produccion" => $tablas['cosecha']['rendimiento_produccion']
+        ];
+
+        $files['cosecha'] = $this->generateDiagram($veccor_cosecha, 'cosecha');
+
+        /* Estimacion de Produccion */
+
+        $tablas['estimacion'] = $this->getProduccion($id);
+
+        /* Calidad */
+
+        $tablas['calidad'] = $this->getCalidad($id);
+
+        $veccor_calidad = [
+            "Ph" => $tablas['calidad']['calidad']['ph'],
+            "Plagas" => $tablas['calidad']['calidad']['plagas'],
+            "Drenaje" => $tablas['calidad']['calidad']['drenaje'],
+            "Erocion" => $tablas['calidad']['calidad']['erocion'],
+            "Malezas" => $tablas['calidad']['calidad']['malezas'],
+            "Enfermedades" => $tablas['calidad']['calidad']['enfermedades']
+        ];
+
+        $files['calidad'] = $this->generateDiagram($veccor_calidad, 'calidad');
+
+        $pdf = PDF::loadView('reporte.pdf.general', [
+            'preterreno' => $preterreno,
+            'tablas' => $tablas,
+            'files' => $files,
+        ]);
+
+        return $pdf->stream('download');
+    }
+
+
+    public function pdfGeneral2($id)
     {
 
         $data_base = [];
@@ -283,72 +333,18 @@ class ReportesController extends Controller
                     ->where('estado', 'Planificado')->orderBy('fecha_planificacion', 'asc')->get();
             }
 
-            $first = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
-                ->select('fecha_planificacion',
-                    'estado',
-                    'id',
-                    'metodos_riego',
-                    'comportamiento_lluvia',
-                    'problemas_drenaje',
-                    'comentario_riego',
-                    DB::raw("'NULL' as preventivo_plagas"),
-                    DB::raw("'NULL' as control_malezas"),
-                    DB::raw("'NULL' as control_enfermedades"),
-                    DB::raw("'NULL' as comentario_fumigacion"),
-                    'riego_id',
-                    DB::raw("'NULL' as fumigacion_id"),
-                    DB::raw("'Riego' as table_name"));
-
-            $second = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
-                ->select('fecha_planificacion',
-                    'estado',
-                    'id',
-                    DB::raw("'NULL' as metodos_riego"),
-                    DB::raw("'NULL' as comportamiento_lluvia"),
-                    DB::raw("'NULL' as problemas_drenaje"),
-                    DB::raw("'NULL' as comentario_riego"),
-                    'preventivo_plagas',
-                    'control_malezas',
-                    'control_enfermedades',
-                    'comentario_fumigacion',
-                    DB::raw("'NULL' as riego_id"),
-                    'fumigacion_id',
-                    DB::raw("'Fumigacion' as table_name"))
-                ->union($first)
-                ->orderBy('fecha_planificacion', 'asc')
-                ->get();
-            $planificaciones['lista'] = $second;
+            $planificaciones['lista'] = $this->getPlanificaciones($id);
         }
         if(Cosecha::where('siembra_id', $preterreno['siembra']['id'])->count()){
             $cosecha['exist'] = True;
             $cosecha['cosecha'] = Cosecha::where('siembra_id', $preterreno['siembra']['id'])->first();
 
+            $estimacion = $this->getProduccion($id);
             $estimacion['exist'] = True;
             $estimacion['siembra'] = Siembra::where('id', $preterreno['siembra']['id'])->first();
 
+            $calidad = $this->getCalidad($id);
             $calidad['exist'] = True;
-            $aux_ph = ((7 - $estimacion['siembra']['preparacionterreno']['ph']) * $estimacion['siembra']['fertilizacion']) + $estimacion['siembra']['preparacionterreno']['ph'];
-            $aux_plagas = ($estimacion['siembra']['preparacionterreno']['plaga_suelo'] + $planificaciones['planificacionfumigacion']->sum('preventivo_plagas')) / ($planificaciones['planificacionfumigacion']->count() + 1);
-            $aux_drenaje = ($planificaciones['planificacionriego']->sum('problemas_drenaje') + $planificaciones['planificacionriego']->sum('comportamiento_lluvia') + $estimacion['siembra']['preparacionterreno']['drenage']) / ((2 * $planificaciones['planificacionriego']->count()) + 1);
-            $aux_malezas = ($estimacion['siembra']['preparacionterreno']['maleza_preparacion'] + $planificaciones['planificacionfumigacion']->sum('control_malezas')) / ($planificaciones['planificacionfumigacion']->count() + 1);
-            $aux_enfermeades = $planificaciones['planificacionfumigacion']->sum('control_enfermedades') / $planificaciones['planificacionfumigacion']->count();
-            $calidad['calidad']['ph'] = 10 - (abs($aux_ph - 7) / 0.7);
-            $calidad['calidad']['plagas'] =  10 - ($aux_plagas / 10);
-            $calidad['calidad']['drenaje'] =  $aux_drenaje / 10;
-            $calidad['calidad']['erocion'] = $estimacion['siembra']['preparacionterreno']['erocion'] / 10;
-            $calidad['calidad']['malezas'] = 10 - ($aux_malezas / 10);
-            $calidad['calidad']['enfermedades'] = $aux_enfermeades / 10;
-            $media = array_sum($calidad['calidad']) / count($calidad['calidad']);
-            $aux_varianza = [];
-            foreach ($calidad['calidad']as $valor){
-                $aux_varianza[] = pow(($valor - $media), 2);
-            }
-            $varianza = array_sum($aux_varianza) / count($aux_varianza);
-            $desviacion_estandar = sqrt($varianza);
-
-            $calidad['estadistico']['media'] = round($media, 5);
-            $calidad['estadistico']['varianza'] = round($varianza, 5);
-            $calidad['estadistico']['desviacion_estandar'] = round($desviacion_estandar, 5);
         }
         return view('reporte.general.show',['preterreno' => $preterreno, 'planificaciones' => $planificaciones, 'cosecha' => $cosecha, 'estimacion' => $estimacion, 'calidad' => $calidad]);
     }
@@ -366,5 +362,148 @@ class ReportesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    protected function getPlanificaciones($id)
+    {
+        $preterreno = Preparacionterreno::find($id);
+        $first = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
+            ->select('fecha_planificacion',
+                'estado',
+                'id',
+                'metodos_riego',
+                'comportamiento_lluvia',
+                'problemas_drenaje',
+                'comentario_riego',
+                DB::raw("'NULL' as preventivo_plagas"),
+                DB::raw("'NULL' as control_malezas"),
+                DB::raw("'NULL' as control_enfermedades"),
+                DB::raw("'NULL' as comentario_fumigacion"),
+                'riego_id',
+                DB::raw("'NULL' as fumigacion_id"),
+                DB::raw("'Riego' as table_name"));
+
+        $second = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
+            ->select('fecha_planificacion',
+                'estado',
+                'id',
+                DB::raw("'NULL' as metodos_riego"),
+                DB::raw("'NULL' as comportamiento_lluvia"),
+                DB::raw("'NULL' as problemas_drenaje"),
+                DB::raw("'NULL' as comentario_riego"),
+                'preventivo_plagas',
+                'control_malezas',
+                'control_enfermedades',
+                'comentario_fumigacion',
+                DB::raw("'NULL' as riego_id"),
+                'fumigacion_id',
+                DB::raw("'Fumigacion' as table_name"))
+            ->union($first)
+            ->orderBy('fecha_planificacion', 'asc')
+            ->get();
+        return $second;
+    }
+
+    protected function getProduccion($id)
+    {
+        $preterreno = Preparacionterreno::find($id);
+        $cosecha['cosecha'] = Cosecha::where('siembra_id', $preterreno['siembra']['id'])->first();
+        $estimacion['siembra'] = Siembra::where('id', $preterreno['siembra']['id'])->first();
+
+        $estimacion['rendimiento_produccion'] = ceil($cosecha['cosecha']['rendimiento_produccion']/25)-1;
+        $estimacion['plantas_por_hectarea'] = (10000/($estimacion['siembra']['distancia_surco'] * $estimacion['siembra']['distancia_surco']))*10000;
+        $produccion_maiz = $estimacion['rendimiento_produccion'] * $estimacion['plantas_por_hectarea'] * 0.375 * 0.001;
+
+        $estimacion['rendimiento'] = $cosecha['cosecha']['rendimiento_produccion'];
+        $estimacion['produccion_por_hectaria'] = round($produccion_maiz,1);
+        $estimacion['produccion_total'] = number_format(round($produccion_maiz,1) * $estimacion['siembra']['preparacionterreno']['terreno']['area_parcela'], 0, '.', ',');
+
+        return $estimacion;
+    }
+
+    protected function getCalidad($id)
+    {
+        $preterreno = Preparacionterreno::find($id);
+        $cosecha['cosecha'] = Cosecha::where('siembra_id', $preterreno['siembra']['id'])->first();
+        $estimacion['siembra'] = Siembra::where('id', $preterreno['siembra']['id'])->first();
+        $planificaciones['planificacionriego'] = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])->get();
+        $planificaciones['planificacionfumigacion'] = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])->get();
+
+        $aux_ph = ((7 - $estimacion['siembra']['preparacionterreno']['ph']) * $estimacion['siembra']['fertilizacion']) + $estimacion['siembra']['preparacionterreno']['ph'];
+        $aux_plagas = ($estimacion['siembra']['preparacionterreno']['plaga_suelo'] + $planificaciones['planificacionfumigacion']->sum('preventivo_plagas')) / ($planificaciones['planificacionfumigacion']->count() + 1);
+        $aux_drenaje = ($planificaciones['planificacionriego']->sum('problemas_drenaje') + $planificaciones['planificacionriego']->sum('comportamiento_lluvia') + $estimacion['siembra']['preparacionterreno']['drenage']) / ((2 * $planificaciones['planificacionriego']->count()) + 1);
+        $aux_malezas = ($estimacion['siembra']['preparacionterreno']['maleza_preparacion'] + $planificaciones['planificacionfumigacion']->sum('control_malezas')) / ($planificaciones['planificacionfumigacion']->count() + 1);
+        $aux_enfermeades = $planificaciones['planificacionfumigacion']->sum('control_enfermedades') / $planificaciones['planificacionfumigacion']->count();
+        $calidad['calidad']['ph'] = 10 - (abs($aux_ph - 7) / 0.7);
+        $calidad['calidad']['plagas'] =  10 - ($aux_plagas / 10);
+        $calidad['calidad']['drenaje'] =  $aux_drenaje / 10;
+        $calidad['calidad']['erocion'] = $estimacion['siembra']['preparacionterreno']['erocion'] / 10;
+        $calidad['calidad']['malezas'] = 10 - ($aux_malezas / 10);
+        $calidad['calidad']['enfermedades'] = $aux_enfermeades / 10;
+        $media = array_sum($calidad['calidad']) / count($calidad['calidad']);
+        $aux_varianza = [];
+        foreach ($calidad['calidad']as $valor){
+            $aux_varianza[] = pow(($valor - $media), 2);
+        }
+        $varianza = array_sum($aux_varianza) / count($aux_varianza);
+        $desviacion_estandar = sqrt($varianza);
+
+        $calidad['estadistico']['media'] = round($media, 5);
+        $calidad['estadistico']['varianza'] = round($varianza, 5);
+        $calidad['estadistico']['desviacion_estandar'] = round($desviacion_estandar, 5);
+
+        return $calidad;
+    }
+
+    protected function generateDiagram($veccor_cosecha, $tipo)
+    {
+        if($tipo == 'cosecha')
+        {
+            $url = 'https://diagram.herokuapp.com/simpleBarChart.php';
+        }
+        elseif ($tipo == 'calidad')
+        {
+            $url = 'https://diagram.herokuapp.com/calidadBarChart.php';
+        }
+        else
+        {
+            $url='';
+        }
+
+        $data_base = [];
+        foreach ($veccor_cosecha as $item_key => $item_value)
+        {
+            $datosfor['label'] = $item_key;
+            $datosfor['value'] = $item_value;
+            $data_base['values'][] = $datosfor;
+        }
+
+        $client = Client::getInstance();
+        $client->isLazy();
+        $client->getEngine()->setPath(base_path().'/bin/phantomjs.exe');
+//        $client->getEngine()->setPath('/app/bin/phantomjs');
+        $client->getEngine()->addOption('--load-images=true');
+        $client->getEngine()->addOption('--ignore-ssl-errors=true');
+
+        $request  = $client->getMessageFactory()->createCaptureRequest();
+        $response = $client->getMessageFactory()->createResponse();
+
+        $request->setViewportSize(1800, 900);
+
+        $data = array(
+            'data' => serialize($data_base)
+        );
+
+        $request->setMethod('POST');
+        $request->setUrl($url);
+        $request->setRequestData($data);
+
+        $request->setBodyStyles(['backgroundColor' => '#ffffff']);
+        $file = 'diagram/'.$tipo.'.jpg';
+        $request->setOutputFile($file);
+
+        $client->send($request, $response);
+
+        return $file;
     }
 }

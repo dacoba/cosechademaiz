@@ -11,13 +11,19 @@
     padding: 0 !important;
 }
 
+.p-2{
+    padding: 2px !important;
+}
+
+.p-15{
+    padding: 15px !important;
+}
+
 .po-0{
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
-.p-2{
-    padding: 2px !important;
-}
+
 .pr-0{
     padding-right: 0px !important;
 }
@@ -78,4 +84,24 @@
 .card-selected {
     background-color: rgba(33, 185, 33, 0.52);
     border: 2px solid green;
+}
+
+/* Print Button */
+
+a.print{
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 15px;
+    background: #dc143c;
+    background: linear-gradient(#e3647e, #DC143C);
+    text-align: center;
+    color: #fff;
+    padding: 3px 6px;
+    border-radius: 3px;
+    border: 1px solid #e3647e;
+}
+
+i.fa.fa-print{
+    margin-right: 5px;
+    font-size: 14;
 }
