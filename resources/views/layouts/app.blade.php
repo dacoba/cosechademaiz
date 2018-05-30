@@ -63,22 +63,24 @@
                                 </ul>
                             </li>
                         @endif
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Terreno</a>
-                            <ul class="dropdown-menu">
-                                @if ( Auth::user()->tipo == 'Administrador')
-                                    <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
-                                    <li><a href="{{ url('/preparacionterrenos') }}">Asignacion Tecnico-Terreno</a></li>
-                                @elseif ( Auth::user()->tipo == 'Tecnico')
-                                    <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
-                                @endif
-                                {{--<li><a href="{{ url('/simuladors') }}">Simulador</a></li>--}}
-                            </ul>
-                        </li>
+                        @if ( Auth::user()->tipo != 'Productor')
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Terreno</a>
+                                <ul class="dropdown-menu">
+                                    @if ( Auth::user()->tipo == 'Administrador')
+                                        <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
+                                        <li><a href="{{ url('/preparacionterrenos') }}">Asignacion Tecnico-Terreno</a></li>
+                                    @elseif ( Auth::user()->tipo == 'Tecnico')
+                                        <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
+                                    @endif
+                                    {{--<li><a href="{{ url('/simuladors') }}">Simulador</a></li>--}}
+                                </ul>
+                            </li>
+                        @endif
                         @if ( Auth::user()->tipo == 'Tecnico')
                             <li><a href="{{ url('/siembras') }}">Siembra</a></li>
                         @endif
-                        @if ( Auth::user()->tipo != 'Administrador')
+                        @if (!in_array(Auth::user()->tipo, array('Administrador', 'Productor')))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Planificaciones</a>
                                 <ul class="dropdown-menu">
