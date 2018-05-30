@@ -69,8 +69,6 @@
                                 @if ( Auth::user()->tipo == 'Administrador')
                                     <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
                                     <li><a href="{{ url('/preparacionterrenos') }}">Asignacion Tecnico-Terreno</a></li>
-                                @elseif ( Auth::user()->tipo == 'Productor')
-                                    <li><a href="{{ url('/terrenos') }}">Administar Terreno</a></li>
                                 @elseif ( Auth::user()->tipo == 'Tecnico')
                                     <li><a href="{{ url('/preparacionterrenos') }}">Preparacion del Terreno</a></li>
                                 @endif

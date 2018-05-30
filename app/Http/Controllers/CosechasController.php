@@ -224,6 +224,16 @@ class CosechasController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $reglas = [
+            'problemas_produccion' => 'required|numeric|between:1,100',
+            'altura_tallo' => 'required|numeric|between:1,100',
+            'humedad_terreno' => 'required|numeric|between:1,100',
+            'rendimiento_produccion' => 'required|numeric|between:1,100',
+            'comentario_cosecha' => 'required',
+        ];
+
+        $this->validate($request, $reglas);
+
         $success = "Datos de la cosecha registrados exitosamente";
         Cosecha::where('id', $id)
             ->update([

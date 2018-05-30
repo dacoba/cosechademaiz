@@ -21,43 +21,63 @@
                     <center>
                         <form class="form-horizontal" role="form" method="POST" id="form_cosecha" action="{{ url('/cosechas') }}/{{ $cosecha['id'] }}">
                             {{ csrf_field() }}
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('problemas_produccion') ? ' has-error' : '' }}">
                                 <label for="problemas_produccion" class="col-md-5 control-label">Problemas de Produccion</label>
                                 <div class="col-md-6">
                                     <div class="input-group">
-                                        <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control text-right" value="{{ $cosecha['problemas_produccion'] }}">
+                                        <input type="number" min="1" max="100" id="problemas_produccion" name="problemas_produccion" class="form-control text-right" value="{{null != (old('problemas_produccion')) ? old('problemas_produccion') : $cosecha['problemas_produccion'] }}">
                                         <span class="input-group-addon">%</span>
                                     </div>
+                                    @if ($errors->has('problemas_produccion'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('problemas_produccion') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('altura_tallo') ? ' has-error' : '' }}">
                                 <label for="altura_tallo" class="col-md-5 control-label">Altura del Tallo</label>
                                 <div class="col-md-6">
                                     <div class="input-group">
-                                        <input type="number" min="1" max="100" id="altura_tallo" name="altura_tallo" class="form-control text-right" value="{{ $cosecha['altura_tallo'] }}"/>
+                                        <input type="number" min="1" max="100" id="altura_tallo" name="altura_tallo" class="form-control text-right" value="{{null != (old('altura_tallo')) ? old('altura_tallo') : $cosecha['altura_tallo'] }}"/>
                                         <span class="input-group-addon">%</span>
                                     </div>
+                                    @if ($errors->has('altura_tallo'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('altura_tallo') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('humedad_terreno') ? ' has-error' : '' }}">
                                 <label for="humedad_terreno" class="col-md-5 control-label">Humedad del Terreno</label>
                                 <div class="col-md-6">
                                     <div class="input-group">
-                                        <input type="number" min="1" max="100" id="humedad_terreno" name="humedad_terreno" class="form-control text-right" value="{{ $cosecha['humedad_terreno'] }}"/>
+                                        <input type="number" min="1" max="100" id="humedad_terreno" name="humedad_terreno" class="form-control text-right" value="{{null != (old('humedad_terreno')) ? old('humedad_terreno') : $cosecha['humedad_terreno'] }}"/>
                                         <span class="input-group-addon">%</span>
                                     </div>
+                                    @if ($errors->has('humedad_terreno'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('humedad_terreno') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group{{ $errors->has('rendimiento_produccion') ? ' has-error' : '' }}">
                                 <label for="rendimiento_produccion" class="col-md-5 control-label">Rendimiento de la Produccion</label>
                                 <div class="col-md-6">
                                     <div class="input-group">
-                                        <input type="number" min="1" max="100" id="rendimiento_produccion" name="rendimiento_produccion" class="form-control text-right" value="{{ $cosecha['rendimiento_produccion'] }}"/>
+                                        <input type="number" min="1" max="100" id="rendimiento_produccion" name="rendimiento_produccion" class="form-control text-right" value="{{null != (old('rendimiento_produccion')) ? old('rendimiento_produccion') : $cosecha['rendimiento_produccion'] }}"/>
                                         <span class="input-group-addon">%</span>
                                     </div>
+                                    @if ($errors->has('rendimiento_produccion'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('rendimiento_produccion') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -65,7 +85,7 @@
                                 <label for="comentario_cosecha" class="col-md-5 control-label">Observaciones</label>
 
                                 <div class="col-md-6">
-                                    <textarea id="comentario_cosecha" name="comentario_cosecha" class="form-control" rows="3">{{ $cosecha['comentario_cosecha'] or old('comentario_cosecha') }}</textarea>
+                                    <textarea id="comentario_cosecha" name="comentario_cosecha" class="form-control" rows="3">{{ null != (old('comentario_cosecha')) ? old('comentario_cosecha') : $cosecha['comentario_cosecha'] }}</textarea>
                                     @if ($errors->has('comentario_cosecha'))
                                         <span class="help-block">
                                             <strong>{{ $errors->first('comentario_cosecha') }}</strong>
