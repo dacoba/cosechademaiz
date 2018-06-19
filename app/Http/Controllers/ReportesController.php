@@ -439,7 +439,7 @@ class ReportesController extends Controller
         $calidad['calidad']['drenaje'] =  $aux_drenaje / 10;
         $calidad['calidad']['erocion'] = $estimacion['siembra']['preparacionterreno']['erocion'] / 10;
         $calidad['calidad']['malezas'] = 10 - ($aux_malezas / 10);
-        $calidad['calidad']['enfermedades'] = $aux_enfermeades / 10;
+        $calidad['calidad']['enfermedades'] = 10 - ($aux_enfermeades / 10);
         $media = array_sum($calidad['calidad']) / count($calidad['calidad']);
         $aux_varianza = [];
         foreach ($calidad['calidad']as $valor){
