@@ -211,7 +211,7 @@
                                     </center>
                                 </div>
                                 <div class="tab-pane" id="tabPlanificaciones">
-                                    <h2 class="h2-reports text-center mb-0">Riegos y Fumigaciones</h2>
+                                    <h2 class="h2-reports text-center">Riegos y Fumigaciones</h2>
                                     @if($planificaciones['exist'])
                                         <?php
                                         $riego_percent = 100 / $planificaciones['planificacionriego']->count() * $planificaciones['planificacionriegoEnd']->count();
@@ -448,15 +448,15 @@
                                 </div>
                                 <div class="tab-pane" id="tabCalidad">
                                     <h2 class="h2-reports text-center">Control de Calidad</h2>
-                                    <div class="row text-ceter mb-30">
-                                        <strong class="col-xs-7 col-sm-6 text-right">Media : </strong>
-                                        <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['media'] }}</span>
-                                        <strong class="col-xs-7 col-sm-6 text-right">Varianza : </strong>
-                                        <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['varianza'] }}</span>
-                                        <strong class="col-xs-7 col-sm-6 text-right">Desviación Estándar : </strong>
-                                        <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['desviacion_estandar'] }}</span>
-                                    </div>
                                     @if($calidad['exist'])
+                                        <div class="row text-ceter mb-30">
+                                            <strong class="col-xs-7 col-sm-6 text-right">Media : </strong>
+                                            <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['media'] }}</span>
+                                            <strong class="col-xs-7 col-sm-6 text-right">Varianza : </strong>
+                                            <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['varianza'] }}</span>
+                                            <strong class="col-xs-7 col-sm-6 text-right">Desviación Estándar : </strong>
+                                            <span class="col-xs-5 col-sm-6 text-left">{{ $calidad['estadistico']['desviacion_estandar'] }}</span>
+                                        </div>
                                         <style>
                                             text {
                                                 font: 12px sans-serif;
