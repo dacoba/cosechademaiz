@@ -213,30 +213,32 @@
                                 <div class="tab-pane" id="tabPlanificaciones">
                                     <h2 class="h2-reports text-center">Riegos y Fumigaciones</h2>
                                     @if($planificaciones['exist'])
-                                        <?php
-                                        $riego_percent = 100 / $planificaciones['planificacionriego']->count() * $planificaciones['planificacionriegoEnd']->count();
-                                        $fumigacion_percent = 100 / $planificaciones['planificacionfumigacion']->count() * $planificaciones['planificacionfumigacionEnd']->count();
-                                        ?>
                                         <div class="row text-center mb-30">
                                             <div class="skills">
-                                                <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
-                                            <span data-percent="{{ $riego_percent }}" class="chart easyPieChart" style="width: 140px; height: 140px; line-height: 140px;">
-                                                <span class="percent">{{ $riego_percent }}</span>
-                                            </span>
+                                                @if($planificaciones['riego_exist'])
+                                                    @php($riego_percent = 100 / $planificaciones['planificacionriego']->count() * $planificaciones['planificacionriegoEnd']->count())
+                                                    <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
+                                                    <span data-percent="{{ $riego_percent }}" class="chart easyPieChart" style="width: 140px; height: 140px; line-height: 140px;">
+                                                        <span class="percent">{{ $riego_percent }}</span>
+                                                    </span>
                                                     <h3 class="text-center mt-5">Riego</h3>
                                                     @if ($riego_percent != 100)
                                                         <p class="reports-skills-p"><strong>Fecha del siguiente riego</strong><br>{{ date('H:i a - d/m/Y', strtotime($planificaciones['planificacionriegoPla']->first()['fecha_planificacion'])) }}</p>
                                                     @endif
-                                                </div>
-                                                <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
-                                            <span data-percent="{{ $fumigacion_percent }}" class="chart easyPieChart" style="barColor:black; width: 140px; height: 140px; line-height: 140px;">
-                                                <span class="percent">{{ round($fumigacion_percent, 1) }}</span>
-                                            </span>
+                                                    </div>
+                                                @endif
+                                                @if($planificaciones['fumifacion_exist'])
+                                                    @php($fumigacion_percent = 100 / $planificaciones['planificacionfumigacion']->count() * $planificaciones['planificacionfumigacionEnd']->count())
+                                                    <div class="col-sm-6 col-md-3 col-md-offset-2 text-center reports-skills">
+                                                    <span data-percent="{{ $fumigacion_percent }}" class="chart easyPieChart" style="barColor:black; width: 140px; height: 140px; line-height: 140px;">
+                                                        <span class="percent">{{ round($fumigacion_percent, 1) }}</span>
+                                                    </span>
                                                     <h3 class="text-center mt-5">Fumigacion</h3>
                                                     @if ($fumigacion_percent != 100)
                                                         <p class="reports-skills-p"><strong>Fecha de la siguiente fumigacion</strong><br>{{ date('H:i a - d/m/Y', strtotime($planificaciones['planificacionfumigacionPla']->first()['fecha_planificacion'])) }}</p>
                                                     @endif
-                                                </div>
+                                                    </div>
+                                                 @endif
                                             </div>
                                         </div>
                                         <style>

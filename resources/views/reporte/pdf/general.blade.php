@@ -122,6 +122,7 @@
     </tr>
     </tbody>
 </table>
+@if($estados['planificaciones'] and $tablas['planificaciones']->count() > 0)
 <h3>RIEGOS Y FUMAGACIONES</h3>
 <table class="table table-bordered table-sm">
     <thead>
@@ -147,6 +148,8 @@
     @endforeach
     </tbody>
 </table>
+@endif
+@if($estados['cosecha'])
 <div class="page-break"></div>
 <table class="table table-bordered table-sm">
     <thead>
@@ -291,3 +294,4 @@
     </tr>
 </table>
 </body>
+@endif

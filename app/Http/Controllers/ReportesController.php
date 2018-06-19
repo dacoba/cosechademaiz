@@ -207,48 +207,63 @@ class ReportesController extends Controller
     }
     public function pdfGeneral(Request $request, $id)
     {
+        $estados['planificaciones'] = false;
+        $estados['cosecha'] = false;
+        $tablas = [];
+        $files = [];
+
         $preterreno = Preparacionterreno::find($id);
 
         /* Riegos y Fumigaciones */
+        if (!in_array($preterreno['estado'], array("Preparacion", "Siembra"))) {
+            $estados['planificaciones'] = true;
+            $tablas['planificaciones'] = $this->getPlanificaciones($id);
+        }
 
-        $tablas['planificaciones'] = $this->getPlanificaciones($id);
 
-        /* Cosecha */
+        if ($preterreno['estado'] == "Cerrado") {
 
-        $tablas['cosecha'] = Cosecha::where('siembra_id', $preterreno['siembra']['id'])->first();
+            $estados['cosecha'] = true;
 
-        $veccor_cosecha = [
-            "Problemas de produccion" => $tablas['cosecha']['problemas_produccion'],
-            "Altura de tallo" => $tablas['cosecha']['altura_tallo'],
-            "Humedad del terreno" => $tablas['cosecha']['humedad_terreno'],
-            "Remdimiento de produccion" => $tablas['cosecha']['rendimiento_produccion']
-        ];
+            /* Cosecha */
 
-        $files['cosecha'] = $this->generateDiagram($veccor_cosecha, 'cosecha');
+            $tablas['cosecha'] = Cosecha::where('siembra_id', $preterreno['siembra']['id'])->first();
 
-        /* Estimacion de Produccion */
+            $veccor_cosecha = [
+                "Problemas de produccion" => $tablas['cosecha']['problemas_produccion'],
+                "Altura de tallo" => $tablas['cosecha']['altura_tallo'],
+                "Humedad del terreno" => $tablas['cosecha']['humedad_terreno'],
+                "Remdimiento de produccion" => $tablas['cosecha']['rendimiento_produccion']
+            ];
 
-        $tablas['estimacion'] = $this->getProduccion($id);
+            $files['cosecha'] = $this->generateDiagram($veccor_cosecha, 'cosecha');
 
-        /* Calidad */
+            /* Estimacion de Produccion */
 
-        $tablas['calidad'] = $this->getCalidad($id);
+            $tablas['estimacion'] = $this->getProduccion($id);
 
-        $veccor_calidad = [
-            "Ph" => $tablas['calidad']['calidad']['ph'],
-            "Plagas" => $tablas['calidad']['calidad']['plagas'],
-            "Drenaje" => $tablas['calidad']['calidad']['drenaje'],
-            "Erocion" => $tablas['calidad']['calidad']['erocion'],
-            "Malezas" => $tablas['calidad']['calidad']['malezas'],
-            "Enfermedades" => $tablas['calidad']['calidad']['enfermedades']
-        ];
+            /* Calidad */
 
-        $files['calidad'] = $this->generateDiagram($veccor_calidad, 'calidad');
+            $tablas['calidad'] = $this->getCalidad($id);
+
+            $veccor_calidad = [
+                "Ph" => $tablas['calidad']['calidad']['ph'],
+                "Plagas" => $tablas['calidad']['calidad']['plagas'],
+                "Drenaje" => $tablas['calidad']['calidad']['drenaje'],
+                "Erocion" => $tablas['calidad']['calidad']['erocion'],
+                "Malezas" => $tablas['calidad']['calidad']['malezas'],
+                "Enfermedades" => $tablas['calidad']['calidad']['enfermedades']
+            ];
+
+            $files['calidad'] = $this->generateDiagram($veccor_calidad, 'calidad');
+
+        }
 
         $pdf = PDF::loadView('reporte.pdf.general', [
             'preterreno' => $preterreno,
             'tablas' => $tablas,
             'files' => $files,
+            'estados' => $estados,
         ]);
 
         return $pdf->stream('download');
@@ -312,6 +327,8 @@ class ReportesController extends Controller
     {
         $preterreno = Preparacionterreno::find($id);
         $planificaciones['exist'] = False;
+        $planificaciones['riego_exist'] = False;
+        $planificaciones['fumifacion_exist'] = False;
         $cosecha['exist'] = False;
         $estimacion['exist'] = False;
         $calidad['exist'] = False;
@@ -319,6 +336,9 @@ class ReportesController extends Controller
             if(Riego::where('siembra_id', $preterreno['siembra']['id'])->count()){
                 $planificaciones['exist'] = True;
                 $planificaciones['planificacionriego'] = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])->get();
+                if($planificaciones['planificacionriego']->count()){
+                    $planificaciones['riego_exist'] = True;
+                }
                 $planificaciones['planificacionriegoEnd'] = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
                     ->whereIn('estado', array('Ejecutado', 'Registrado'))->get();
                 $planificaciones['planificacionriegoPla'] = Planificacionriego::where('riego_id', Riego::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
@@ -327,6 +347,9 @@ class ReportesController extends Controller
             if(Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->count()){
                 $planificaciones['exist'] = True;
                 $planificaciones['planificacionfumigacion'] = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])->get();
+                if($planificaciones['planificacionfumigacion']->count()){
+                    $planificaciones['fumifacion_exist'] = True;
+                }
                 $planificaciones['planificacionfumigacionEnd'] = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
                     ->whereIn('estado', array('Ejecutado', 'Registrado'))->get();
                 $planificaciones['planificacionfumigacionPla'] = Planificacionfumigacion::where('fumigacion_id', Fumigacion::where('siembra_id', $preterreno['siembra']['id'])->first()['id'])
