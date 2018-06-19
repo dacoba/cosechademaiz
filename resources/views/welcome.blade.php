@@ -5,7 +5,7 @@
     <div class="home-overlay"></div>
     <div class="intro">
         <div class="start">Proyeto de grado</div>
-        <h1>sistema web responsive de gestión del proceso y simulación de
+        <h1>sistema web responsive de gestión del proceso de produccion y simulación de
             crecimiento de maíz</h1>
         <div class="start">Gualberto Rocha Escobar</div>
     </div>
