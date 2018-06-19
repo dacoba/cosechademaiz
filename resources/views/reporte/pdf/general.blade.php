@@ -149,6 +149,12 @@
     </tbody>
 </table>
 @endif
+<script type="text/php">
+      if (isset($pdf)) {
+        $font = $fontMetrics->getFont("Arial", "bold");
+        $pdf->page_text(543, 750, "Pag. {PAGE_NUM} de {PAGE_COUNT}", $font, 7, array(0, 0, 0));
+      }
+</script>
 @if($estados['cosecha'])
 <div class="page-break"></div>
 <table class="table table-bordered table-sm">
