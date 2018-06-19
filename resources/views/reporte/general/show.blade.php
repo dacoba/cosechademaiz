@@ -249,8 +249,8 @@
                                             <tr>
                                                 <th class="text-center">Planificacion</th>
                                                 <th class="text-center">Fecha de Planificacion</th>
-                                                <th class="text-center">Hora de Planificacion</th>
-                                                <th class="text-center">Estado</th>
+                                                <th class="text-center hidden-xs">Hora de Planificacion</th>
+                                                <th class="text-center hidden-xs">Estado</th>
                                                 <th class="text-center">Detalles</th>
                                             </tr>
                                             </thead>
@@ -259,8 +259,8 @@
                                                 <tr>
                                                     <td class="text-center">{{$planificacion['table_name']}}</td>
                                                     <td class="text-center">{{ $planificacion['fecha_planificacion']->format('d F Y') }}</td>
-                                                    <td class="text-center">{{ $planificacion['fecha_planificacion']->format('H:i a') }}</td>
-                                                    <td class="text-center">{{$planificacion['estado']}}</td>
+                                                    <td class="text-center hidden-xs">{{ $planificacion['fecha_planificacion']->format('H:i a') }}</td>
+                                                    <td class="text-center hidden-xs">{{$planificacion['estado']}}</td>
                                                     <td class="text-center">
                                                         @if($planificacion['estado'] != "Registrado")
                                                             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Aun no se han registrado datos para esta planificacion">
